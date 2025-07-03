@@ -15,6 +15,7 @@
                         submitButtonUpdate.setAttribute('data-kt-indicator', 'on');
                         submitButtonUpdate.disabled = true;
                         let formData = new FormData(kt_modal_new_target_form);
+
                         let id = $('#formId').val();
                         $.ajax({
                             headers: {

@@ -1,77 +1,233 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<!--begin::Head-->
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+<head>
+    <title>Sign In - Apps Admin </title>
+    <meta charset="utf-8" />
+    <meta name="description" content="admin" />
+    <meta name="keywords" content="admin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="BPFK Makassar" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
+    <!--begin::Fonts(mandatory for all pages)-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <!--end::Fonts-->
 
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <link href="{{ asset('/') }}themes/dist/assets/plugins/global/plugins.bundle.css" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('/') }}themes/dist/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+</head>
+<!--end::Head-->
+<!--begin::Body-->
 
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+<body id="kt_body" class="app-blank bgi-size-cover bgi-attachment-fixed bgi-position-center bgi-no-repeat">
+    <!--begin::Theme mode setup on page load-->
+    <script>
+        var defaultThemeMode = "light";
+        var themeMode;
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
+    </script>
+    <!--end::Theme mode setup on page load-->
+    <!--begin::Root-->
+    <div class="d-flex flex-column flex-root" id="kt_app_root">
+        <!--begin::Page bg image-->
+        <style>
+            body {
+                background-image: url('{{ asset('/') }}themes/dist/assets/media/auth/bg4.jpg');
+            }
+
+            [data-bs-theme="dark"] body {
+                background-image: url('{{ asset('/') }}themes/dist/assets/media/auth/bg4-dark.jpg');
+            }
+        </style>
+        <!--end::Page bg image-->
+        <!--begin::Authentication - Sign-in -->
+        <div class="d-flex flex-column flex-column-fluid flex-lg-row">
+            <!--begin::Aside-->
+            <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
+                <!--begin::Aside-->
+                <div class="d-flex flex-center flex-lg-start flex-column">
+                    <!--begin::Logo-->
+                    <a href="index.html" class="mb-7">
+                        <img alt="Logo" src="{{ asset('/') }}themes/dist/assets/media/logos/custom-3.svg" />
+                    </a>
+                    <!--end::Logo-->
+                    <!--begin::Title-->
+                    <h2 class="text-white fw-normal m-0">Branding tools designed for your business</h2>
+                    <!--end::Title-->
+                </div>
+                <!--begin::Aside-->
+            </div>
+            <!--begin::Aside-->
+            <!--begin::Body-->
+            <div
+                class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
+                <!--begin::Card-->
+                <div class="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
+                        <!--begin::Form-->
+                        {{-- <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url=""
+                            action="{{ url('/register') }}" method="POST">
+                            @csrf
+                            <!--begin::Heading-->
+                            <div class="text-center mb-11">
+                                <!--begin::Title-->
+                                <h1 class="text-gray-900 fw-bolder mb-3">Register</h1>
+                                <!--end::Title-->
+                                <!--begin::Subtitle-->
+                                <div class="text-gray-500 fw-semibold fs-6">Input your account</div>
+                                <!--end::Subtitle=-->
                             </div>
-                        </div>
+                            <!--begin::Heading-->
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <!--begin::Input group=-->
+                            <div class="fv-row mb-8">
+                                <!--begin::Email-->
+                                <input type="text" placeholder="Username" name="username" autocomplete="off"
+                                    class="form-control bg-transparent" />
+                                <!--end::Email-->
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <!--end::Input group=-->
+                            <div class="fv-row mb-10">
+                                <!--begin::Password-->
+                                <input type="password" placeholder="Password" name="password" autocomplete="off"
+                                    class="form-control bg-transparent" />
+                                <!--end::Password-->
                             </div>
-                        </div>
+                            <!--end::Input group=-->
 
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
+                            <!--begin::Submit button-->
+                            <div class="d-grid mb-10">
+                                <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                                    <!--begin::Indicator label-->
+                                    <span class="indicator-label">Sign In</span>
+                                    <!--end::Indicator label-->
+                                    <!--begin::Indicator progress-->
+                                    <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    <!--end::Indicator progress-->
                                 </button>
                             </div>
-                        </div>
-                    </form>
+                            <!--end::Submit button-->
+                        </form> --}}
+                        <form class="form w-100" novalidate="novalidate" id="kt_sign_up_form"
+                            action="{{ url('/auth/register') }}" method="POST">
+                            @csrf
+                            <!--begin::Heading-->
+                            <div class="text-center mb-11">
+                                <h1 class="text-gray-900 fw-bolder mb-3">Registrasi Mahasiswa</h1>
+                                <div class="text-gray-500 fw-semibold fs-6">Silahkan lengkapi data diri Anda</div>
+                            </div>
+                            <!--end::Heading-->
+
+                            <!-- Data User -->
+                            <div class="fv-row mb-8">
+                                <input type="text" placeholder="Nama Lengkap" name="name" autocomplete="off"
+                                    class="form-control bg-transparent" required />
+                            </div>
+
+                            <div class="fv-row mb-8">
+                                <input type="text" placeholder="Username" name="username" autocomplete="off"
+                                    class="form-control bg-transparent" required />
+                            </div>
+
+                            <div class="fv-row mb-8">
+                                <input type="email" placeholder="Email" name="email" autocomplete="off"
+                                    class="form-control bg-transparent" required />
+                            </div>
+
+                            <div class="fv-row mb-8">
+                                <input type="password" placeholder="Password" name="password" autocomplete="off"
+                                    class="form-control bg-transparent" required />
+                            </div>
+
+                            <div class="fv-row mb-8">
+                                <input type="password" placeholder="Konfirmasi Password" name="password_confirmation"
+                                    autocomplete="off" class="form-control bg-transparent" required />
+                            </div>
+
+                            <!-- Data Mahasiswa -->
+                            <div class="fv-row mb-8">
+                                <input type="text" placeholder="NIM" name="nim" autocomplete="off"
+                                    class="form-control bg-transparent" required />
+                            </div>
+
+                            <div class="fv-row mb-8">
+                                <select name="prodi" class="form-select bg-transparent" required>
+                                    <option value="">Pilih Program Studi</option>
+                                    <option value="Teknik Informatika">Teknik Informatika</option>
+                                    <option value="Sistem Informasi">Sistem Informasi</option>
+                                    <option value="Ilmu Komputer">Ilmu Komputer</option>
+                                </select>
+                            </div>
+
+                            <div class="fv-row mb-8">
+                                <input type="number" placeholder="Tahun Angkatan" name="angkatan" min="2000"
+                                    max="{{ date('Y') }}" class="form-control bg-transparent" required />
+                            </div>
+
+                            <!--begin::Submit button-->
+                            <div class="d-grid mb-10">
+                                <button type="submit" id="kt_sign_up_submit" class="btn btn-primary">
+                                    <span class="indicator-label">Daftar</span>
+                                    <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            <!--end::Submit button-->
+
+                            <div class="text-gray-500 text-center fw-semibold fs-6">
+                                Sudah punya akun?
+                                <a href="{{ url('/auth/login') }}" class="link-primary">Login disini</a>
+                            </div>
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Wrapper-->
                 </div>
+                <!--end::Card-->
             </div>
+            <!--end::Body-->
         </div>
+        <!--end::Authentication - Sign-in-->
     </div>
-</div>
-@endsection
+    <!--end::Root-->
+
+    <!--begin::Javascript-->
+    <script>
+        var hostUrl = "assets/";
+    </script>
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="{{ asset('/') }}themes/dist/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="{{ asset('/') }}themes/dist/assets/js/scripts.bundle.js"></script>
+    <!--end::Global Javascript Bundle-->
+    <!--begin::Custom Javascript(used for this page only)-->
+    {{-- <script src="{{ asset('/') }}themes/dist/assets/js/custom/authentication/sign-in/general.js"></script> --}}
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
+
+</body>
+<!--end::Body-->
+
+</html>

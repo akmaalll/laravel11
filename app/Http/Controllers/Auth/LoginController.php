@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -59,18 +61,79 @@ class LoginController extends Controller
         }
     }
 
+    protected function attemptApiLogin($username, $password)
+    {
+        $url = "https://service.undipa.ac.id/mhs.php?user=" . $username . "&pass=" . $password . "&api=071994";
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->get($url);
+            $body = $response->getBody()->getContents();
+
+            // Parse the API response - adjust according to actual API response format
+            $data = json_decode($body, true);
+
+            // dd();
+            if (isset($data['data'][0]['stb']) && $data['data'][0]['stb'] === $username) {
+                return ['success' => true, 'data' => $data];
+            }
+
+            return ['success' => false, 'error' => 'invalid'];
+        } catch (\Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    protected function findOrCreateUserFromApi($username, $apiData)
+    {
+        // Try to find existing user by username or email
+        $user = User::where('username', $username)
+            ->orWhere('email', $username)
+            ->first();
+        // dd($username);
+
+        if (!$user) {
+            // Create new user from API data
+            $user = new User();
+            $user->username = $username;
+            $user->email = $apiData['data'][0]['email'] ?? $username; // Adjust according to API data
+            $user->password = Hash::make('password'); // Random password since we don't have it
+            $user->name = $apiData['data'][0]['nmmhs'];
+            $user->id_role = 3;
+            // dd($user->id_role);
+            // Set other fields from API data as needed
+            $user->save();
+        }
+
+        return $user;
+    }
+
     public function login(Request $request)
     {
         try {
             $login = request()->input('username');
+            $password = $request->password;
             $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-            if (Auth::attempt([$field => $login, 'password' => $request->password])) {
+            if (Auth::attempt([$field => $login, 'password' => $password])) {
                 Helper::menu();
                 return redirect()->route('admin');
-            } else {
-                return redirect()->back();
             }
+
+            $apiResponse = $this->attemptApiLogin($login, $password);
+
+            if ($apiResponse['success']) {
+                // API authentication succeeded - handle user login/creation
+                $user = $this->findOrCreateUserFromApi($login, $apiResponse['data']);
+
+                if ($user) {
+                    Auth::login($user);
+                    Helper::menu();
+                    return redirect()->route('admin');
+                }
+            }
+
+            return redirect()->back()->withErrors(['message' => 'Invalid credentials']);
         } catch (\Exception $e) {
             $this->response['message'] = $e->getMessage() . ' in file :' . $e->getFile() . ' line: ' . $e->getLine();
             return view('errors.message', ['message' => $this->response]);

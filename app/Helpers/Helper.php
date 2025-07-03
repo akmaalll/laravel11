@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -18,8 +19,17 @@ class Helper
     public static function icon()
     {
         $data = [
-            'flaticon-squares-1', 'flaticon-technology', 'flaticon-squares', 'flaticon-menu-1', 'flaticon-menu-2', 'flaticon-settings-1', 'flaticon-folder-1', 'flaticon-folder-2', 'flaticon-folder-3',
-            'flaticon-users', 'flaticon-users-1',
+            'flaticon-squares-1',
+            'flaticon-technology',
+            'flaticon-squares',
+            'flaticon-menu-1',
+            'flaticon-menu-2',
+            'flaticon-settings-1',
+            'flaticon-folder-1',
+            'flaticon-folder-2',
+            'flaticon-folder-3',
+            'flaticon-users',
+            'flaticon-users-1',
         ];
         return $data;
     }
@@ -143,6 +153,17 @@ class Helper
         $data = DB::table($param)->get();
         return isset($data) ? $data : null;
     }
+
+    public static function getDataMhs($param)
+    {
+        if ($param === 'users') {
+            return \App\Models\User::whereHas('mahasiswa')->with('mahasiswa')->get();
+        }
+
+        return DB::table($param)->get();
+    }
+
+
 
     public static function getDatas($param)
     {

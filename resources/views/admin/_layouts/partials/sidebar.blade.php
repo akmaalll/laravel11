@@ -81,30 +81,37 @@
                     <!--end:Menu item-->
 
                     @foreach (Session::get('main_menu') as $mm)
+                        {{-- {{ dd($mm) }} --}}
                         <!--begin:Menu item-->
-                        <div class="menu-item pt-5">
-                            <!--begin:Menu content-->
-                            <div class="menu-content">
-                                <span class="menu-heading fw-bold text-uppercase fs-7">{{ $mm['name'] }}</span>
+                        @if ($mm['read'] == 1)
+                            <div class="menu-item pt-5">
+                                <!--begin:Menu content-->
+                                <div class="menu-content">
+                                    <span class="menu-heading fw-bold text-uppercase fs-7">{{ $mm['name'] }}</span>
+                                </div>
+                                <!--end:Menu content-->
                             </div>
-                            <!--end:Menu content-->
-                        </div>
+                        @endif
+
                         <!--end:Menu item-->
                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion @stack($mm['name'])">
                             <!--begin:Menu link-->
-                            <span class="menu-link">
-                                <span class="menu-icon">
-                                    <i class="ki-duotone ki-element-7 fs-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </span>
-                                {{-- <span class="menu-icon">
+                            @if ($mm['read'] == 1)
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-element-7 fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </span>
+                                    {{-- <span class="menu-icon">
                                     <i class="bi {{ $mm['icon'] }} fs-3"></i>
                                 </span> --}}
-                                <span class="menu-title">{{ $mm['name'] }}</span>
-                                <span class="menu-arrow"></span>
-                            </span>
+                                    <span class="menu-title">{{ $mm['name'] }}</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                            @endif
+
                             <!--end:Menu link-->
 
                             <!--begin:Menu sub-->

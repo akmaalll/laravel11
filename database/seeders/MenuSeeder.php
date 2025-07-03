@@ -20,9 +20,15 @@ class MenuSeeder extends Seeder
             ['name' => 'USER SETTING', 'icon' => '', 'url' => '#', 'index' => 4, 'main_menu' => 'USER SETTING', 'active' => '1', 'parent' => '0'],
 
             // APPS
-            ['name' => 'Todo', 'icon' => 'bi-stack', 'url' => 'todo', 'index' => 1, 'main_menu' => 'APPS', 'active' => '1', 'parent' => '1'],
+            ['name' => 'Pengajuan Judul', 'icon' => 'bi-stack', 'url' => 'pengajuan-judul', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '1'],
+            ['name' => 'Pembimbing', 'icon' => 'bi-stack', 'url' => 'pembimbing', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '1'],
 
             // DATA MASTER
+            ['name' => 'Judul', 'icon' => 'bi-stack', 'url' => 'judul', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
+            ['name' => 'Dosen', 'icon' => 'bi-stack', 'url' => 'dosen', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
+            ['name' => 'Prodi', 'icon' => 'bi-stack', 'url' => 'prodi', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
+            ['name' => 'Keahlian', 'icon' => 'bi-stack', 'url' => 'keahlian', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
+
 
             // USER
             ['name' => 'User', 'icon' => 'bi-people-fill', 'url' => 'users', 'index' => 0, 'main_menu' => 'USERS', 'active' => '1', 'parent' => '3'],
