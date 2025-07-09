@@ -12,4 +12,5 @@ interface PengajuanJudulContract
 	*/
 
 	public function paginated(array $request);
+	public function paginatedByUser(array $request);
 }

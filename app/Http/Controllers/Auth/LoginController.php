@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,8 +101,6 @@ class LoginController extends Controller
             $user->password = Hash::make('password'); // Random password since we don't have it
             $user->name = $apiData['data'][0]['nmmhs'];
             $user->id_role = 3;
-            // dd($user->id_role);
-            // Set other fields from API data as needed
             $user->save();
         }
 
@@ -121,6 +120,7 @@ class LoginController extends Controller
             }
 
             $apiResponse = $this->attemptApiLogin($login, $password);
+            // dd($sesi);
 
             if ($apiResponse['success']) {
                 // API authentication succeeded - handle user login/creation
@@ -129,7 +129,8 @@ class LoginController extends Controller
                 if ($user) {
                     Auth::login($user);
                     Helper::menu();
-                    return redirect()->route('admin');
+                    $this->storeApiDataInSession($apiResponse['data']);
+                    return redirect()->route('dashboard');
                 }
             }
 
@@ -138,6 +139,22 @@ class LoginController extends Controller
             $this->response['message'] = $e->getMessage() . ' in file :' . $e->getFile() . ' line: ' . $e->getLine();
             return view('errors.message', ['message' => $this->response]);
         }
+    }
+
+    protected function storeApiDataInSession($apiData)
+    {
+        $stb = $apiData['data'][0]['stb'] ?? '';
+        $prodi = Helper::getProdiFromNim($stb);
+        // dd($prodi);
+        Session::put([
+            'nama_mhs' => $apiData['data'][0]['nmmhs'] ?? 'Mahasiswa',
+            'stb' => $stb,
+            'email' => $apiData['data'][0]['email'] ?? '',
+            'alamat' => $apiData['data'][0]['alm'] ?? '',
+            'prodi' => $prodi,
+            'prodi_kode' => substr($stb, 2, 1) ?? '',
+            'mahasiswa_data' => $apiData['data'][0] ?? []
+        ]);
     }
 
     public function logout(Request $request)

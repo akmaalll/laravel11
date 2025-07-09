@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Models\UserMenu;
+use Carbon\Carbon;
+
 
 class Helper
 {
@@ -185,25 +187,25 @@ class Helper
     public static function getHari($hari)
     {
         switch ($hari) {
-            case "Sun":
+            case "7":
                 $hari = "Minggu";
                 break;
-            case "Mon":
+            case "1":
                 $hari = "Senin";
                 break;
-            case "Tue":
+            case "2":
                 $hari = "Selasa";
                 break;
-            case "Wed":
+            case "3":
                 $hari = "Rabu";
                 break;
-            case "Thu":
+            case "4":
                 $hari = "Kamis";
                 break;
-            case "Fri":
+            case "5":
                 $hari = "Jumat";
                 break;
-            case "Sat":
+            case "6":
                 $hari = "Sabtu";
                 break;
         }
@@ -223,15 +225,23 @@ class Helper
     }
 
     // format 17 Januari 2021
+
     public static function getDateIndo($tgl)
     {
-        $tanggal = substr($tgl, 8, 2);
-        $bulan = Helper::getBulan((int)substr($tgl, 5, 2));
-        $tahun = substr($tgl, 0, 4);
-        $tgl = $tanggal . " " . $bulan . " " . $tahun;
-        if ($tgl != "--") {
-            return $tanggal . " " . $bulan . " " . $tahun;
+        if (!$tgl || $tgl == '0000-00-00') {
+            return '--';
         }
+
+        // Ambil komponen tanggal
+        $tahun = substr($tgl, 0, 4);
+        $bulanNum = (int)substr($tgl, 5, 2);
+        $tanggal = substr($tgl, 8, 2);
+
+        // Konversi ke hari dan bulan
+        $hari = Helper::getHari(date('N', strtotime($tgl))); // 'N' = 1 (Senin) - 7 (Minggu)
+        $bulan = Helper::getBulan($bulanNum);
+
+        return "$hari, $tanggal $bulan $tahun";
     }
 
     // format Januari 17, 2021
@@ -347,5 +357,23 @@ class Helper
     {
         $data = DB::table('menus')->select('name')->find($id);
         return isset($data) ? $data->name : '';
+    }
+
+    public static function getProdiFromNim($nim)
+    {
+        if (strlen($nim) < 3) return 'Prodi Tidak Diketahui';
+
+        $digitKetiga = substr($nim, 2, 1); // Ambil digit ketiga (indeks 2)
+
+        $mapping = [
+            '1' => 'Sistem Informasi',
+            '2' => 'Teknik Informatika',
+            '3' => 'Manajemen Informatika',
+            '4' => 'Kewirausahaan',
+            '5' => 'Rekayasa Perangkat Lunak',
+            '6' => 'Bisnis Digital'
+        ];
+
+        return $mapping[$digitKetiga] ?? 'Prodi Tidak Diketahui';
     }
 }

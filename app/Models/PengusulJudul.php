@@ -12,6 +12,7 @@ class PengusulJudul extends Model
     protected $fillable = [
         'id_judul',
         'nim',
+        'nama',
     ];
 
     public function judul()

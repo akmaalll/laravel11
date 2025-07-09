@@ -12,8 +12,10 @@
     <meta property="og:title" content="Umi - LP2s" />
     <meta property="og:url" content="https://fikir.umi-ac.id" />
     <meta property="og:site_name" content="FIKIR-UMI" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" href="{{ asset('public/logo-fikir.png') }}" />
+
+    {{-- <link rel="shortcut icon" href="{{ asset('public/logo-fikir.png') }}" /> --}}
 
     @include('app.layouts._css')
     @stack('css-scripts')
@@ -54,26 +56,9 @@
                 <!--end::Header-->
 
                 <!--begin::Content-->
-                <div class="toolbar py-3 py-lg-6" id="kt_toolbar">
-                    <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap gap-2">
-                        <div class="page-title d-flex flex-column align-items-start me-3 py-2 py-lg-0 gap-2">
-                            <h1 class="d-flex text-gray-900 fw-bold m-0 fs-3">
-                                @yield('page-title', 'Dashboard')
-
-                                @hasSection('page-subtitle')
-                                    <span class="h-20px border-gray-500 border-start mx-3"></span>
-                                    <small class="text-gray-500 fs-7 fw-semibold my-1">
-                                        @yield('page-subtitle')
-                                    </small>
-                                @endif
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="content container-xxl" id="kt_content">
+                {{-- <div class="content container-xxl" id="kt_content"> --}}
                     @yield('content')
-                </div>
+                {{-- </div> --}}
                 <!--end::Content-->
 
                 <!--begin::Footer-->

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Repositories\Contracts\PengajuanJudulContract;
 use App\Http\Services\Repositories\Contracts\PengusulJudulContract;
+use App\Models\PengajuanJudul;
 
 class PengajuanJudulController extends Controller
 {
@@ -75,6 +76,28 @@ class PengajuanJudulController extends Controller
         } catch (\Exception $e) {
             dd($e);
             return view('errors.message', ['message' => $e->getMessage()]);
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'status' => 'required|in:diajukan,diterima,ditolak',
+                'catatan' => 'nullable|string'
+            ]);
+
+            $pengajuan = PengajuanJudul::findOrFail($id);
+            // dd($pengajuan);
+            $pengajuan->update([
+                'status' => $request->status,
+                'catatan' => $request->catatan
+            ]);
+
+            return redirect()->back()->with('success', 'Status berhasil diperbarui!');
+        } catch (\Exception $e) {
+            dd($e);
+            // return view('errors.message', ['message' => $e->getMessage()]);
         }
     }
 

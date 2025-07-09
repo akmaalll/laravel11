@@ -26,7 +26,7 @@
             <!--begin::Topbar-->
             <div class="d-flex align-items-center flex-row-auto">
                 <!--begin::Theme mode-->
-                <div class="d-flex align-items-center ms-1">
+                {{-- <div class="d-flex align-items-center ms-1">
                     <!--begin::Menu toggle-->
                     <a href="#"
                         class="btn btn-icon btn-color-white bg-hover-white bg-hover-opacity-10 w-35px h-35px h-md-40px w-md-40px"
@@ -104,7 +104,7 @@
                         <!--end::Menu item-->
                     </div>
                     <!--end::Menu-->
-                </div>
+                </div> --}}
                 <!--end::Theme mode-->
 
                 <!--begin::User-->
@@ -115,10 +115,10 @@
                         <!--begin::Name-->
                         <div class="d-none d-md-flex flex-column align-items-end justify-content-center me-2 me-md-4">
                             <span class="text-white opacity-75 fs-8 fw-semibold lh-1 mb-1">
-                                {{-- {{ Auth::user()->username }} --}}
+                                {{ Session::get('stb', '') }}
                             </span>
                             <span class="text-white fs-8 fw-bold lh-1">
-                                {{-- {{ Auth::user()->name }} --}}
+                                {{ Session::get('nama_mhs', '') }}
                             </span>
                         </div>
                         <!--end::Name-->
@@ -143,10 +143,10 @@
                                 <!--begin::Username-->
                                 <div class="d-flex flex-column">
                                     <div class="fw-bold d-flex align-items-center fs-5">
-                                        {{-- {{ Auth::user()->name }} --}}
+                                        {{ Session::get('nama_mhs', '') }}
                                     </div>
                                     <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-                                        {{-- {{ Auth::user()->email }} --}}
+                                        {{ Session::get('email', '') }}
                                     </a>
                                 </div>
                                 <!--end::Username-->
@@ -207,7 +207,7 @@
                                 data-kt-menu="true">
                                 <!--begin:Menu item-->
                                 <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                    class="menu-item menu-here-bg me-0 me-lg-2 @if (request()->routeIs('dashboard*')) menu-here-bg @endif">
+                                    class="menu-item menu-here-bg me-0 me-lg-2 @if (isset($dashboard) && $dashboard) here we show @endif">
                                     <a class="menu-link py-3" href="{{ route('dashboard') }}">
                                         <span class="menu-icon">
                                             <i class="ki-duotone ki-home fs-2">
@@ -222,12 +222,8 @@
 
                                 <!--begin:Menu item-->
                                 <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                    data-kt-menu-placement="bottom-start"
-                                    class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2 
-                                    {{-- @if (request()->routeIs('usulan-penelitian*') || request()->routeIs('perbaikan-usulan*') || request()->routeIs('catatan-harian*') || request()->routeIs('laporan-kemajuan*') || request()->routeIs('laporan-akhir*') || request()->routeIs('template-dokumen*')) menu-here-bg @endif --}}
-                                            ">
-                                    <!--begin:Menu link-->
-                                    <span class="menu-link py-3">
+                                    class="menu-item menu-here-bg me-0 me-lg-2 @if (isset($pengajuan_judul) && $pengajuan_judul) here we show @endif">
+                                    <a class="menu-link py-3" href="{{ route('pengajuan.index') }}">
                                         <span class="menu-icon">
                                             <i class="ki-duotone ki-tablet-text-down fs-2">
                                                 <span class="path1"></span>
@@ -236,155 +232,8 @@
                                                 <span class="path4"></span>
                                             </i>
                                         </span>
-                                        <span class="menu-title">Usulan Reguler</span>
-                                        <span class="menu-arrow d-lg-none"></span>
-                                    </span>
-                                    <!--end:Menu link-->
-                                    <!--begin:Menu sub-->
-                                    <div
-                                        class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Usulan</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Perbaikan Usulan</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Catatan Harian</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Laporan Kemajuan</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Laporan Akhir</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Download</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
-                                    </div>
-                                    <!--end:Menu sub-->
-                                </div>
-                                <!--end:Menu item-->
-
-                                <!--begin:Menu item-->
-                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                    data-kt-menu-placement="bottom-start"
-                                    class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2 
-                                    {{-- @if (request()->routeIs('evaluasi-administrasi*') || request()->routeIs('evaluasi-substansi*')) menu-here-bg @endif --}}
-                                    ">
-                                    <!--begin:Menu link-->
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="ki-duotone ki-tablet-text-down fs-2">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                                <span class="path3"></span>
-                                                <span class="path4"></span>
-                                            </i>
-                                        </span>
-                                        <span class="menu-title">Evaluasi Usulan</span>
-                                        <span class="menu-arrow d-lg-none"></span>
-                                    </span>
-                                    <!--end:Menu link-->
-                                    <!--begin:Menu sub-->
-                                    <div
-                                        class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
-                                        <!--begin:Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Evaluasi Administrasi</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                            <!--begin:Menu link-->
-                                            <a class="menu-link py-3" href="#"
-                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                data-bs-dismiss="click" data-bs-placement="right">
-                                                <span class="menu-icon">
-                                                    <i class="ki-duotone ki-black-right fs-2">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </span>
-                                                <span class="menu-title">Evaluasi Substansi</span>
-                                            </a>
-                                            <!--end:Menu link-->
-                                        </div>
-                                        <!--end:Menu item-->
-                                    </div>
-                                    <!--end:Menu sub-->
+                                        <span class="menu-title">Pengajuan Judul</span>
+                                    </a>
                                 </div>
                                 <!--end:Menu item-->
                             </div>

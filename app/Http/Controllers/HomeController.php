@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\Repositories\Contracts\datasContract;
 use App\Http\Services\Repositories\Contracts\UsersContract;
 use App\Models\Mahasiswa;
+use App\Models\PengajuanJudul;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -34,7 +35,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('app.home');
+        $totalPengajuan = PengajuanJudul::with('pengusuls')->get();
+        // dd($totalPengajuan);
+        return view('app.home', compact('totalPengajuan'));
+    }
+
+    public function pengajuan()
+    {
+        return view('app.pengajuan-judul.index');
     }
 
     public function register()

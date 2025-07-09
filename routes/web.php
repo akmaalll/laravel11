@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController;
+use App\Http\Controllers\Admin\JudulController;
 use App\Http\Controllers\admin\JudulKlasifikasiController;
 use App\Http\Controllers\Admin\KeahlianController;
 use App\Http\Controllers\Admin\ProdiController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TodoController;
 use App\Http\Controllers\Admin\UserMenuController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\App\TitleClassificationController;
+use App\Http\Controllers\App\TitleSimilarityController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -31,7 +34,25 @@ use App\Http\Controllers\Auth\LoginController as Auths;
 // Route::resource('photos', PhotoController::class)->except(['create', 'store', 'update', 'destroy']);
 // Route::resource('photos', PhotoController::class)->only(['index', 'show']);
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+Route::group(['prefix' => 'mahasiswa', 'middleware' => ['role:3']], function () {
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    Route::group(['prefix' => '/pengajuan-judul'], function () {
+        Route::get('/', [App\Http\Controllers\App\PengajuanController::class, 'index'])->name('pengajuan.index');
+        Route::get('/data', [App\Http\Controllers\App\PengajuanController::class, 'data'])->name('pengajuan.data');
+        Route::prefix('create')->group(function () {
+            Route::post('/store', [App\Http\Controllers\App\PengajuanController::class, 'store'])->name('pengajuan.store');
+            Route::get('/step-1', [App\Http\Controllers\App\PengajuanController::class, 'step1'])->name('pengajuan.step1');
+            Route::get('/step-2', [App\Http\Controllers\App\PengajuanController::class, 'step2'])->name('pengajuan.step2');
+            Route::get('/step-3', [App\Http\Controllers\App\PengajuanController::class, 'step3'])->name('pengajuan.step3');
+        });
+        Route::post('/api/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
+            ->name('check.title.similarity');
+        // Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
+        // Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
+        // Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
+    });
+});
 
 Route::domain('')->group(function () { // development
     // Route::domain('permohonan.bpfkmakassar.go.id')->group(function () { // production
@@ -46,7 +67,7 @@ Route::domain('')->group(function () { // development
 
 
     // ADMIN_ROUTES
-    Route::group(['prefix' => 'admin',   'middleware' => ['web']], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'role:1,2']], function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
 
@@ -59,6 +80,20 @@ Route::domain('')->group(function () { // development
             Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
             Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
             Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
+            Route::put('/{id}/update-status', [PengajuanJudulController::class, 'updateStatus'])
+                ->name('pengajuan-judul.update-status');
+        });
+
+        Route::group(['prefix' => '/judul'], function () {
+            Route::get('/', [JudulController::class, 'index'])->name('judul.index');
+            Route::get('/data', [JudulController::class, 'data'])->name('judul.data');
+            Route::get('/create', [JudulController::class, 'create'])->name('judul.create');
+            Route::post('/store', [JudulController::class, 'store'])->name('judul.store');
+            Route::get('/{id}/edit', [JudulController::class, 'edit'])->name('judul.edit');
+            Route::put('/{id}', [JudulController::class, 'update'])->name('judul.update');
+            Route::delete('/{id}', [JudulController::class, 'destroy'])->name('judul.delete');
+            Route::post('/api/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
+                ->name('check.title.similarity');
         });
 
 

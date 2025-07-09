@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('id_judul', 100);
             $table->string('nim', 6);
+            $table->string('nama');
             $table->timestamps();
 
             $table->foreign('id_judul')->references('id')->on('pengajuan_juduls')->onDelete('cascade');

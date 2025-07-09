@@ -14,3 +14,4 @@
 
 <link href="{{ asset('apps/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('apps/themes/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+

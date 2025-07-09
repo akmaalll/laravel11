@@ -13,11 +13,17 @@ class Judul extends Model
     protected $fillable = [
         'judul',
         'topik',
-        'id_prodi'
+        'id_prodi',
+        'id_user',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function prodi()
+    {
+        return $this->hasOne(Prodi::class, 'id', 'id_prodi');
     }
 }

@@ -16,8 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('id_prodi');
             $table->string('judul');
             $table->string('topik', 100);
-            $table->string('file', 100);
-            $table->text('deskripsi');
+            $table->string('konsentrasi', 50);
+            $table->string('objek_penelitian');
+            $table->text('latar_belakang');
+            $table->text('rumusan_masalah');
+            $table->text('tujuan_penelitian');
+            $table->text('penelitian_terkait');
             $table->enum('status', ['diajukan', 'diverifikasi', 'ditolak', 'diterima'])->default('diajukan');
             $table->timestamps();
 

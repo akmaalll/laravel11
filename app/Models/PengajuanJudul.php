@@ -16,12 +16,16 @@ class PengajuanJudul extends Model
         'id_prodi',
         'judul',
         'topik',
-        'file',
-        'deskripsi',
+        'konsentrasi',
+        'objek_penelitian',
+        'latar_belakang',
+        'rumusan_masalah',
+        'tujuan_penelitian',
+        'penelitian_terkait',
         'status',
     ];
 
-    public function pengusul()
+    public function pengusuls()
     {
         return $this->hasMany(PengusulJudul::class, 'id_judul', 'id');
     }

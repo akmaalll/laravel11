@@ -20,7 +20,9 @@
 <!--begin::Custom Javascript(used for this page only)-->
 <script src="{{ asset('demo/assets/js/custom/apps/user-management/users/list/table.js') }}"></script>
 <script src="{{ asset('/') }}twbs-pagination/jquery.twbsPagination.min.js"></script>
+<script src="{{ asset('/') }}themes/dist/assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
+
 
 <!--end::Custom Javascript-->
 <!--end::Javascript-->
-@stack('jsScript')
+{{-- @stack('jsScript') --}}
