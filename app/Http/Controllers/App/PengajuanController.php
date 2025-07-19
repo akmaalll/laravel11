@@ -69,12 +69,18 @@ class PengajuanController extends Controller
     }
     public function step1()
     {
-        // if (!Session::has('form_uuid')) {
-        $uuid = Uuid::uuid4()->toString();
-        Session::put('form_uuid', $uuid);
-        // }
-        return view('app.pengajuan-judul.index-step1', ['step' => 1, 'uuid' => $uuid]);
+        // Generate a new UUID only if one doesn't exist in session
+        if (!Session::has('form_uuid')) {
+            $uuid = Uuid::uuid4()->toString();
+            Session::put('form_uuid', $uuid);
+        }
+
+        return view('app.pengajuan-judul.index-step1', [
+            'step' => 1,
+            'uuid' => Session::get('form_uuid')
+        ]);
     }
+
     public function step2()
     {
 
@@ -105,6 +111,19 @@ class PengajuanController extends Controller
             $req['uuid'] = Session::get('form_uuid');
             $currentStep = $req['step'];
             $nextStep = $currentStep + 1;
+
+            $currentCount = PengajuanJudul::with('pengusuls')
+                ->whereHas('pengusuls', function ($query) {
+                    $query->where('nim', Session::get('stb'));
+                })->count();
+
+            if ($currentCount >= 3) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda sudah mencapai batas maksimal pengajuan (3 judul)',
+                    'redirect' => route('pengajuan.index')
+                ], 403);
+            }
 
             // Jalankan validator hanya pada step 2
             if ($currentStep == 2) {
@@ -143,11 +162,9 @@ class PengajuanController extends Controller
                     Session::forget('form_uuid');
                 }
             }
-            $data = PengajuanJudul::with('pengusuls')->WhereHas('pengusuls', function ($query) {
-                $query->where('nim', Session::get('stb'));
-            })->count();
 
-            if ($currentStep == 2 && $data < 3) {
+
+            if ($currentStep == 2) {
                 if ($existingRecord) {
                     $this->repo->update($req, $existingRecord->id);
                     return response()->json([
@@ -156,6 +173,7 @@ class PengajuanController extends Controller
                         'message' => 'Data Update successfully'
                     ]);
                 } else {
+                    // dd($existingRecord);
                     $this->repo->store($req);
                     return response()->json([
                         'success' => true,
@@ -163,16 +181,12 @@ class PengajuanController extends Controller
                         'message' => 'Data saved successfully'
                     ]);
                 }
-            } else {
-                return response()->json([
-                    'message' => 'Sudah tidak bisa tambah data'
-                ]);
             }
 
             return response()->json([
                 'success' => true,
                 'step' => $nextStep,
-                'message' => 'Data saved successfully'
+                'message' => 'Data saved successfully',
             ]);
         } catch (\Exception $e) {
             dd($e);

@@ -176,7 +176,7 @@
             console.log(data)
             const resultDiv = document.getElementById('titleCheckResult');
             const submitButton = document.getElementById('kt_formvalidation_step_submit');
-            const cosinePercent = Math.round(data.similarity * 100);
+            const cosinePercent = (data.similarity * 100).toFixed(2);
             const svmPrediction = data.predicted_topic || 'Tidak dapat diprediksi';
 
             // Determine overall status
@@ -188,7 +188,7 @@
             } else if (cosinePercent < 70) {
                 overallStatus = '⚠️ Perlu Modifikasi!';
                 alertClass = 'alert-warning';
-                if (submitButton) submitButton.disabled = false;
+                if (submitButton) submitButton.disabled = true;
             } else {
                 overallStatus = '❌ Judul Ditolak!';
                 alertClass = 'alert-danger';
@@ -203,8 +203,8 @@
                     <strong>Judul yang mirip:</strong>
                     <ul class="mt-2">
                         ${data.similar_titles.map(title => `
-                                                    <li>${title.judul} (${Math.round(title.similarity * 100)}% similar, Topik: ${title.topik})</li>
-                                                `).join('')}
+                                                                    <li>${title.judul} (${Math.round(title.similarity * 100)}% similar, Topik: ${title.topik})</li>
+                                                                `).join('')}
                     </ul>
                 </div>
             `;

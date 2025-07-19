@@ -4,13 +4,15 @@ namespace App\Http\Services\Repositories\Contracts;
 
 use Illuminate\Database\Eloquent\Collection;
 
-interface DosenContract
+interface DosenRecommenderContract
 {
 	/**
 	 * params string $search
 	 * @return Collection
-	*/
+	 */
 
 	public function paginated(array $request);
-	public function updates(array $data, $id);
+	public function recommend($topik, $limit);
+	public function recommendWithSimilarity($topik, $limit);
+	public function getMultipleRecommendations($topik, $count);
 }

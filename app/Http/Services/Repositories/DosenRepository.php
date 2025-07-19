@@ -23,6 +23,24 @@ class DosenRepository extends BaseRepository implements DosenContract
 		$perPage = $criteria['per_page'] ?? 5;
 		$field = $criteria['sort_field'] ?? 'nidn';
 		$sortOrder = $criteria['sort_order'] ?? 'desc';
-		return $this->model->orderBy($field, $sortOrder)->paginate($perPage);
+		$search = $criteria['search'] ?? '';
+
+		return $this->model->when($search, function ($query) use ($search) {
+			$query->where('nama', 'like', "%{$search}%");
+		})
+			->orderBy($field, $sortOrder)
+			->paginate($perPage);
+	}
+
+	public function updates(array $data, $id)
+	{
+		$dosen = Dosen::findOrFail($id);
+
+		if (isset($data['id_keahlian']) && is_array($data['id_keahlian'])) {
+			$data['id_keahlian'] = json_encode($data['id_keahlian']);
+		}
+
+		$dosen->update($data);
+		return $dosen;
 	}
 }

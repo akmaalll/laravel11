@@ -32,6 +32,7 @@ class DosenController extends Controller
         try {
             $title = $this->title;
             $data = $this->repo->paginated($request->all());
+            // dd($data);
             $perPage = $request->per_page == '' ? 5 : $request->per_page;
             $view = view('admin.' . $title . '.data', compact('data', 'title'))->with('i', ($request->input('page', 1) -
                 1) * $perPage)->render();
@@ -61,6 +62,15 @@ class DosenController extends Controller
         try {
             $req = $request->all();
             $data = $this->repo->store($req);
+            if ($request->keahlian_ids_values) {
+                $keahlianIds = explode(',', $request->keahlian_ids_values);
+
+                $data->keahlians()->sync($keahlianIds);
+            }
+            if ($request->keahlian_ids_values) {
+                $keahlianIds = explode(',', $request->keahlian_ids_values);
+                $data->keahlians()->sync($keahlianIds);
+            }
             return response()->json(['data' => $data, 'success' => true]);
         } catch (\Exception $e) {
             return view('errors.message', ['message' => $e->getMessage()]);
@@ -83,8 +93,10 @@ class DosenController extends Controller
         try {
             $title = $this->title;
             $data = $this->repo->find($id);
+            // dd($data );
             return view('admin.' . $title . '.form', compact('title', 'data'));
         } catch (\Exception $e) {
+            dd($e);
             return view('errors.message', ['message' => $e->getMessage()]);
         }
     }
@@ -93,9 +105,16 @@ class DosenController extends Controller
     {
         try {
             $req = $request->all();
-            $data = $this->repo->update($req, $request->id);
+
+            $data = $this->repo->updates($req, $request->id);
+            if ($request->keahlian_ids_values) {
+                $keahlianIds = explode(',', $request->keahlian_ids_values);
+
+                $data->keahlians()->sync($keahlianIds);
+            }
             return response()->json(['data' => $data, 'success' => true]);
         } catch (\Exception $e) {
+            dd($e);
             return view('errors.message', ['message' => $e->getMessage()]);
         }
     }

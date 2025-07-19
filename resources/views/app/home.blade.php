@@ -149,7 +149,8 @@
                         </div>
                         <div class="card-body pt-0">
                             @foreach ($totalPengajuan as $v)
-                                <div class="recent-item">
+                               @if ($v->pengusuls->contains('nim', Session::get('stb')))
+                                    <div class="recent-item">
                                     <div class="flex-grow-1">
                                         <div class="recent-title fw-bold text-gray-800 fs-6">{{ $v->judul }}</div>
                                         <div class="recent-desc text-gray-600 fs-7">
@@ -164,6 +165,7 @@
                                         {{ $v->status }}
                                     </span>
                                 </div>
+                               @endif
                             @endforeach
                         </div>
                     </div>

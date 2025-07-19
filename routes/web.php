@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TodoController;
 use App\Http\Controllers\Admin\UserMenuController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\App\TitleAnalysisController;
 use App\Http\Controllers\App\TitleClassificationController;
 use App\Http\Controllers\App\TitleSimilarityController;
 use Illuminate\Support\Facades\Route;
@@ -35,24 +36,6 @@ use App\Http\Controllers\Auth\LoginController as Auths;
 // Route::resource('photos', PhotoController::class)->only(['index', 'show']);
 
 
-Route::group(['prefix' => 'mahasiswa', 'middleware' => ['role:3']], function () {
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
-    Route::group(['prefix' => '/pengajuan-judul'], function () {
-        Route::get('/', [App\Http\Controllers\App\PengajuanController::class, 'index'])->name('pengajuan.index');
-        Route::get('/data', [App\Http\Controllers\App\PengajuanController::class, 'data'])->name('pengajuan.data');
-        Route::prefix('create')->group(function () {
-            Route::post('/store', [App\Http\Controllers\App\PengajuanController::class, 'store'])->name('pengajuan.store');
-            Route::get('/step-1', [App\Http\Controllers\App\PengajuanController::class, 'step1'])->name('pengajuan.step1');
-            Route::get('/step-2', [App\Http\Controllers\App\PengajuanController::class, 'step2'])->name('pengajuan.step2');
-            Route::get('/step-3', [App\Http\Controllers\App\PengajuanController::class, 'step3'])->name('pengajuan.step3');
-        });
-        Route::post('/api/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
-            ->name('check.title.similarity');
-        // Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
-        // Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
-        // Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
-    });
-});
 
 Route::domain('')->group(function () { // development
     // Route::domain('permohonan.bpfkmakassar.go.id')->group(function () { // production
@@ -65,21 +48,56 @@ Route::domain('')->group(function () { // development
 
     Route::get('/logout', [Auths::class, 'logout'])->middleware('auth')->name('logout');
 
+    // Route untuk similarity check
+    Route::post('/title/similarity', [TitleAnalysisController::class, 'checkTitleSimilarity'])->name('title.similarity');
+
+    // Route untuk classification
+    Route::post('/title/classify', [TitleAnalysisController::class, 'classifyTitleTopic'])->name('title.classify');
+
+    // Route untuk combined analysis
+    Route::post('/title/analyze', [TitleAnalysisController::class, 'analyzeTitle'])->name('title.analyze');
+
+
+    Route::group(['prefix' => 'mahasiswa', 'middleware' => ['role:3']], function () {
+        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+        Route::group(['prefix' => '/pengajuan-judul'], function () {
+            Route::get('/', [App\Http\Controllers\App\PengajuanController::class, 'index'])->name('pengajuan.index');
+            Route::get('/data', [App\Http\Controllers\App\PengajuanController::class, 'data'])->name('pengajuan.data');
+            Route::prefix('create')->group(function () {
+                Route::post('/store', [App\Http\Controllers\App\PengajuanController::class, 'store'])->name('pengajuan.store');
+                Route::get('/step-1', [App\Http\Controllers\App\PengajuanController::class, 'step1'])->name('pengajuan.step1');
+                Route::get('/step-2', [App\Http\Controllers\App\PengajuanController::class, 'step2'])->name('pengajuan.step2');
+                Route::get('/step-3', [App\Http\Controllers\App\PengajuanController::class, 'step3'])->name('pengajuan.step3');
+            });
+            Route::post('/api/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
+                ->name('check.title.similarity');
+            // Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
+            // Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
+            // Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
+        });
+    });
+
 
     // ADMIN_ROUTES
     Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'role:1,2']], function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
+        // routes/web.php
+        // Route::get('/pengajuan/{id}/rekomendasi', [PembimbingController::class, 'getRecommendation']);
+        // Route::post('/pengajuan/{id}/assign-pembimbing', [PembimbingController::class, 'assignSupervisors']);
 
         # APPS 
         Route::group(['prefix' => '/pengajuan-judul'], function () {
             Route::get('/', [PengajuanJudulController::class, 'index'])->name('pengajuan-judul.index');
             Route::get('/data', [PengajuanJudulController::class, 'data'])->name('pengajuan-judul.data');
+            Route::get('/datas', [PengajuanJudulController::class, 'datas'])->name('pengajuan-judul.datas');
             Route::get('/create', [PengajuanJudulController::class, 'create'])->name('pengajuan-judul.create');
             Route::post('/store', [PengajuanJudulController::class, 'store'])->name('pengajuan-judul.store');
             Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
             Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
             Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
+            Route::put('/{id}/assign-supervisor', [PengajuanJudulController::class, 'assignSupervisor'])->name('pengajuan-judul.assign-supervisor');
+            Route::get('/dosen', [PengajuanJudulController::class, 'getDosen'])->name('admin.pengajuan-judul.dosen');
             Route::put('/{id}/update-status', [PengajuanJudulController::class, 'updateStatus'])
                 ->name('pengajuan-judul.update-status');
         });
@@ -93,7 +111,7 @@ Route::domain('')->group(function () { // development
             Route::put('/{id}', [JudulController::class, 'update'])->name('judul.update');
             Route::delete('/{id}', [JudulController::class, 'destroy'])->name('judul.delete');
             Route::post('/api/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
-                ->name('check.title.similarity');
+                ->name('admin.check.title.similarity');
         });
 
 
@@ -141,6 +159,12 @@ Route::domain('')->group(function () { // development
         });
 
         Route::group(['prefix' => '/pembimbing'], function () {
+            Route::get('/test', function () {
+                return view('admin.pembimbing.test');
+            });
+            Route::get('/naive-bayes-test', function () {
+                return view('admin.pembimbing.naive-bayes-test');
+            })->name('pembimbing.naive-bayes-test');
             Route::get('/', [PembimbingController::class, 'index'])->name('pembimbing.index');
             Route::get('/data', [PembimbingController::class, 'data'])->name('pembimbing.data');
             Route::get('/create', [PembimbingController::class, 'create'])->name('pembimbing.create');
@@ -148,6 +172,32 @@ Route::domain('')->group(function () { // development
             Route::get('/{id}/edit', [PembimbingController::class, 'edit'])->name('pembimbing.edit');
             Route::put('/{id}', [PembimbingController::class, 'update'])->name('pembimbing.update');
             Route::delete('/{id}', [PembimbingController::class, 'destroy'])->name('pembimbing.delete');
+
+            Route::get('/recommendation/{pengajuanId}', [PembimbingController::class, 'getRecommendation'])
+                ->name('pembimbing.recommendation');
+
+            Route::get('/recommendation-similarity/{pengajuanId}', [PembimbingController::class, 'getRecommendationSimilarity'])
+                ->name('pembimbing.recommendation.similarity');
+
+            Route::get('/recommendation-naive-bayes/{pengajuanId}', [PembimbingController::class, 'getRecommendationNaiveBayes'])
+                ->name('pembimbing.recommendation.naive-bayes');
+
+            Route::post('/train-naive-bayes', [PembimbingController::class, 'trainNaiveBayesModel'])
+                ->name('pembimbing.train-naive-bayes');
+
+            Route::post('/save-training-data', [PembimbingController::class, 'saveTrainingData'])
+                ->name('pembimbing.save-training-data');
+
+            Route::post('/assign/{pengajuanId}', [PembimbingController::class, 'assignSupervisors'])
+                ->name('pembimbing.assign');
+
+            // Get available dosens
+            Route::get('/dosens/available', [PembimbingController::class, 'getAvailableDosens'])
+                ->name('pembimbing.dosens.available');
+
+            // Get pembimbing history
+            Route::get('/history/{pengajuanId}', [PembimbingController::class, 'getPembimbingHistory'])
+                ->name('pembimbing.history');
         });
 
         # USER SETTING

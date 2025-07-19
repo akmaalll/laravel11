@@ -25,11 +25,11 @@
             <input type="text" class="form-control form-control-solid" placeholder="" name=""
                 value="{{ $data['topik'] }}" id="" readonly />
         </div>
-        <div class=" col-md-6 fv-row">
+        {{-- <div class=" col-md-6 fv-row">
             <label class="required fs-6 fw-semibold mb-2">2. Topik</label>
             <input type="text" class="form-control form-control-solid" placeholder="" name=""
                 value="{{ $data['topik'] }}" id="" readonly />
-        </div>
+        </div> --}}
     </div>
 
     {{-- <div class="row g-9 mb-8">

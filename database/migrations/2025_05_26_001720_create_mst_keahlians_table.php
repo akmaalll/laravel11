@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mst_keahlians', function (Blueprint $table) {
-            $table->id();
+            $table->string('id', 10)->primary();
             $table->string('nama', 50);
             $table->timestamps();
         });

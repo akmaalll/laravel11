@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Repositories\Contracts\PengajuanJudulContract;
 use App\Http\Services\Repositories\Contracts\PengusulJudulContract;
+use App\Models\Dosen;
 use App\Models\PengajuanJudul;
 
 class PengajuanJudulController extends Controller
@@ -26,6 +27,19 @@ class PengajuanJudulController extends Controller
             return view('admin.' . $title . '.index', compact('title'));
         } catch (\Exception $e) {
             return view('errors.message', ['message' => $e->getMessage()]);
+        }
+    }
+
+    public function datas()
+    {
+        try {
+            $pengajuan = PengajuanJudul::all();
+            return response()->json([
+                'ok' => true,
+                'data' => $pengajuan
+            ]);
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 
@@ -142,5 +156,29 @@ class PengajuanJudulController extends Controller
         } catch (\Exception $e) {
             return view('errors.message', ['message' => $e->getMessage()]);
         }
+    }
+
+    public function assignSupervisor(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'pembimbing_id' => 'required|exists:dosen,id'
+            ]);
+
+            $pengajuan = PengajuanJudul::findOrFail($id);
+            $pengajuan->update([
+                'pembimbing_id' => $request->pembimbing_id
+            ]);
+
+            return redirect()->back()->with('success', 'Pembimbing berhasil ditentukan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menentukan pembimbing');
+        }
+    }
+
+    public function getDosen()
+    {
+        $dosen = Dosen::all();
+        return response()->json($dosen);
     }
 }

@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('nama', 50);
             $table->string('email', 60);
             $table->timestamps();
-            $table->unsignedBigInteger('id_keahlian');
-            $table->foreign('id_keahlian')->references('id')->on('mst_keahlians')->onDelete('cascade');
         });
     }
 

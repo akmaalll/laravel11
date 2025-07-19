@@ -23,6 +23,22 @@ class ProdiSeeder extends Seeder
                 'kode' => 2,
                 'nama' => 'Teknik Informatika',
             ],
+            [
+                'kode' => 3,
+                'nama' => 'Manajemen Informatika',
+            ],
+            [
+                'kode' => 4,
+                'nama' => 'Kewirausahaan',
+            ],
+            [
+                'kode' => 5,
+                'nama' => 'Rekayasa Perangkat Lunak',
+            ],
+            [
+                'kode' => 6,
+                'nama' => 'Bisnis Digital`',
+            ],
         ];
 
         foreach ($topikData as $topik) {

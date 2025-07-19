@@ -158,6 +158,19 @@
                 });
             }
 
+            function loadDosen() {
+                $.ajax({
+                    url: '{{ route('admin.pengajuan-judul.dosen') }}',
+                    type: "GET",
+                    datatype: "json",
+                    success: function(data) {
+                        window.dosenData = data;
+                    }
+                });
+            }
+
+            loadDosen();
+
             function loadpage(per_page, search) {
                 $.ajax({
                     url: '{{ route($title . '.data') }}',

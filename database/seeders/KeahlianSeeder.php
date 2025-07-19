@@ -15,6 +15,7 @@ class KeahlianSeeder extends Seeder
     public function run(): void
     {
         Keahlian::create([
+            'id' =>'KHL001',
             'nama' => 'Pemrograman Web'
         ]);
     }

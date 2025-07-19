@@ -62,7 +62,7 @@
                                             </span>
                                         </button>
 
-                                        {{-- <!-- Alert untuk menampilkan hasil klasifikasi -->
+                                        <!-- Alert untuk menampilkan hasil klasifikasi -->
                                         <div id="classificationResult" class="alert alert-info d-none" role="alert">
                                             <h6 class="alert-heading">Hasil Klasifikasi:</h6>
                                             <p id="classificationMessage" class="mb-0"></p>
@@ -72,7 +72,7 @@
                                         <div id="similarTitlesResult" class="alert alert-warning d-none" role="alert">
                                             <h6 class="alert-heading">Judul Serupa Ditemukan:</h6>
                                             <div id="similarTitlesList"></div>
-                                        </div> --}}
+                                        </div>
                                     </div>
 
                                     <div class="col-md-12 fv-row">
@@ -204,21 +204,22 @@
             button.disabled = true;
 
             // Hide previous results
-            // document.getElementById('classificationResult').classList.add('d-none');
-            // document.getElementById('similarTitlesResult').classList.add('d-none');
+            document.getElementById('classificationResult').classList.add('d-none');
+            document.getElementById('similarTitlesResult').classList.add('d-none');
 
             // AJAX request to classify topic
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ route('check.title.similarity') }}",
+                url: "{{ route('admin.check.title.similarity') }}",
                 type: "POST",
                 data: {
                     judul: judul
                 },
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response);
                     // Hide loading
                     button.removeAttribute('data-kt-indicator');
                     button.disabled = false;
@@ -228,12 +229,12 @@
                     const messageDiv = document.getElementById('classificationMessage');
 
                     if (response.status === 'success') {
-                        // resultDiv.className = 'alert alert-success';
-                        // messageDiv.innerHTML = `
-                    //     <strong>Topik Diprediksi:</strong> ${response.predicted_topic}<br>
-                    //     <strong>Tingkat Kemiripan:</strong> ${(response.similarity * 100).toFixed(2)}%<br>
-                    //     <strong>Status:</strong> ${response.message}
-                    // `;
+                        resultDiv.className = 'alert alert-success';
+                        messageDiv.innerHTML = `
+                        <strong>Topik Diprediksi:</strong> ${response.predicted_topic}<br>
+                        <strong>Tingkat Kemiripan:</strong> ${(response.similarity * 100).toFixed(2)}%<br>
+                        <strong>Status:</strong> ${response.message}
+                    `;
 
                         // Set topik otomatis
                         document.getElementById('topik').value = response.predicted_topic;
@@ -241,16 +242,16 @@
                         toastr.success('Klasifikasi berhasil! Topik telah diisi otomatis.');
 
                     } else if (response.status === 'warning') {
-                        // resultDiv.className = 'alert alert-warning';
-                        // messageDiv.innerHTML = `
-                    //     <strong>Peringatan:</strong> ${response.validation_message}<br>
-                    //     ${response.predicted_topic ? `<strong>Topik Diprediksi:</strong> ${response.predicted_topic}<br>` : ''}
-                    //     <strong>Tingkat Kemiripan:</strong> ${(response.similarity * 100).toFixed(2)}%
-                    // `;
+                        resultDiv.className = 'alert alert-warning';
+                        messageDiv.innerHTML = `
+                        <strong>Peringatan:</strong> ${response.validation_message}<br>
+                        ${response.predicted_topic ? `<strong>Topik Diprediksi:</strong> ${response.predicted_topic}<br>` : ''}
+                        <strong>Tingkat Kemiripan:</strong> ${(response.similarity * 100).toFixed(2)}%
+                    `;
 
-                        // if (response.predicted_topic) {
-                        //     document.getElementById('topik').value = response.predicted_topic;
-                        // }
+                        if (response.predicted_topic) {
+                            document.getElementById('topik').value = response.predicted_topic;
+                        }
 
                         toastr.warning(response.message);
                     }

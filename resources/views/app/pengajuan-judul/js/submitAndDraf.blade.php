@@ -55,14 +55,19 @@
                 contentType: false,
                 success: function(response) {
                     if (response.success) {
-                        handleSuccessResponse(response, status);
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                            toastr.error(response.message);
+                        } else {
+                            handleSuccessResponse(response, status);
+                        }
                     } else {
-                        window.location.href = '{{ route('pengajuan.index') }}';
                         toastr.error(response.message || 'Operation failed');
                     }
                 },
                 error: function(xhr, status, error) {
                     if (xhr.responseJSON) {
+                        // console.log(xhr.responseJSON);
                         if (xhr.responseJSON.message) {
                             errorMessage = xhr.responseJSON.message;
                         }
