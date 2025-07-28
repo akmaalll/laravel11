@@ -39,6 +39,18 @@
                 value="{{ Session::get('stb', '') }}" id="nim" readonly/>
         </div>
     </div> --}}
+    {{-- <div class="form-group row mb-4">
+        <div class="col-md-3">
+            <label class="required fs-6 fw-semibold mb-2">Nim Mahasiswa</label>
+            <input type="text" class="form-control" name="mahasiswas[0][nim]" value="{{ Session::get('stb', '') }}"
+                readonly>
+        </div>
+        <div class="col-md-6">
+            <label class="required fs-6 fw-semibold mb-2">Nama Mahasiswa</label>
+            <input type="text" class="form-control" name="mahasiswas[0][nama]"
+                value="{{ Session::get('nama_mhs', '') }}" readonly>
+        </div>
+    </div> --}}
     <div class="row g-9 mb-8">
         <div class="col-md-12 fv-row">
             <!--begin::Repeater-->
@@ -49,24 +61,18 @@
                         <div data-repeater-item>
                             <div class="form-group row">
                                 <div class="col-md-3">
-                                    <label class="required fs-6 fw-semibold mb-2">Nim
-                                        Mahasiswa</label>
-                                    <input type="text" class="form-control" name="nim"
-                                        value="{{ Session::get('stb', '') }}">
+                                    <label class="required fs-6 fw-semibold mb-2">Nim Mahasiswa</label>
+                                    <input type="hidden" name="nim" value="{{ Session::get('stb', '') }}">
+                                    <select class="form-control select-mahasiswa" name="nim" value="{{ Session::get('stb', '') }}" readonly></select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="required fs-6 fw-semibold mb-2">Nama
-                                        Mahasiswa</label>
-                                    <input type="text" class="form-control" name="nama"
-                                        value="{{ Session::get('nama_mhs', '') }}">
+                                    <label class="required fs-6 fw-semibold mb-2">Nama Mahasiswa</label>
+                                    <input type="text" class="form-control nama-mahasiswa" name="nama" value="{{ Session::get('nama_mhs', '') }}" readonly>
                                 </div>
                                 <div class="col-md-3">
                                     <a href="javascript:;" data-repeater-delete
                                         class="btn btn-sm btn-light-danger mt-3 mt-md-9">
-                                        <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span
-                                                class="path2"></span><span class="path3"></span><span
-                                                class="path4"></span><span class="path5"></span></i>
-                                        Delete
+                                        <i class="ki-duotone ki-trash fs-5"></i> Delete
                                     </a>
                                 </div>
                             </div>
@@ -78,8 +84,7 @@
                 <!--begin::Form group-->
                 <div class="form-group mt-5">
                     <a href="javascript:;" data-repeater-create class="btn btn-light-primary">
-                        <i class="ki-duotone ki-plus fs-3"></i>
-                        Add
+                        <i class="ki-duotone ki-plus fs-3"></i> Add
                     </a>
                 </div>
                 <!--end::Form group-->

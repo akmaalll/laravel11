@@ -89,4 +89,12 @@ class BaseRepository implements BaseContract
 	{
 		return $this->model->find($id)->delete();
 	}
+
+	/**
+	 * @return Model
+	 */
+	public function getModel(): Model
+	{
+		return $this->model;
+	}
 }

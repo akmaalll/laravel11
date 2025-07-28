@@ -22,6 +22,7 @@ class MenuSeeder extends Seeder
             // APPS
             ['name' => 'Pengajuan Judul', 'icon' => 'bi-stack', 'url' => 'pengajuan-judul', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '1'],
             ['name' => 'Pembimbing', 'icon' => 'bi-stack', 'url' => 'pembimbing', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '1'],
+            ['name' => 'Assignment Pembimbing', 'icon' => 'bi-robot', 'url' => 'pembimbing/assignment', 'index' => 2, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '1'],
 
             // DATA MASTER
             ['name' => 'Judul', 'icon' => 'bi-stack', 'url' => 'judul', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],

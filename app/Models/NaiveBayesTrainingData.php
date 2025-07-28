@@ -11,7 +11,7 @@ class NaiveBayesTrainingData extends Model
 
     protected $table = 'naive_bayes_training_data';
     protected $fillable = [
-        'pengajuan_id',
+        'judul_id',
         'dosen_nidn',
         'judul_skripsi',
         'topik_skripsi',
@@ -33,9 +33,9 @@ class NaiveBayesTrainingData extends Model
         'is_training_data' => 'boolean'
     ];
 
-    public function pengajuanJudul()
+    public function judul()
     {
-        return $this->belongsTo(PengajuanJudul::class, 'pengajuan_id', 'id');
+        return $this->belongsTo(Judul::class, 'judul_id', 'id');
     }
 
     public function dosen()

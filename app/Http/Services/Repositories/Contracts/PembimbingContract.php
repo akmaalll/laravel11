@@ -9,7 +9,8 @@ interface PembimbingContract
 	/**
 	 * params string $search
 	 * @return Collection
-	*/
+	 */
 
 	public function paginated(array $request);
+	// public function getNaiveBayesRecommendations($judul, $topik);
 }

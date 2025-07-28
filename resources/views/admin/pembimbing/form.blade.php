@@ -39,66 +39,68 @@
                 <!--begin::Body-->
                 <div class="card-body pt-3">
 
+                    {{-- @if (isset($rekomendasi) && count($rekomendasi) > 0)
+                        <div class="alert alert-info">
+                            <strong>Rekomendasi Pembimbing (Naive Bayes):</strong>
+                            <ol>
+                                @foreach ($rekomendasi as $nidn => $rec)
+                                    <li><b>{{ $rec['nama'] }}</b> (NIDN: {{ $nidn }}) - Skor:
+                                        {{ number_format($rec['skor'], 4) }}</li>
+                                @endforeach
+                            </ol>
+                        </div>
+                    @endif --}}
+
                     <div class="row mt-5">
                         <!--begin:Form-->
-                        <form id="kt_modal_new_target_form" class="form" action="#">
-                            <input name="_method" type="hidden" id="methodId"
-                                value="{{ isset($data->id) ? 'PUT' : 'POST' }}">
-                            <input type="hidden" name="id" id="formId" value="{{ $data->id ?? null }}">
+                        <form id="kt_modal_new_target_form" class="form" method="POST"
+                            action="{{ route('pembimbing.assign-with-recommendation', $pengajuan->id ?? ($pengajuan_id ?? null)) }}">
                             @csrf
-
-                            <!--begin::Input group-->
+                            <input type="hidden" name="pengajuan_id"
+                                value="{{ $pengajuan->id ?? ($pengajuan_id ?? null) }}">
                             <div class="row g-9 mb-8">
                                 <div class="col-md-6 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Dosen</label>
+                                    <label class="required fs-6 fw-semibold mb-2">Pembimbing 1 (15 teratas)</label>
                                     <select class="form-select" data-control="select2" data-hide-search="true"
-                                        data-placeholder="Select a Dosen" name="id_dosen" id="id_dosen">
-                                        <option value="">Select user...</option>
-                                        @foreach (Helper::getData('mst_dosens') as $v)
-                                            <option {{ isset($data->nidn) && $data->nidn == $v->nidn ? 'selected' : '' }}
-                                                value="{{ $v->nidn }}">{{ $v->nidn }} -
-                                                {{ $v->nama }}
-                                            </option>
-                                        @endforeach
+                                        data-placeholder="Select a Dosen" name="pembimbing_1" id="pembimbing_1" required>
+                                        <option value="">Pilih Pembimbing 1...</option>
+                                        @if (isset($rekomendasi) && count($rekomendasi) > 0)
+                                            @foreach (array_slice($rekomendasi, 0, 15) as $nidn => $rec)
+                                                <option value="{{ $nidn }}">{{ $rec['nama'] }}
+                                                    ({{ $nidn }})
+                                                    - Skor: {{ number_format($rec['skor'], 4) }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-md-6 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Judul Mahasiswa</label>
+                                    <label class="required fs-6 fw-semibold mb-2">Pembimbing 2 (selain 15 teratas)</label>
                                     <select class="form-select" data-control="select2" data-hide-search="true"
-                                        data-placeholder="Select a Dosen" name="id_judul" id="id_judul">
-                                        <option value="">Select user...</option>
-                                        @foreach (Helper::getData('pengajuan_juduls') as $v)
-                                            <option {{ isset($data->id) && $data->id == $v->id ? 'selected' : '' }}
-                                                value="{{ $v->id }}">{{ $v->judul }}
-                                            </option>
-                                        @endforeach
+                                        data-placeholder="Select a Dosen" name="pembimbing_2" id="pembimbing_2" required>
+                                        <option value="">Pilih Pembimbing 2...</option>
+                                        @if (isset($rekomendasi) && count($rekomendasi) > 0)
+                                            @foreach (array_slice($rekomendasi, 15) as $nidn => $rec)
+                                                <option value="{{ $nidn }}">{{ $rec['nama'] }}
+                                                    ({{ $nidn }})
+                                                    - Skor: {{ number_format($rec['skor'], 4) }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
-                            <!--end::Input group-->
-
-                            <!--begin::Actions-->
                             <div class="d-flex justify-content-end">
                                 <a href="{{ route($title . '.index') }}">
                                     <button type="button" id="kt_modal_new_target_cancel" class="btn btn-secondary me-3"
                                         data-bs-dismiss="modal">Batal</button>
                                 </a>
-                                @if (isset($data->id))
-                                    <button type="submit" id="kt_modal_new_target_update" class="btn btn-primary">
-                                        <span class="indicator-label">Update</span>
-                                        <span class="indicator-progress">Please wait...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    </button>
-                                @else
-                                    <button type="submit" id="kt_modal_new_target_save" class="btn btn-primary">
-                                        <span class="indicator-label">Simpan</span>
-                                        <span class="indicator-progress">Please wait...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    </button>
-                                @endif
+                                <button type="submit" id="kt_modal_new_target_save" class="btn btn-primary">
+                                    <span class="indicator-label">Simpan</span>
+                                    <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                </button>
                             </div>
-                            <!--end::Actions-->
-
                         </form>
                         <!--end:Form-->
                     </div>
@@ -284,7 +286,26 @@
     @if (isset($data->id))
         @include('admin._card._updateAjax')
     @else
-        @include('admin._card._createAjax')
+        {{-- @include('admin._card._createAjax') --}}
+        
     @endif
+
+    <script>
+        // Exclude pembimbing 1 dari pembimbing 2
+        document.addEventListener('DOMContentLoaded', function() {
+            const pembimbing1 = document.getElementById('pembimbing_1');
+            const pembimbing2 = document.getElementById('pembimbing_2');
+            pembimbing1.addEventListener('change', function() {
+                const selected1 = this.value;
+                Array.from(pembimbing2.options).forEach(opt => {
+                    if (opt.value === selected1 && opt.value !== '') {
+                        opt.disabled = true;
+                    } else {
+                        opt.disabled = false;
+                    }
+                });
+            });
+        });
+    </script>
 
 @endpush

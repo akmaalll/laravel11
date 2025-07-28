@@ -37,6 +37,6 @@ class PengajuanJudul extends Model
 
     public function prodi()
     {
-        return $this->hasOne(Prodi::class, 'id_prodi', 'id');
+        return $this->belongsTo(Prodi::class, 'id_prodi', 'id');
     }
 }

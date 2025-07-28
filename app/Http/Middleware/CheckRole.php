@@ -19,19 +19,15 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        // Jika role tidak sesuai
-        if (auth()->user()->id_role != $role) {
-            // Jika user adalah mahasiswa (role 3) mencoba akses admin
-            if (auth()->user()->id_role == 3) {
-                return redirect()->route('dashboard');
-            } else {
-                return redirect()->route('admin');
-            }
-
-            // Untuk role lainnya tampilkan unauthorized
-            abort(403, 'Unauthorized action.');
+        // Parse multiple roles (e.g., "1,2,4" becomes [1,2,4])
+        $allowedRoles = array_map('intval', explode(',', $role));
+        $userRole = auth()->user()->id_role;
+        
+        // Check if user has any of the allowed roles
+        if (!in_array($userRole, $allowedRoles)) {
+            // Instead of redirecting, show unauthorized page
+            abort(403, 'Unauthorized action. User role: ' . $userRole . ', Required roles: ' . implode(',', $allowedRoles));
         }
-
 
         return $next($request);
     }

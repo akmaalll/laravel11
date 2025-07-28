@@ -79,7 +79,6 @@ class PengajuanJudulController extends Controller
         try {
             $req = $request->all();
             $data = $this->repo->store($req);
-            // dd($data);
             foreach ($req['mahasiswas'] as $mahasiswa) {
                 $this->pengusul->store([
                     'id_judul' => $req['id'],

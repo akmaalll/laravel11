@@ -26,4 +26,21 @@ class Judul extends Model
     {
         return $this->hasOne(Prodi::class, 'id', 'id_prodi');
     }
+
+    public function pembimbings()
+    {
+        return $this->hasMany(MstJudulPembimbing::class, 'id_judul', 'id');
+    }
+
+    public function pembimbing1()
+    {
+        return $this->hasOne(MstJudulPembimbing::class, 'id_judul', 'id')
+            ->where('peran', 'pembimbing_1');
+    }
+
+    public function pembimbing2()
+    {
+        return $this->hasOne(MstJudulPembimbing::class, 'id_judul', 'id')
+            ->where('peran', 'pembimbing_2');
+    }
 }

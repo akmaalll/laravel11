@@ -116,7 +116,19 @@ class LoginController extends Controller
 
             if (Auth::attempt([$field => $login, 'password' => $password])) {
                 Helper::menu();
-                return redirect()->route('admin');
+
+                // Redirect based on user role
+                $userRole = auth()->user()->id_role;
+                switch ($userRole) {
+                    case 1: // Super Admin
+                    case 2: // Admin
+                    case 4: // Dosen
+                        return redirect()->route('admin');
+                    case 3: // Mahasiswa
+                        return redirect()->route('dashboard');
+                    default:
+                        return redirect()->route('admin');
+                }
             }
 
             $apiResponse = $this->attemptApiLogin($login, $password);

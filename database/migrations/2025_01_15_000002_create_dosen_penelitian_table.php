@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('dosen_nidn', 20);
             $table->string('judul_penelitian', 200);
-            $table->text('topik_penelitian');
+            $table->string('topik_penelitian', 255); // Changed from text to string(255)
             $table->string('jenis_penelitian', 50)->nullable(); // Penelitian Dasar/Terapan/Pengembangan
             $table->string('skema_penelitian', 50)->nullable(); // Hibah, Mandiri, dll
             $table->year('tahun_penelitian');

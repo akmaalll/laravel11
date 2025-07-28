@@ -339,6 +339,7 @@ class NaiveBayesService
                 'hasil_pembimbingan' => $hasilPembimbingan,
                 'is_training_data' => true
             ];
+            dd($trainingData);
 
             NaiveBayesTrainingData::saveTrainingData($trainingData);
 

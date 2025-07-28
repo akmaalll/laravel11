@@ -54,4 +54,9 @@ interface BaseContract
 	 * @return void
 	 */
 	public function delete($id);
+
+	/**
+	 * @return Model
+	 */
+	public function getModel(): Model;
 }

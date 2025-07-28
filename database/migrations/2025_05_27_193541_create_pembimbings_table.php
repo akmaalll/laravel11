@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('pembimbings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_dosen');
+            $table->string('id_dosen', 20); // Changed from unsignedBigInteger to string(20)
             $table->string('id_judul', 100);
             $table->enum('peran', ['pembimbing_1', 'pembimbing_2'])->default('pembimbing_1');
             $table->timestamps();
 
-            $table->foreign('id_dosen')->references('id')->on('mst_dosens')->onDelete('cascade');
+            $table->foreign('id_dosen')->references('nidn')->on('mst_dosens')->onDelete('cascade'); // Changed to reference nidn
             $table->foreign('id_judul')->references('id')->on('pengajuan_juduls')->onDelete('cascade');
         });
     }

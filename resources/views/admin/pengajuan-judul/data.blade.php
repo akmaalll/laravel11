@@ -23,90 +23,42 @@
             </span>
         </td>
         <td align="center">
-            <span class="fw-semibold badge badge-{{ $v->status == 'diterima' ? 'success' : 'warning' }}">
+            <span
+                class="fw-semibold badge badge-{{ match ($v->status) {
+                    'diajukan' => 'warning',
+                    'diterima' => 'success',
+                    'ditolak' => 'danger',
+                    'assigned' => 'info',
+                    default => 'secondary',
+                } }}">
                 {{ $v->status ?? '' }}
             </span>
         </td>
-        <td>
-            {{-- {!! Helper::btnAction($v->id, $title) !!} --}}
-            <!-- Button Trigger Modal (Ubah dari tombol edit yang sudah ada) -->
-            <a href="#" data-bs-toggle="modal" data-bs-target="#ubahStatusModal{{ $v->id }}" class="me-1">
-                <button type="button" class="btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm">
-                    <i class="ki-duotone ki-pencil fs-2">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                </button>
-            </a>
-
-            @if ($v->status == 'diterima')
-                <a href="#" data-bs-toggle="modal" data-bs-target="#pilihPembimbingModal" class="me-1">
+        <td class="d-flex justify-content-center">
+            @if ($v->status != 'assigned')
+                <a href="#" data-bs-toggle="modal" data-bs-target="#ubahStatusModal{{ $v->id }}"
+                    class="me-1">
                     <button type="button" class="btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm">
-                        <i class="ki-duotone ki-emoji-happy">
+                        <i class="ki-duotone ki-pencil fs-2">
                             <span class="path1"></span>
                             <span class="path2"></span>
-                            <span class="path3"></span>
-                            <span class="path4"></span>
                         </i>
                     </button>
                 </a>
             @endif
 
-            <div class="modal fade" id="pilihPembimbingModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <form action="" method="POST">
-                            @csrf
-                            @method('PUT')
-
-                            <div class="modal-header">
-                                <h5 class="modal-title">Pilih Pembimbing</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-
-                            <div class="modal-body">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Mahasiswa:</label>
-                                        <p class="fw-bold">Siti Nurhaliza (202001002)</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Topik:</label>
-                                        <p class="fw-bold">Sistem Informasi</p>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="pembimbingSelect" class="form-label">Pilih Pembimbing</label>
-                                    <select class="form-select" data-control="select2" id="pembimbingSelect"
-                                        name="pembimbing_id" required>
-                                        <option value="">-- Pilih Pembimbing --</option>
-                                        <option value="1">Dr. Ir. Agus Wijaya, M.Kom (Artificial Intelligence)
-                                        </option>
-                                        <option value="2">Dr. Rina Sari, S.T., M.T. (Sistem Informasi)</option>
-                                        <option value="3">Prof. Dr. Bambang Riyanto, M.Cs (Cyber Security)</option>
-                                        <option value="4">Dr. Eng. Fahmi Rahman, S.Kom, M.Kom (Mobile Development)
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="catatanPembimbing" class="form-label">Catatan (Opsional)</label>
-                                    <textarea data-kt-autosize="true" class="form-control" id="catatanPembimbing" name="catatan" rows="3"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Simpan Pembimbing</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            @if ($v->status == 'diterima')
+                <button type="button" class="btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm"
+                    onclick="showPembimbingModal('{{ $v->id }}', '{{ addslashes($v->judul) }}', '{{ addslashes($v->topik) }}')">
+                    <i class="ki-duotone ki-profile-user">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                        <span class="path4"></span>
+                       </i>
+                    {{-- Ajukan Pembimbing --}}
+                </button>
+            @endif
 
             <!-- Modal Ubah Status -->
             <div class="modal fade" id="ubahStatusModal{{ $v->id }}" tabindex="-1" aria-hidden="true">
@@ -130,6 +82,8 @@
                                             'diajukan' => 'warning',
                                             'diterima' => 'success',
                                             'ditolak' => 'danger',
+                                            'assigned' => 'info',
+                                            default => 'secondary',
                                         } }}">
                                         {{ ucfirst($v->status) }}
                                     </span>
@@ -153,8 +107,7 @@
                                 <div class="mb-3">
                                     <label for="catatan{{ $v->id }}" class="form-label">Catatan
                                         (Opsional)</label>
-                                    <textarea data-kt-autosize="true" class="form-control" id="catatan{{ $v->id }}" name="catatan"
-                                        rows="3"></textarea>
+                                    <textarea data-kt-autosize="true" class="form-control" id="catatan{{ $v->id }}" name="catatan" rows="3"></textarea>
                                 </div>
                             </div>
 

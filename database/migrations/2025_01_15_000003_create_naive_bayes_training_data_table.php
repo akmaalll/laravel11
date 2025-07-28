@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('naive_bayes_training_data', function (Blueprint $table) {
             $table->id();
-            $table->string('pengajuan_id', 36); // UUID dari pengajuan judul
+            $table->unsignedBigInteger('judul_id'); // ID dari mst_juduls
             $table->string('dosen_nidn', 20);
             $table->text('judul_skripsi');
             $table->string('topik_skripsi', 100);
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->boolean('is_training_data')->default(true);
             $table->timestamps();
 
-            $table->foreign('pengajuan_id')->references('id')->on('pengajuan_juduls')->onDelete('cascade');
+            $table->foreign('judul_id')->references('id')->on('mst_juduls')->onDelete('cascade');
             $table->foreign('dosen_nidn')->references('nidn')->on('mst_dosens')->onDelete('cascade');
             $table->index(['dosen_nidn', 'topik_skripsi']);
         });

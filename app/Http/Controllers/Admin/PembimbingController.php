@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\Repositories\Contracts\DosenRecommenderContract;
+
 use App\Http\Services\Repositories\Contracts\PembimbingContract;
 use App\Models\Dosen;
 use App\Models\PengajuanJudul;
 use App\Services\NaiveBayesService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PembimbingController extends Controller
 {
-    protected $title, $repo, $response, $dosenRecommender, $naiveBayesService;
+    protected $title, $repo, $response, $naiveBayesService;
 
-    public function __construct(PembimbingContract $repo, DosenRecommenderContract $dosenRecommender, NaiveBayesService $naiveBayesService)
+    public function __construct(PembimbingContract $repo, NaiveBayesService $naiveBayesService)
     {
         $this->title = 'pembimbing';
         $this->repo = $repo;
-        $this->dosenRecommender = $dosenRecommender;
         $this->naiveBayesService = $naiveBayesService;
     }
 
@@ -132,111 +132,7 @@ class PembimbingController extends Controller
         }
     }
 
-    public function getRecommendation($pengajuanId)
-    {
-        try {
-            $pengajuan = PengajuanJudul::findOrFail($pengajuanId);
 
-            if (!$pengajuan->topik) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Topik pengajuan tidak ditemukan'
-                ], 400);
-            }
-
-            // Get multiple recommendations
-            $recommendations = $this->dosenRecommender->getMultipleRecommendations($pengajuan->topik, 3);
-            // dd($recommendations);
-
-            if (empty($recommendations)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak ditemukan dosen yang sesuai dengan topik'
-                ], 404);
-            }
-
-            // Assign pembimbing 1 dan 2
-            $pembimbing1 = $recommendations[0] ?? null;
-            $pembimbing2 = $recommendations[1] ?? null;
-
-            // dd($pembimbing1, $pembimbing2);
-
-            // Jika hanya ada 1 rekomendasi, cari pembimbing 2 secara random
-            if (!$pembimbing2) {
-                $pembimbing2 = Dosen::where('nidn', '!=', $pembimbing1->nidn)
-                    ->inRandomOrder()
-                    ->first();
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'pembimbing1' => $pembimbing1,
-                    'pembimbing2' => $pembimbing2,
-                    'all_recommendations' => $recommendations
-                ],
-                'message' => 'Rekomendasi pembimbing berhasil dibuat'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in getRecommendation: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal membuat rekomendasi: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Get recommendation using similarity approach (alternative method)
-     */
-    public function getRecommendationSimilarity($pengajuanId)
-    {
-        try {
-            $pengajuan = PengajuanJudul::findOrFail($pengajuanId);
-
-            if (!$pengajuan->topik) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Topik pengajuan tidak ditemukan'
-                ], 400);
-            }
-
-            // Get recommendation using similarity
-            $pembimbing1 = $this->dosenRecommender->recommendWithSimilarity($pengajuan->topik, 3);
-
-            if (!$pembimbing1) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak ditemukan dosen yang sesuai dengan topik'
-                ], 404);
-            }
-
-            // Get second supervisor
-            $pembimbing2 = $this->dosenRecommender->recommendWithSimilarity($pengajuan->topik, 2);
-
-            // Pastikan pembimbing 2 berbeda dari pembimbing 1
-            if (!$pembimbing2 || $pembimbing2->nidn == $pembimbing1->nidn) {
-                $pembimbing2 = Dosen::where('nidn', '!=', $pembimbing1->nidn)
-                    ->inRandomOrder()
-                    ->first();
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'pembimbing1' => $pembimbing1,
-                    'pembimbing2' => $pembimbing2
-                ],
-                'message' => 'Rekomendasi pembimbing berhasil dibuat menggunakan similarity'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in getRecommendationSimilarity: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal membuat rekomendasi: ' . $e->getMessage()
-            ], 500);
-        }
-    }
 
     public function assignSupervisors(Request $request, $pengajuanId)
     {
@@ -244,27 +140,27 @@ class PembimbingController extends Controller
 
         try {
             $request->validate([
-                'pembimbing1_id' => 'required|exists:dosens,nidn',
-                'pembimbing2_id' => 'required|exists:dosens,nidn|different:pembimbing1_id'
+                'pembimbing1_id' => 'required|exists:mst_dosens,nidn',
+                'pembimbing2_id' => 'required|exists:mst_dosens,nidn|different:pembimbing1_id'
             ]);
 
             $pengajuan = PengajuanJudul::findOrFail($pengajuanId);
 
             // Delete existing supervisors if any
             $this->repo->getModel()
-                ->where('id_pengajuan', $pengajuanId)
+                ->where('id_judul', $pengajuanId)
                 ->delete();
 
             // Assign pembimbing 1
             $pembimbing1 = $this->repo->store([
-                'id_pengajuan' => $pengajuanId,
+                'id_judul' => $pengajuanId,
                 'id_dosen' => $request->pembimbing1_id,
                 'peran' => 'pembimbing_1'
             ]);
 
             // Assign pembimbing 2
             $pembimbing2 = $this->repo->store([
-                'id_pengajuan' => $pengajuanId,
+                'id_judul' => $pengajuanId,
                 'id_dosen' => $request->pembimbing2_id,
                 'peran' => 'pembimbing_2'
             ]);
@@ -283,6 +179,7 @@ class PembimbingController extends Controller
                 'message' => 'Pembimbing berhasil ditetapkan'
             ]);
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             Log::error('Error in assignSupervisors: ' . $e->getMessage());
 
@@ -343,7 +240,7 @@ class PembimbingController extends Controller
     public function getRecommendationNaiveBayes($pengajuanId)
     {
         try {
-            $pengajuan = PengajuanJudul::findOrFail($pengajuanId);
+            $pengajuan = PengajuanJudul::with('prodi')->findOrFail($pengajuanId);
 
             if (!$pengajuan->topik) {
                 return response()->json([
@@ -359,6 +256,7 @@ class PembimbingController extends Controller
                 $pengajuan->konsentrasi,
                 5
             );
+            // dd($recommendations);
 
             if (empty($recommendations)) {
                 return response()->json([
@@ -448,6 +346,88 @@ class PembimbingController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan data training: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show assignment page with AI recommendations
+     */
+    public function showAssignment($pengajuanId = null)
+    {
+        try {
+            $pengajuan = null;
+            if ($pengajuanId) {
+                $pengajuan = PengajuanJudul::with(['prodi', 'pengusuls'])->findOrFail($pengajuanId);
+            }
+            return view('admin.pembimbing.assignment', compact('pengajuan', 'pengajuanId'));
+        } catch (\Exception $e) {
+            return view('errors.message', ['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Assign supervisors with AI recommendations
+     */
+    public function assignWithRecommendation(Request $request, $pengajuanId)
+    {
+        try {
+            // dd($request->pembimbing_1);
+            $request->validate([
+                'pembimbing1_id' => 'exists:mst_dosens,nidn',
+                'pembimbing2_id' => 'exists:mst_dosens,nidn|different:pembimbing1_id',
+                'notes' => 'nullable|string'
+            ]);
+
+            $pengajuan = PengajuanJudul::findOrFail($pengajuanId);
+
+            // Check if already has supervisors
+            $existingPembimbings = $pengajuan->pembimbings;
+
+            if ($existingPembimbings->count() > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pengajuan ini sudah memiliki pembimbing'
+                ], 400);
+            }
+
+            // Create pembimbing 1
+            $pembimbing1 = $this->repo->store([
+                'id_dosen' => $request->pembimbing_1,
+                'id_judul' => $pengajuanId,
+                'peran' => 'pembimbing_1'
+            ]);
+            // dd($pembimbing1);
+
+
+            // Create pembimbing 2
+            $pembimbing2 = $this->repo->store([
+                'id_dosen' => $request->pembimbing_2,
+                'id_judul' => $pengajuanId,
+                'peran' => 'pembimbing_2'
+            ]);
+
+            // Update pengajuan status
+            $pengajuan->update(['status' => 'diterima']);
+
+            // Log the assignment for training data
+            Log::info("Pembimbing assigned for pengajuan {$pengajuanId}: Pembimbing1={$request->pembimbing1_id}, Pembimbing2={$request->pembimbing2_id}");
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'pembimbing1' => $pembimbing1,
+                    'pembimbing2' => $pembimbing2,
+                    'pengajuan' => $pengajuan
+                ],
+                'message' => 'Pembimbing berhasil ditetapkan'
+            ]);
+        } catch (\Exception $e) {
+            dd($e);
+            Log::error('Error in assignWithRecommendation: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menetapkan pembimbing: ' . $e->getMessage()
             ], 500);
         }
     }

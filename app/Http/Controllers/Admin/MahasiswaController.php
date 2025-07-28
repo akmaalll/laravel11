@@ -7,6 +7,7 @@ use App\Http\Services\Repositories\Contracts\MahasiswaContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class MahasiswaController extends Controller
 {
@@ -123,5 +124,11 @@ class MahasiswaController extends Controller
         } catch (\Exception $e) {
             return view('errors.message', ['message' => $e->getMessage()]);
         }
+    }
+
+    public function apiList()
+    {
+        $response = Http::get('https://service.undipa.ac.id/mhs-all.php?api=071994');
+        return response()->json($response->json());
     }
 }

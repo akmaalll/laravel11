@@ -152,7 +152,9 @@ class PengajuanController extends Controller
 
                 if ($existingRecord && $currentStep == 3) {
                     // dd($req['nim']);
+                    
                     foreach ($req['mahasiswas'] as $mahasiswa) {
+                        // dd($mahasiswa);
                         $this->pengusul->store([
                             'id_judul' => $existingRecord->id,
                             'nim' => $mahasiswa['nim'],

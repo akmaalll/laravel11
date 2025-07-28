@@ -86,14 +86,49 @@
 @push('jsScript')
     @include('app.pengajuan-judul.js.submitAndDraf')
     <script>
+        let mahasiswaList = [];
         $(document).ready(function() {
+            // Ambil data mahasiswa dari API
+            fetch('/api/mahasiswa-list')
+                .then(response => response.json())
+                .then(result => {
+                    mahasiswaList = result.data.map(m => ({
+                        id: m.stb,
+                        text: m.stb + ' - ' + m.nmmhs,
+                        nama: m.nmmhs
+                    }));
 
-            $('#backStep1').on('click', function() {
-                setTimeout(function() {
-                    window.location.replace("{{ route('pengajuan.step2') }}");
-                }, 750);
+                    // Inisialisasi select2 untuk semua select-mahasiswa
+                    $('.select-mahasiswa').each(function(index) {
+                        $(this).select2({
+                            data: mahasiswaList,
+                            placeholder: "Pilih Mahasiswa...",
+                            allowClear: true,
+                            width: '100%'
+                        });
+                        // Jika item pertama (login), set value default dan readonly
+                        if (index === 0) {
+                            var nimLogin = "{{ Session::get('stb', '') }}";
+                            var namaLogin = "{{ Session::get('nama_mhs', '') }}";
+                            $(this).val(nimLogin).trigger('change');
+                            $(this).prop('disabled', true);
+                            $(this).closest('[data-repeater-item]').find('.nama-mahasiswa').val(
+                                namaLogin);
+                            // Sembunyikan tombol delete pada item pertama
+                            $(this).closest('[data-repeater-item]').find('[data-repeater-delete]')
+                            .hide();
+                        }
+                    });
+                });
+
+            // Event saat select berubah, isi nama otomatis
+            $(document).on('change', '.select-mahasiswa', function() {
+                const selectedNim = $(this).val();
+                const selected = mahasiswaList.find(m => m.id === selectedNim);
+                $(this).closest('[data-repeater-item]').find('.nama-mahasiswa').val(selected ? selected
+                    .nama : '');
             });
-        })
+        });
 
         $('#kt_docs_repeater_basic').repeater({
             initEmpty: false,
@@ -107,10 +142,26 @@
 
                 // Inisialisasi Select2 untuk elemen yang baru ditambahkan
                 $(this).find('select[name*="nim"]').select2({
-                    placeholder: "Select user...",
+                    data: mahasiswaList,
+                    placeholder: "Pilih Mahasiswa...",
                     allowClear: true,
                     width: '100%'
                 });
+
+                // Jika ini item pertama (login), set value default dan readonly
+                if ($('#kt_docs_repeater_basic [data-repeater-item]').length === 1) {
+                    var nimLogin = "{{ Session::get('stb', '') }}";
+                    var namaLogin = "{{ Session::get('nama_mhs', '') }}";
+                    $(this).find('select[name*="nim"]').val(nimLogin).trigger('change');
+                    $(this).find('select[name*="nim"]').prop('disabled', true);
+                    $(this).find('.nama-mahasiswa').val(namaLogin);
+                    $(this).find('[data-repeater-delete]').hide();
+                } else {
+                    // Pastikan select NIM kosong saat baru ditambah
+                    $(this).find('select[name*="nim"]').val(null).trigger('change');
+                    $(this).find('select[name*="nim"]').prop('disabled', false);
+                    $(this).find('[data-repeater-delete]').show();
+                }
 
                 // Cek jumlah item setelah menambah
                 checkItemLimit();
@@ -129,7 +180,8 @@
         // Inisialisasi Select2 untuk item yang sudah ada
         $('#kt_docs_repeater_basic select[name*="nim"]').each(function() {
             $(this).select2({
-                placeholder: "Select user...",
+                data: mahasiswaList,
+                placeholder: "Pilih Mahasiswa...",
                 allowClear: true,
                 width: '100%'
             });
@@ -137,9 +189,10 @@
 
         // Fungsi untuk mengecek dan membatasi jumlah item
         function checkItemLimit() {
+            // Hanya hitung item pada repeater (mahasiswa tambahan)
             const repeaterItems = $('#kt_docs_repeater_basic [data-repeater-item]');
             const addButton = $('#kt_docs_repeater_basic [data-repeater-create]');
-            const maxItems = 2;
+            const maxItems = 2; // hanya boleh tambah 1 mahasiswa tambahan
 
             if (repeaterItems.length >= maxItems) {
                 addButton.hide();

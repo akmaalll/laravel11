@@ -54,6 +54,7 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    console.log(response);
                     if (response.success) {
                         if (response.redirect) {
                             window.location.href = response.redirect;
@@ -118,6 +119,7 @@
         }
 
         function handleSuccessResponse(response, status) {
+            // console.log(response);
             if (status === 'Draft') {
                 toastr.success('Draft berhasil disimpan');
                 window.location.href = "{{ route('pengajuan.index') }}";

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\Auth\LoginController as Auths;
+use App\Http\Controllers\Api\MahasiswaProxyController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -48,6 +49,16 @@ Route::domain('')->group(function () { // development
 
     Route::get('/logout', [Auths::class, 'logout'])->middleware('auth')->name('logout');
 
+    // Route untuk unauthorized access
+    Route::get('/unauthorized', function () {
+        return view('errors.unauthorized');
+    })->name('unauthorized');
+
+    // Test route untuk debugging
+    Route::get('/test-admin', function () {
+        return 'Test route working';
+    })->name('test.admin');
+
     // Route untuk similarity check
     Route::post('/title/similarity', [TitleAnalysisController::class, 'checkTitleSimilarity'])->name('title.similarity');
 
@@ -58,7 +69,7 @@ Route::domain('')->group(function () { // development
     Route::post('/title/analyze', [TitleAnalysisController::class, 'analyzeTitle'])->name('title.analyze');
 
 
-    Route::group(['prefix' => 'mahasiswa', 'middleware' => ['role:3']], function () {
+    Route::group(['prefix' => 'mahasiswa', 'middleware' => ['auth']], function () {
         Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
         Route::group(['prefix' => '/pengajuan-judul'], function () {
             Route::get('/', [App\Http\Controllers\App\PengajuanController::class, 'index'])->name('pengajuan.index');
@@ -79,7 +90,7 @@ Route::domain('')->group(function () { // development
 
 
     // ADMIN_ROUTES
-    Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'role:1,2']], function () {
+    Route::group(['prefix' => 'admin'], function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
         // routes/web.php
@@ -100,6 +111,8 @@ Route::domain('')->group(function () { // development
             Route::get('/dosen', [PengajuanJudulController::class, 'getDosen'])->name('admin.pengajuan-judul.dosen');
             Route::put('/{id}/update-status', [PengajuanJudulController::class, 'updateStatus'])
                 ->name('pengajuan-judul.update-status');
+
+            // Route::get('/rekomendasi-naive-bayes/{pengajuanId}', [PembimbingController::class, 'rekomendasiNaiveBayes'])->name('admin.pengajuan-judul.rekomendasi_naive_bayes');
         });
 
         Route::group(['prefix' => '/judul'], function () {
@@ -165,6 +178,8 @@ Route::domain('')->group(function () { // development
             Route::get('/naive-bayes-test', function () {
                 return view('admin.pembimbing.naive-bayes-test');
             })->name('pembimbing.naive-bayes-test');
+            Route::get('/assignment', [PembimbingController::class, 'showAssignment'])->name('pembimbing.assignment');
+            Route::post('/assign-with-recommendation/{pengajuanId}', [PembimbingController::class, 'assignWithRecommendation'])->name('pembimbing.assign-with-recommendation');
             Route::get('/', [PembimbingController::class, 'index'])->name('pembimbing.index');
             Route::get('/data', [PembimbingController::class, 'data'])->name('pembimbing.data');
             Route::get('/create', [PembimbingController::class, 'create'])->name('pembimbing.create');
@@ -172,12 +187,6 @@ Route::domain('')->group(function () { // development
             Route::get('/{id}/edit', [PembimbingController::class, 'edit'])->name('pembimbing.edit');
             Route::put('/{id}', [PembimbingController::class, 'update'])->name('pembimbing.update');
             Route::delete('/{id}', [PembimbingController::class, 'destroy'])->name('pembimbing.delete');
-
-            Route::get('/recommendation/{pengajuanId}', [PembimbingController::class, 'getRecommendation'])
-                ->name('pembimbing.recommendation');
-
-            Route::get('/recommendation-similarity/{pengajuanId}', [PembimbingController::class, 'getRecommendationSimilarity'])
-                ->name('pembimbing.recommendation.similarity');
 
             Route::get('/recommendation-naive-bayes/{pengajuanId}', [PembimbingController::class, 'getRecommendationNaiveBayes'])
                 ->name('pembimbing.recommendation.naive-bayes');
@@ -253,3 +262,6 @@ Route::domain('')->group(function () { // development
         });
     });
 });
+
+// Proxy API Mahasiswa untuk frontend (tanpa middleware, agar tidak kena CORS)
+Route::get('/api/mahasiswa-list', MahasiswaProxyController::class);

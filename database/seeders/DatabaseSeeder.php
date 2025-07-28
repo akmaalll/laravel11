@@ -20,14 +20,23 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
-        $this->call(MenuSeeder::class);
-        $this->call(ProdiSeeder::class);
-        $this->call(KeahlianSeeder::class);
-        $this->call(UserMenuSeeder::class);
-        $this->call(DosenSeeder::class);
-        // $this->call(JudulTrainingDataSeeder::class);
-        // $this->call(DataTopikSeeder::class);
+        $this->call([
+            // Master data first
+            RoleSeeder::class,
+            MenuSeeder::class,
+            ProdiSeeder::class,
+            KeahlianSeeder::class,
+            UserSeeder::class,
+            UserMenuSeeder::class,
+            DosenSeeder::class,
+
+            // Judul and related data
+            MstJudulSeeder::class,
+            PengajuanJudulSeeder::class,
+            MstJudulPembimbingSeeder::class,
+
+            // Naive Bayes training data
+            NaiveBayesSeeder::class,
+        ]);
     }
 }

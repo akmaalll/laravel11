@@ -45,6 +45,11 @@ class Dosen extends Model
         return $this->hasMany(Pembimbing::class, 'id_dosen', 'nidn');
     }
 
+    public function mstJudulPembimbingan()
+    {
+        return $this->hasMany(MstJudulPembimbing::class, 'dosen_nidn', 'nidn');
+    }
+
     public function trainingData()
     {
         return $this->hasMany(NaiveBayesTrainingData::class, 'dosen_nidn', 'nidn');
