@@ -16,11 +16,13 @@ return new class extends Migration
             $table->string('judul');
             $table->string('topik', 100);
             $table->unsignedBigInteger('id_prodi');
-            $table->unsignedBigInteger('id_user');
+            $table->string('nidn_p1', 20)->nullable(); // boleh kosong
+            $table->string('nidn_p2', 20)->nullable(); // boleh kosong
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('id_prodi')->references('id')->on('mst_prodis')->onDelete('cascade');
+            $table->foreign('nidn_p1')->references('nidn')->on('mst_dosens')->nullOnDelete();
+            $table->foreign('nidn_p2')->references('nidn')->on('mst_dosens')->nullOnDelete();
         });
     }
 

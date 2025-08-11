@@ -21,13 +21,6 @@ class MstJudulSeeder extends Seeder
             return;
         }
 
-        // Ambil satu user yang ada
-        $user = User::first();
-        if (!$user) {
-            $this->command->warn('Tidak ada data user. Seeder MstJudulSeeder dilewati.');
-            return;
-        }
-
         // Data dari CSV file
         $csvData = [
             ['judul' => 'PERANCANGAN APLIKASI WATERMARKING KEPEMILIKAN CITRA MENGGUNAKAN KOMBINASI METODE SHA DAN LEAST SIGNIFICANT BIT (LSB)', 'topik' => 'Keamanan Komputer dan Informasi'],
@@ -63,7 +56,8 @@ class MstJudulSeeder extends Seeder
                 'judul' => $item['judul'],
                 'topik' => $item['topik'],
                 'id_prodi' => $prodi->id,
-                'id_user' => $user->id,
+                'nidn_p1' => null,
+                'nidn_p2' => null
             ];
         }
 

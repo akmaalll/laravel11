@@ -33,17 +33,6 @@ class PembimbingController extends Controller
         }
     }
 
-    // public function getProdiCode(Request $request)
-    // {
-    //     $prodi = DB::table('mst_prodis')
-    //         ->where('id', $request->id_prodi)
-    //         ->first();
-
-    //     return response()->json([
-    //         'kode_prodi' => $prodi->kode // Pastikan kolom ini ada di tabel
-    //     ]);
-    // }
-
     public function data(Request $request)
     {
         try {
@@ -86,16 +75,6 @@ class PembimbingController extends Controller
         }
     }
 
-    // public function show($id)
-    // {
-    //     try {
-    //         $data = $this->repo->find($id);
-    //         return response()->json($data);
-    //     } catch (\Exception $e) {
-    //         return view('errors.message', ['message' => $e->getMessage()]);
-    //     }
-    // }
-
 
     public function edit($id)
     {
@@ -133,7 +112,7 @@ class PembimbingController extends Controller
     }
 
 
-
+    //naive bayes
     public function assignSupervisors(Request $request, $pengajuanId)
     {
         DB::beginTransaction();

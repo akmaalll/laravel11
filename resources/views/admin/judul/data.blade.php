@@ -20,6 +20,20 @@
                 {{ $v->prodi->nama }}
             </span>
         </td>
+        <td>
+            @if ($v->nidn_p1 && $v->p1)
+                {{ $v->p1->nama }}
+            @else
+                <span class="text-muted">-</span>
+            @endif
+        </td>
+        <td>
+            @if ($v->nidn_p2 && $v->p2)
+                {{ $v->p2->nama }}
+            @else
+                <span class="text-muted">-</span>
+            @endif
+        </td>
         <td class="text-end">
             {!! Helper::btnAction($v->id, $title) !!}
         </td>

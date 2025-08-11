@@ -23,6 +23,12 @@ class JudulRepository extends BaseRepository implements JudulContract
 		$perPage = $criteria['per_page'] ?? 5;
 		$field = $criteria['sort_field'] ?? 'id';
 		$sortOrder = $criteria['sort_order'] ?? 'desc';
-		return $this->model->orderBy($field, $sortOrder)->paginate($perPage);
+		$search = $criteria['search'] ?? '';
+
+		return $this->model->when($search, function ($query) use ($search) {
+			$query->where('judul', 'like', "%{$search}%");
+		})
+			->orderBy($field, $sortOrder)
+			->paginate($perPage);
 	}
 }

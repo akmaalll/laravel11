@@ -80,23 +80,27 @@
 
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
-                    <!--begin::Table-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
-                        <thead>
-                            <tr class="text-start text-gray-600 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="min-w-20px pe-2"> No </th>
-                                <th class="min-w-200px"> Judul </th>
-                                <th class="min-w-200px"> Topik </th>
-                                <th class="min-w-200px"> Prodi </th>
-                                <th class="text-end min-w-70px"> Actions </th>
-                            </tr>
-                        </thead>
+                    <div class="table-responsive">
+                        <!--begin::Table-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
+                            <thead>
+                                <tr class="text-start text-gray-600 fw-bold fs-7 text-uppercase gs-0">
+                                    <th class="min-w-20px pe-2"> No </th>
+                                    <th class="min-w-200px"> Judul </th>
+                                    <th class="min-w-200px"> Topik </th>
+                                    <th class="min-w-200px"> Prodi </th>
+                                    <th class="min-w-200px"> Pembimbing 1 </th>
+                                    <th class="min-w-200px"> Pembimbing 2 </th>
+                                    <th class="text-end min-w-70px"> Actions </th>
+                                </tr>
+                            </thead>
 
-                        <tbody class="fw-semibold text-gray-600 datatables">
-                        </tbody>
+                            <tbody class="fw-semibold text-gray-600 datatables">
+                            </tbody>
 
-                    </table>
-                    <!--end::Table-->
+                        </table>
+                        <!--end::Table-->
+                    </div>
 
                     <!--begin::Pagination-->
                     <div class="d-flex justify-content-between align-items-center flex-wrap">

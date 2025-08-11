@@ -66,12 +66,9 @@
 
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <a href="{{ route($title . '.create') }}" class="btn btn-success">
-                            <span class="btn-label">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                            Add New
-                        </a>
+                        <button id="generate-keahlian-btn" class="btn btn-primary mb-4">
+                            <i class="fas fa-cogs"></i> Generate Keahlian Dosen
+                        </button>
                     </div>
                     <!--end::Card toolbar-->
                 </div>
@@ -85,8 +82,9 @@
                         <thead>
                             <tr class="text-start text-gray-600 fw-bold fs-7 text-uppercase gs-0">
                                 <th class="min-w-20px pe-2"> No </th>
-                                <th class="min-w-200px"> Nama Keahlian </th>
-                                <th class="text-end min-w-70px"> Actions </th>
+                                <th class="min-w-200px"> Nama Dosen </th>
+                                <th class="min-w-200px"> Keahlian </th>
+                                {{-- <th class="text-end min-w-70px"> Actions </th> --}}
                             </tr>
                         </thead>
 
@@ -123,8 +121,63 @@
     <!--end::Content-->
 @endsection
 
-@push('jsScript')
+{{-- @push('jsScript')
     <script type="text/javascript">
+        $(document).ready(function() {
+            // Generate expertise for all lecturers
+            $('#generate-keahlian-btn').click(function() {
+                const btn = $(this);
+                btn.prop('disabled', true);
+                btn.html('<span class="indicator-label"><i class="fas fa-cogs"></i> Processing...</span>');
+
+                Swal.fire({
+                    title: 'Generate Lecturer Expertise',
+                    text: 'This will process all lecturer data. Continue?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, generate!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('keahlian.generate-all') }}',
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: response.message,
+                                        icon: 'success'
+                                    });
+                                    // Refresh datatable
+                                    $('.twbs-pagination').twbsPagination('destroy');
+                                    loadpage(5, $('#input_search')
+                                        .val());
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Error!', xhr.responseJSON?.message ||
+                                    'Process failed', 'error');
+                            },
+                            complete: function() {
+                                btn.prop('disabled', false);
+                                btn.html(
+                                    '<i class="fas fa-cogs"></i> Generate Keahlian Dosen'
+                                );
+                            }
+                        });
+                    } else {
+                        btn.prop('disabled', false);
+                        btn.html('<i class="fas fa-cogs"></i> Generate Keahlian Dosen');
+                    }
+                });
+            });
+        });
+
         $(document).ready(function() {
             loadpage(5, '');
             var $pagination = $('.twbs-pagination');
@@ -237,6 +290,246 @@
             });
 
 
+        });
+    </script>
+@endpush --}}
+@push('jsScript')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Configuration
+            const config = {
+                defaultPerPage: 5,
+                paginationOptions: {
+                    totalPages: 1,
+                    prev: '&#8672;',
+                    next: '&#8674;',
+                    first: '&#8676;',
+                    last: '&#8677;',
+                    visiblePages: 8
+                }
+            };
+
+            // Initialize pagination
+            const $pagination = $('.twbs-pagination');
+            $pagination.twbsPagination(config.paginationOptions);
+
+            // Initialize page
+            loadPage(config.defaultPerPage, '');
+
+            /**
+             * Load data for specific page
+             * @param {number} page - Page number
+             * @param {number} perPage - Items per page
+             * @param {string} search - Search query
+             */
+            function loadData(page, perPage, search) {
+                return $.ajax({
+                    url: '{{ route($title . '.data') }}',
+                    data: {
+                        page: page,
+                        per_page: perPage,
+                        search: search
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $(".datatables").html(data.html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Load data error:', error);
+                        toastr.error("Failed to load data!");
+                    }
+                });
+            }
+
+            /**
+             * Load page with pagination
+             * @param {number} perPage - Items per page
+             * @param {string} search - Search query
+             */
+            function loadPage(perPage, search) {
+                $.ajax({
+                    url: '{{ route($title . '.data') }}',
+                    data: {
+                        per_page: perPage,
+                        search: search
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        // Destroy existing pagination
+                        if ($pagination.data("twbs-pagination")) {
+                            $pagination.twbsPagination('destroy');
+                            $(".datatables").html('<tr><td colspan="4">Data not found</td></tr>');
+                        }
+
+                        // Initialize new pagination
+                        $pagination.twbsPagination($.extend({}, config.paginationOptions, {
+                            startPage: 1,
+                            totalPages: response.total_page,
+                            onPageClick: function(event, page) {
+                                const startItem = page === 1 ? 1 : page * perPage - (
+                                    perPage - 1);
+                                const endItem = page === response.total_page ? response
+                                    .total_data : page * perPage;
+
+                                updatePageInfo(startItem, endItem, response.total_data);
+                                loadData(page, perPage, search);
+                            }
+                        }));
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Load page error:', error);
+                        toastr.error("Failed to load page data!");
+                    }
+                });
+            }
+
+            /**
+             * Update page information display
+             * @param {number} start - Start item number
+             * @param {number} end - End item number
+             * @param {number} total - Total items
+             */
+            function updatePageInfo(start, end, total) {
+                $('#contentPage').text(`Showing ${start} to ${end} of ${total} entries`);
+            }
+
+            /**
+             * Generate expertise for all lecturers
+             */
+            function generateExpertise() {
+                const $btn = $('#generate-keahlian-btn');
+                const originalText = $btn.html();
+
+                // Disable button and show loading
+                $btn.prop('disabled', true)
+                    .html('<span class="indicator-label"><i class="fas fa-cogs"></i> Processing...</span>');
+
+                Swal.fire({
+                    title: 'Generate Lecturer Expertise',
+                    text: 'This will process all lecturer data. Continue?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, generate!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('keahlian.generate-all') }}',
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: response.message,
+                                        icon: 'success'
+                                    });
+                                    // Refresh datatable
+                                    refreshTable();
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
+                            },
+                            error: function(xhr) {
+                                const errorMessage = xhr.responseJSON?.message ||
+                                    'Process failed';
+                                Swal.fire('Error!', errorMessage, 'error');
+                                console.error('Generate expertise error:', xhr);
+                            }
+                        }).always(function() {
+                            // Reset button state
+                            $btn.prop('disabled', false).html(originalText);
+                        });
+                    } else {
+                        // Reset button if cancelled
+                        $btn.prop('disabled', false).html(originalText);
+                    }
+                });
+            }
+
+            /**
+             * Delete data by ID
+             * @param {number} id - Data ID to delete
+             */
+            function deleteData(id) {
+                Swal.fire({
+                    title: "Are you sure to delete?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "Cancel",
+                    confirmButtonColor: '#d33'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "DELETE",
+                            url: `{{ url("admin/$title") }}/${id}`,
+                            success: function(data) {
+                                refreshTable();
+                                toastr.success("Data deleted successfully!");
+                            },
+                            error: function(xhr) {
+                                const errorMessage = xhr.responseJSON?.message ||
+                                    'Failed to delete data';
+                                toastr.error(errorMessage);
+                                console.error('Delete error:', xhr);
+                            }
+                        });
+                    }
+                });
+            }
+
+            /**
+             * Refresh table with current search and pagination
+             */
+            function refreshTable() {
+                const search = $('#input_search').val();
+                const perPage = $('#perPage').val() || config.defaultPerPage;
+
+                if ($pagination.data("twbs-pagination")) {
+                    $pagination.twbsPagination('destroy');
+                }
+                loadPage(perPage, search);
+            }
+
+            // Event Handlers
+            $('#generate-keahlian-btn').on('click', generateExpertise);
+
+            $("#button_search, #perPage").on('click change', function() {
+                const search = $('#input_search').val();
+                const perPage = $('#perPage').val() || config.defaultPerPage;
+                loadPage(perPage, search);
+            });
+
+            $("#button_refresh").on('click', function() {
+                $('#input_search').val('');
+                loadPage(config.defaultPerPage, '');
+            });
+
+            // Delegated event for delete buttons
+            $('body').on('click', '.deleteData', function() {
+                const id = $(this).data("id");
+                if (id) {
+                    deleteData(id);
+                } else {
+                    toastr.error("Invalid data ID!");
+                }
+            });
+
+            // Handle Enter key in search input
+            $('#input_search').on('keypress', function(e) {
+                if (e.which === 13) { // Enter key
+                    $("#button_search").click();
+                }
+            });
         });
     </script>
 @endpush

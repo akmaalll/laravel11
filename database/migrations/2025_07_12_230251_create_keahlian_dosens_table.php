@@ -6,27 +6,48 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('mst_keahlian_dosens', function (Blueprint $table) {
-            $table->string('dosen_id'); // Mengacu ke id (bukan nidn) di mst_dosens
-            $table->string('keahlian_id', 10); // Mengacu ke id di mst_keahlians
-
-            $table->foreign('dosen_id')->references('nidn')->on('mst_dosens')->onDelete('cascade');
-            $table->foreign('keahlian_id')->references('id')->on('mst_keahlians')->onDelete('cascade');
-
-            $table->primary(['dosen_id', 'keahlian_id']);
+        // Update FK di dosen_mata_kuliah
+        Schema::table('dosen_mata_kuliah', function (Blueprint $table) {
+            $table->dropForeign(['dosen_nidn']); // drop FK lama
+            $table->foreign('dosen_nidn')
+                ->references('nidn')
+                ->on('mst_dosens')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
+
+        // Update FK di mst_keahlian_dosens
+        Schema::table('mst_keahlian_dosens', function (Blueprint $table) {
+            $table->dropForeign(['dosen_id']); // drop FK lama
+            $table->foreign('dosen_id')
+                ->references('nidn')
+                ->on('mst_dosens')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
+        // Kalau ada tabel lain yang pakai nidn sebagai FK, tambahkan di sini
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('mst_keahlian_dosens');
+        // Revert ke FK tanpa onUpdate cascade (opsional)
+        Schema::table('dosen_mata_kuliah', function (Blueprint $table) {
+            $table->dropForeign(['dosen_nidn']);
+            $table->foreign('dosen_nidn')
+                ->references('nidn')
+                ->on('mst_dosens')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('mst_keahlian_dosens', function (Blueprint $table) {
+            $table->dropForeign(['dosen_id']);
+            $table->foreign('dosen_id')
+                ->references('nidn')
+                ->on('mst_dosens')
+                ->onDelete('cascade');
+        });
     }
 };

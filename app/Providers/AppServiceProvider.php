@@ -12,6 +12,7 @@ use App\Http\Services\Repositories\Contracts\JudulContract;
 use App\Http\Services\Repositories\Contracts\KeahlianContract;
 use App\Http\Services\Repositories\Contracts\KelompokContract;
 use App\Http\Services\Repositories\Contracts\MahasiswaContract;
+use App\Http\Services\Repositories\Contracts\MatkulDosenContract;
 use App\Http\Services\Repositories\Contracts\MenuContract;
 use App\Http\Services\Repositories\Contracts\PembimbingContract;
 use App\Http\Services\Repositories\Contracts\PengajuanJudulContract;
@@ -27,6 +28,7 @@ use App\Http\Services\Repositories\JudulRepository;
 use App\Http\Services\Repositories\KeahlianRepository;
 use App\Http\Services\Repositories\KelompokRepository;
 use App\Http\Services\Repositories\MahasiswaRepository;
+use App\Http\Services\Repositories\MatkulDosenRepository;
 use App\Http\Services\Repositories\MenuRepository;
 use App\Http\Services\Repositories\PembimbingRepository;
 use App\Http\Services\Repositories\PengajuanJudulRepository;
@@ -66,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProdiContract::class, ProdiRepository::class);
         $this->app->bind(KeahlianContract::class, KeahlianRepository::class);
         $this->app->bind(DosenRecommenderContract::class, DosenRecommenderRepository::class);
+        $this->app->bind(MatkulDosenContract::class, MatkulDosenRepository::class);
 
 
         $this->app->bind(PengajuanJudulContract::class, PengajuanJudulRepository::class);

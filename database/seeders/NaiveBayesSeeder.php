@@ -20,12 +20,12 @@ class NaiveBayesSeeder extends Seeder
 
         // 1. Sample Mata Kuliah Dosen
         $mataKuliahData = [
-            ['dosen_nidn' => '0914117202', 'mata_kuliah' => 'Pemrograman Web', 'kode_mk' => 'IF101', 'sks' => 3],
-            ['dosen_nidn' => '0914117202', 'mata_kuliah' => 'Database Management', 'kode_mk' => 'IF102', 'sks' => 3],
-            ['dosen_nidn' => '0910027401', 'mata_kuliah' => 'Machine Learning', 'kode_mk' => 'IF201', 'sks' => 3],
-            ['dosen_nidn' => '0910027401', 'mata_kuliah' => 'Artificial Intelligence', 'kode_mk' => 'IF202', 'sks' => 3],
-            ['dosen_nidn' => '0920037103', 'mata_kuliah' => 'Mobile Development', 'kode_mk' => 'IF301', 'sks' => 3],
-            ['dosen_nidn' => '0920037103', 'mata_kuliah' => 'Software Engineering', 'kode_mk' => 'IF302', 'sks' => 3],
+            ['dosen_nidn' => '0914117202', 'mata_kuliah' => 'Pemrograman Web'],
+            ['dosen_nidn' => '0914117202', 'mata_kuliah' => 'Database Management'],
+            ['dosen_nidn' => '0910027401', 'mata_kuliah' => 'Machine Learning'],
+            ['dosen_nidn' => '0910027401', 'mata_kuliah' => 'Artificial Intelligence'],
+            ['dosen_nidn' => '0920037103', 'mata_kuliah' => 'Mobile Development'],
+            ['dosen_nidn' => '0920037103', 'mata_kuliah' => 'Software Engineering'],
         ];
 
         foreach ($mataKuliahData as $data) {

@@ -1,17 +1,22 @@
-@foreach ($data as $key => $v)
-    <tr class="text-start text-gray-600 fs-7">
+@foreach ($data as $dosenId => $keahlians)
+    <tr>
+        <td>{{ ++$i }}</td>
         <td>
-            <span class="fw-semibold">
-                {{ ++$i }}
-            </span>
-        </td>   
-        <td>
-            <span class="fw-semibold">
-                {{ $v->nama }}
-            </span>
+            <div class="d-flex flex-column">
+                <span class="fw-semibold text-gray-800 fs-6">
+                    {{ $keahlians->first()->dosen->nama ?? '-' }}
+                </span>
+                @if ($keahlians->first()->dosen->nidn)
+                    <small class="text-muted">NIDN: {{ $keahlians->first()->dosen->nidn }}</small>
+                @endif
+            </div>
         </td>
-        <td class="text-end">
-            {!! Helper::btnAction($v->id, $title) !!}
+        <td>
+            @foreach ($keahlians as $keahlian)
+                {{ $keahlian->keahlian->nama ?? '-' }}@if (!$loop->last)
+                    ,
+                @endif
+            @endforeach
         </td>
     </tr>
 @endforeach

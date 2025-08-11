@@ -36,8 +36,8 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="pengajuan_select" class="form-label fw-bold">Pilih Pengajuan Judul:</label>
-                                <select class="form-select" data-control="select2" data-hide-search="true"
-                                    id="pengajuan_select">
+                                <select class="form-select" data-placeholder="Pilih Judul" data-control="select2"
+                                    data-hide-search="false" id="pengajuan_select">
                                     @foreach (Helper::getData('pengajuan_juduls') as $pengajuan)
                                         <option value="{{ $pengajuan->id }}">{{ $pengajuan->judul }}
                                             ({{ $pengajuan->topik }})

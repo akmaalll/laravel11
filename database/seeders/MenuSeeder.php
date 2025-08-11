@@ -29,6 +29,7 @@ class MenuSeeder extends Seeder
             ['name' => 'Dosen', 'icon' => 'bi-stack', 'url' => 'dosen', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
             ['name' => 'Prodi', 'icon' => 'bi-stack', 'url' => 'prodi', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
             ['name' => 'Keahlian', 'icon' => 'bi-stack', 'url' => 'keahlian', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
+            ['name' => 'Matkul Dosen', 'icon' => 'bi-stack', 'url' => 'matkul-dosen', 'index' => 1, 'main_menu' => 'DATA MASTER', 'active' => '1', 'parent' => '2'],
 
 
             // USER

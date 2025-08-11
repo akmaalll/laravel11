@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\JudulKlasifikasiController;
 use App\Http\Controllers\Admin\KeahlianController;
 use App\Http\Controllers\Admin\ProdiController;
 use App\Http\Controllers\Admin\MahasiswaController;
+use App\Http\Controllers\Admin\MatkulDosenController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PembimbingController;
 use App\Http\Controllers\Admin\PengajuanJudulController;
@@ -90,7 +91,7 @@ Route::domain('')->group(function () { // development
 
 
     // ADMIN_ROUTES
-    Route::group(['prefix' => 'admin'], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
         // routes/web.php
@@ -127,8 +128,6 @@ Route::domain('')->group(function () { // development
                 ->name('admin.check.title.similarity');
         });
 
-
-
         # MENU MASTER DATA 
         Route::group(['prefix' => '/mahasiswa'], function () {
             Route::get('/', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
@@ -159,6 +158,16 @@ Route::domain('')->group(function () { // development
             Route::get('/{id}/edit', [KeahlianController::class, 'edit'])->name('keahlian.edit');
             Route::put('/{id}', [KeahlianController::class, 'update'])->name('keahlian.update');
             Route::delete('/{id}', [KeahlianController::class, 'destroy'])->name('keahlian.delete');
+        });
+
+        Route::group(['prefix' => '/matkul-dosen'], function () {
+            Route::get('/', [MatkulDosenController::class, 'index'])->name('matkul-dosen.index');
+            Route::get('/data', [MatkulDosenController::class, 'data'])->name('matkul-dosen.data');
+            Route::get('/create', [MatkulDosenController::class, 'create'])->name('matkul-dosen.create');
+            Route::post('/store', [MatkulDosenController::class, 'store'])->name('matkul-dosen.store');
+            Route::get('/{id}/edit', [MatkulDosenController::class, 'edit'])->name('matkul-dosen.edit');
+            Route::put('/{id}', [MatkulDosenController::class, 'update'])->name('matkul-dosen.update');
+            Route::delete('/{id}', [MatkulDosenController::class, 'destroy'])->name('matkul-dosen.delete');
         });
 
         Route::group(['prefix' => '/dosen'], function () {
@@ -264,4 +273,9 @@ Route::domain('')->group(function () { // development
 });
 
 // Proxy API Mahasiswa untuk frontend (tanpa middleware, agar tidak kena CORS)
-Route::get('/api/mahasiswa-list', MahasiswaProxyController::class);
+Route::group(['prefix' => '/api'], function () {
+    Route::get('/mahasiswa-list', MahasiswaProxyController::class);
+    Route::get('/dosen/{nidn}/predict', [KeahlianController::class, 'predict']);
+    Route::post('/dosen/{nidn}/assign-keahlian', [KeahlianController::class, 'assignKeahlian']);
+    Route::post('/generate-keahlian-dosen', [KeahlianController::class, 'generateAllKeahlian'])->name('keahlian.generate-all');
+});

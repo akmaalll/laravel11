@@ -14,9 +14,7 @@ class DosenMataKuliah extends Model
         'dosen_nidn',
         'mata_kuliah',
         'kode_mk',
-        'sks',
         'semester',
-        'tahun_ajaran'
     ];
 
     public function dosen()
@@ -30,8 +28,8 @@ class DosenMataKuliah extends Model
     public static function getMataKuliahByDosen($dosenNidn)
     {
         return self::where('dosen_nidn', $dosenNidn)
-                   ->pluck('mata_kuliah')
-                   ->toArray();
+            ->pluck('mata_kuliah')
+            ->toArray();
     }
 
     /**
@@ -40,7 +38,7 @@ class DosenMataKuliah extends Model
     public static function getAllMataKuliah()
     {
         return self::distinct()
-                   ->pluck('mata_kuliah')
-                   ->toArray();
+            ->pluck('mata_kuliah')
+            ->toArray();
     }
-} 
+}

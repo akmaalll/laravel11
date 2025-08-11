@@ -16,9 +16,7 @@ return new class extends Migration
             $table->string('dosen_nidn', 20);
             $table->string('mata_kuliah', 100);
             $table->string('kode_mk', 20)->nullable();
-            $table->integer('sks')->default(3);
-            $table->string('semester', 10)->nullable(); // Ganjil/Genap
-            $table->year('tahun_ajaran')->nullable();
+            $table->string('semester', 10)->nullable(); 
             $table->timestamps();
 
             $table->foreign('dosen_nidn')->references('nidn')->on('mst_dosens')->onDelete('cascade');

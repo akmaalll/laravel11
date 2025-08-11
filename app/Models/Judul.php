@@ -14,12 +14,18 @@ class Judul extends Model
         'judul',
         'topik',
         'id_prodi',
-        'id_user',
+        'nidn_p1',
+        'nidn_p2',
     ];
 
-    public function user()
+    public function p1()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Dosen::class, 'nidn_p1', 'nidn');
+    }
+
+    public function p2()
+    {
+        return $this->belongsTo(Dosen::class, 'nidn_p2', 'nidn');
     }
 
     public function prodi()

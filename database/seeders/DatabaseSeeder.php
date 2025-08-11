@@ -29,14 +29,15 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             UserMenuSeeder::class,
             DosenSeeder::class,
+            DosenMatkulSeeder::class,
 
             // Judul and related data
-            MstJudulSeeder::class,
-            PengajuanJudulSeeder::class,
-            MstJudulPembimbingSeeder::class,
+            // MstJudulSeeder::class,
+            // PengajuanJudulSeeder::class,
+            // MstJudulPembimbingSeeder::class,
 
             // Naive Bayes training data
-            NaiveBayesSeeder::class,
+            // NaiveBayesSeeder::class,
         ]);
     }
 }
