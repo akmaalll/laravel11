@@ -4,6 +4,7 @@ namespace App\Http\Services\Repositories;
 
 use App\Http\Services\Repositories\BaseRepository;
 use App\Http\Services\Repositories\Contracts\KeahlianContract;
+use App\Models\Keahlian;
 use App\Models\KeahlianDosen;
 
 class KeahlianRepository extends BaseRepository implements KeahlianContract
@@ -13,7 +14,7 @@ class KeahlianRepository extends BaseRepository implements KeahlianContract
 	 */
 	protected $model;
 
-	public function __construct(KeahlianDosen $model)
+	public function __construct(Keahlian $model)
 	{
 		$this->model = $model;
 	}
@@ -21,26 +22,14 @@ class KeahlianRepository extends BaseRepository implements KeahlianContract
 	public function paginated(array $criteria)
 	{
 		$perPage = $criteria['per_page'] ?? 5;
-		$field = $criteria['sort_field'] ?? 'dosen_id';
+		$field = $criteria['sort_field'] ?? 'id';
 		$sortOrder = $criteria['sort_order'] ?? 'desc';
+		$search = $criteria['search'] ?? '';
 
-		// Ambil daftar dosen unik untuk pagination
-		$dosenPaginated = $this->model
-			->select('dosen_id')
-			->groupBy('dosen_id')
+		return $this->model->when($search, function ($query) use ($search) {
+			$query->where('nama', 'like', "%{$search}%");
+		})
 			->orderBy($field, $sortOrder)
 			->paginate($perPage);
-
-		// Ambil semua data keahlian dari dosen yang ada di halaman ini
-		$allData = $this->model
-			->whereIn('dosen_id', $dosenPaginated->pluck('dosen_id'))
-			->with(['dosen', 'keahlian'])
-			->get()
-			->groupBy('dosen_id');
-
-		return [
-			'pagination' => $dosenPaginated,
-			'grouped'    => $allData
-		];
 	}
 }

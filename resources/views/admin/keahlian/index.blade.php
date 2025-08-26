@@ -66,9 +66,12 @@
 
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <button id="generate-keahlian-btn" class="btn btn-primary mb-4">
-                            <i class="fas fa-cogs"></i> Generate Keahlian Dosen
-                        </button>
+                        <a href="{{ route($title . '.create') }}" class="btn btn-success">
+                            <span class="btn-label">
+                                <i class="fa fa-plus"></i>
+                            </span>
+                            Add New
+                        </a>
                     </div>
                     <!--end::Card toolbar-->
                 </div>
@@ -82,9 +85,8 @@
                         <thead>
                             <tr class="text-start text-gray-600 fw-bold fs-7 text-uppercase gs-0">
                                 <th class="min-w-20px pe-2"> No </th>
-                                <th class="min-w-200px"> Nama Dosen </th>
                                 <th class="min-w-200px"> Keahlian </th>
-                                {{-- <th class="text-end min-w-70px"> Actions </th> --}}
+                                <th class="text-end min-w-70px"> Actions </th>
                             </tr>
                         </thead>
 
@@ -121,63 +123,8 @@
     <!--end::Content-->
 @endsection
 
-{{-- @push('jsScript')
+@push('jsScript')
     <script type="text/javascript">
-        $(document).ready(function() {
-            // Generate expertise for all lecturers
-            $('#generate-keahlian-btn').click(function() {
-                const btn = $(this);
-                btn.prop('disabled', true);
-                btn.html('<span class="indicator-label"><i class="fas fa-cogs"></i> Processing...</span>');
-
-                Swal.fire({
-                    title: 'Generate Lecturer Expertise',
-                    text: 'This will process all lecturer data. Continue?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, generate!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '{{ route('keahlian.generate-all') }}',
-                            method: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    Swal.fire({
-                                        title: 'Success!',
-                                        text: response.message,
-                                        icon: 'success'
-                                    });
-                                    // Refresh datatable
-                                    $('.twbs-pagination').twbsPagination('destroy');
-                                    loadpage(5, $('#input_search')
-                                        .val());
-                                } else {
-                                    Swal.fire('Error!', response.message, 'error');
-                                }
-                            },
-                            error: function(xhr) {
-                                Swal.fire('Error!', xhr.responseJSON?.message ||
-                                    'Process failed', 'error');
-                            },
-                            complete: function() {
-                                btn.prop('disabled', false);
-                                btn.html(
-                                    '<i class="fas fa-cogs"></i> Generate Keahlian Dosen'
-                                );
-                            }
-                        });
-                    } else {
-                        btn.prop('disabled', false);
-                        btn.html('<i class="fas fa-cogs"></i> Generate Keahlian Dosen');
-                    }
-                });
-            });
-        });
-
         $(document).ready(function() {
             loadpage(5, '');
             var $pagination = $('.twbs-pagination');
@@ -292,8 +239,8 @@
 
         });
     </script>
-@endpush --}}
-@push('jsScript')
+@endpush
+{{-- @push('jsScript')
     <script type="text/javascript">
         $(document).ready(function() {
             // Configuration
@@ -532,4 +479,4 @@
             });
         });
     </script>
-@endpush
+@endpush --}}

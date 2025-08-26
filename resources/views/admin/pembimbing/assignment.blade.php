@@ -4,6 +4,10 @@
     active
 @endpush
 
+@push('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+
 @section('content')
     <!--begin::Toolbar-->
     @component('admin._card.breadcrumb')
@@ -38,10 +42,12 @@
                                 <label for="pengajuan_select" class="form-label fw-bold">Pilih Pengajuan Judul:</label>
                                 <select class="form-select" data-placeholder="Pilih Judul" data-control="select2"
                                     data-hide-search="false" id="pengajuan_select">
-                                    @foreach (Helper::getData('pengajuan_juduls') as $pengajuan)
-                                        <option value="{{ $pengajuan->id }}">{{ $pengajuan->judul }}
-                                            ({{ $pengajuan->topik }})
-                                            - {{ $pengajuan->status }}</option>
+                                    <option value="">-- Pilih Pengajuan --</option>
+                                    @foreach (Helper::getDataJudul('mst_judul') as $pengajuan)
+                                        <option value="{{ $pengajuan->id }}">
+                                            {{ $pengajuan->judul }} - {{ $pengajuan->status }}
+                                            - {{ $pengajuan->nama_keahlian }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -50,239 +56,150 @@
                             <div class="form-group">
                                 <label class="form-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary btn-lg" onclick="getRecommendations()">
-                                        <i class="fas fa-magic me-2"></i>Dapatkan Rekomendasi
+                                    <button type="button" class="btn btn-primary btn-lg" id="btn-get-recommendation">
+                                        <i class="fas fa-magic me-2"></i>
+                                        Dapatkan Rekomendasi
+                                        <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Loading -->
-                    <div id="loading-section" style="display: none;" class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
+                    <!-- Detail Pengajuan -->
+                    <div id="detail-pengajuan" class="d-none">
+                        <div class="alert alert-light-info border-dashed border-info">
+                            <h5 class="alert-heading">
+                                <i class="fas fa-info-circle me-2"></i>Detail Pengajuan
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Judul:</strong> <span id="detail-judul"></span></p>
+                                    <p><strong>Status:</strong> <span id="detail-status" class="badge"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Bidang Keahlian:</strong> <span id="detail-keahlian"></span></p>
+                                    <p><strong>Tanggal Pengajuan:</strong> <span id="detail-tanggal"></span></p>
+                                </div>
+                            </div>
                         </div>
-                        <p class="mt-3">Menganalisis dan memberikan rekomendasi...</p>
-                    </div>
-
-                    <!-- Error Message -->
-                    <div id="error-section" style="display: none;" class="alert alert-danger">
                     </div>
 
                     <!-- Hasil Rekomendasi -->
-                    <div id="recommendation-section" style="display: none;">
+                    <div id="hasil-rekomendasi" class="d-none">
+                        <div class="separator separator-dashed my-6"></div>
 
-                        <!-- Info Pengajuan -->
+                        <h4 class="mb-4">
+                            <i class="fas fa-chart-line text-success me-2"></i>
+                            Hasil Rekomendasi Naive Bayes
+                        </h4>
+
+                        <!-- Legend -->
                         <div class="row mb-4">
                             <div class="col-12">
-                                <div class="card card-custom mb-6">
-                                    <div class="card-header bg-light-primary">
-                                        <div class="card-title">
-                                            <i class="ki-duotone ki-document fs-2 text-primary me-2">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                            </i>
-                                            <h6 class="mb-0">Informasi Pengajuan</h6>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row" id="pengajuan-info">
-                                            <!-- Info akan diisi oleh JavaScript -->
+                                <div class="card bg-light-primary">
+                                    <div class="card-body p-4">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <h6 class="fw-bold mb-3">Keterangan Fitur:</h6>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="bullet bullet-dot bg-success me-2"></span>
+                                                            <span><strong>Keahlian:</strong> Sesuai bidang keahlian</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="bullet bullet-dot bg-warning me-2"></span>
+                                                            <span><strong>Penelitian:</strong> Pengalaman penelitian
+                                                                serupa</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="bullet bullet-dot bg-info me-2"></span>
+                                                            <span><strong>Judul:</strong> Pengalaman bimbingan serupa</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="fw-bold mb-3">Aturan Pembimbingan:</h6>
+                                                <div class="text-sm">
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <i class="fas fa-user-tie text-success me-2"></i>
+                                                        <span><strong>Lektor:</strong> Bisa Pembimbing 1 & 2</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <i class="fas fa-user-graduate text-warning me-2"></i>
+                                                        <span><strong>Ahli:</strong> Hanya Pembimbing 2</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Rekomendasi AI -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="card card-custom mb-6">
-                                    <div class="card-header bg-light-success">
-                                        <div class="card-title">
-                                            <i class="ki-duotone ki-brain fs-2 text-success me-2">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                            </i>
-                                            <h6 class="mb-0">Rekomendasi AI (Naive Bayes)</h6>
-                                        </div>
-                                        <div class="card-toolbar">
-                                            <span class="badge badge-light-success fs-7">
-                                                <i class="ki-duotone ki-information-5 fs-6 me-1">
-                                                    <span class="path1"></span>
-                                                    <span class="path2"></span>
-                                                </i>
-                                                Keahlian (40%) | Bimbingan (40%) | Penelitian (20%)
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row" id="recommendation-cards">
-                                            <!-- Cards akan diisi oleh JavaScript -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Tabel Rekomendasi -->
+                        <div class="table-responsive">
+                            <table class="table table-row-dashed table-row-gray-300 gy-5" id="tabel-rekomendasi">
+                                <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800">
+                                        <th class="text-center">Rank</th>
+                                        <th>NIDN</th>
+                                        <th>Nama Dosen</th>
+                                        <th class="text-center">Jabatan Fungsional</th>
+                                        <th class="text-center">Fitur</th>
+                                        <th class="text-center">Probabilitas</th>
+                                        <th class="text-center">Prediksi</th>
+                                        <th class="text-center">Skor Kelayakan</th>
+                                        <th class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-rekomendasi">
+                                    <!-- Data akan diisi via JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
 
                         <!-- Form Assignment -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card card-custom">
-                                    <div class="card-header bg-light-warning">
-                                        <div class="card-title">
-                                            <i class="ki-duotone ki-user-square fs-2 text-warning me-2">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                            </i>
-                                            <h6 class="mb-0">Assignment Pembimbing</h6>
+                        <div class="separator separator-dashed my-6"></div>
+
+                        <div class="card bg-light-success">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-user-plus text-success me-2"></i>
+                                    Assignment Pembimbing
+                                </h5>
+                                <form id="form-assignment">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label class="form-label fw-bold">Pembimbing 1:</label>
+                                            <select class="form-select" data-control="select2" id="pembimbing1"
+                                                name="pembimbing1" required>
+                                                <option value="">-- Pilih Pembimbing 1 --</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label fw-bold">Pembimbing 2:</label>
+                                            <select class="form-select" data-control="select2" id="pembimbing2"
+                                                name="pembimbing2" required>
+                                                <option value="">-- Pilih Pembimbing 2 --</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-end">
+                                            <button type="submit" class="btn btn-success w-100">
+                                                <i class="fas fa-save me-1"></i>
+                                                Assign
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <form id="assignment-form">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label for="pembimbing1" class="form-label fw-bold text-dark">
-                                                            <i class="ki-duotone ki-user fs-6 text-primary me-1">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                            Pembimbing 1
-                                                        </label>
-                                                        <select id="pembimbing1" name="pembimbing1_id"
-                                                            class="form-select form-select-solid" data-control="select2"
-                                                            data-placeholder="Pilih Pembimbing 1..." required>
-                                                            <option value="">Pilih Pembimbing 1...</option>
-                                                        </select>
-                                                        <small class="text-muted">Pilih dari rekomendasi AI atau dosen
-                                                            lainnya</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label for="pembimbing2" class="form-label fw-bold text-dark">
-                                                            <i class="ki-duotone ki-user fs-6 text-success me-1">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                            Pembimbing 2
-                                                        </label>
-                                                        <select id="pembimbing2" name="pembimbing2_id"
-                                                            class="form-select form-select-solid" data-control="select2"
-                                                            data-placeholder="Pilih Pembimbing 2..." required>
-                                                            <option value="">Pilih Pembimbing 2...</option>
-                                                        </select>
-                                                        <small class="text-muted">Pilih dari rekomendasi AI atau dosen
-                                                            lainnya</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group mb-4">
-                                                        <label for="assignment_notes"
-                                                            class="form-label fw-bold text-dark">
-                                                            <i class="ki-duotone ki-message-text-2 fs-6 text-info me-1">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                            Catatan Assignment
-                                                        </label>
-                                                        <textarea id="assignment_notes" name="notes" class="form-control form-control-solid" rows="3"
-                                                            placeholder="Catatan tambahan untuk assignment pembimbing..."></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="d-flex justify-content-end gap-2">
-                                                        <button type="button" class="btn btn-light-secondary"
-                                                            onclick="resetForm()">
-                                                            <i class="ki-duotone ki-refresh fs-6 me-1">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                            Reset
-                                                        </button>
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <i class="ki-duotone ki-check fs-6 me-1">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                            Assign Pembimbing
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                {{-- <div class="card border-success">
-                                    <div class="card-header bg-success text-white">
-                                        <h5 class="card-title mb-0">
-                                            <i class="fas fa-user-check me-2"></i>
-                                            Assignment Pembimbing (Admin Decision)
-                                        </h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="assignment-form">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-3">
-                                                        <label for="pembimbing1" class="form-label fw-bold">Pembimbing
-                                                            1:</label>
-                                                        <select id="pembimbing1" name="pembimbing1_id" class="form-select"
-                                                            data-control="select2" data-hide-search="true" required>
-                                                            <option value="">Pilih Pembimbing 1...</option>
-                                                        </select>
-                                                        <small class="text-muted">Pilih dari rekomendasi AI atau dosen
-                                                            lainnya</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-3">
-                                                        <label for="pembimbing2" class="form-label fw-bold">Pembimbing
-                                                            2:</label>
-                                                        <select id="pembimbing2" name="pembimbing2_id" class="form-select"
-                                                            data-control="select2" data-hide-search="true" required>
-                                                            <option value="">Pilih Pembimbing 2...</option>
-                                                        </select>
-                                                        <small class="text-muted">Pilih dari rekomendasi AI atau dosen
-                                                            lainnya</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group mb-3">
-                                                        <label for="assignment_notes" class="form-label">Catatan
-                                                            Assignment:</label>
-                                                        <textarea id="assignment_notes" name="notes" class="form-control" rows="3"
-                                                            placeholder="Catatan tambahan untuk assignment pembimbing..."></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <button type="submit" class="btn btn-success btn-lg">
-                                                        <i class="fas fa-save me-2"></i>
-                                                        Assign Pembimbing
-                                                    </button>
-                                                    <button type="button" class="btn btn-secondary btn-lg ms-2"
-                                                        onclick="confirmReset()">
-                                                        <i class="fas fa-refresh me-2"></i>
-                                                        Reset
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div> --}}
+                                </form>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
@@ -303,391 +220,499 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-        // Toastr configuration
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
-        let currentPengajuanId = null;
-        let allDosens = [];
-
-        // Notification helper functions
-        function showSuccessToast(message, title = 'Berhasil!') {
-            toastr.success(message, title);
-        }
-
-        function showErrorToast(message, title = 'Error!') {
-            toastr.error(message, title);
-        }
-
-        function showWarningToast(message, title = 'Perhatian!') {
-            toastr.warning(message, title);
-        }
-
-        function showInfoToast(message, title = 'Info') {
-            toastr.info(message, title);
-        }
-
         $(document).ready(function() {
-            loadPengajuanData();
-            loadAllDosens();
+            // Konfigurasi Toastr
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toastr-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
 
-            // Show welcome message
-            showInfoToast('Selamat datang di halaman assignment pembimbing dengan AI!');
-        });
+            // Event handler untuk tombol Get Recommendation
+            $('#btn-get-recommendation').on('click', function() {
+                const selectedId = $('#pengajuan_select').val();
 
-        function loadPengajuanData() {
-            $.ajax({
-                url: '/admin/pengajuan-judul/data',
-                method: 'GET',
-                success: function(response) {
-                    if (response.ok && response.data) {
-                        let options = '<option value="">Pilih pengajuan judul...</option>';
-                        response.data.forEach(function(pengajuan) {
-                            if (pengajuan.status === 'diverifikasi' || pengajuan.status ===
-                                'diterima') {
-                                options +=
-                                    `<option value="${pengajuan.id}">${pengajuan.judul} (${pengajuan.topik}) - ${pengajuan.status}</option>`;
-                            }
-                        });
-                        $('#pengajuan_select').html(options);
-                    }
-                },
-                error: function(xhr) {
-                    console.error('Error loading pengajuan data:', xhr);
-                    showErrorToast('Gagal memuat data pengajuan judul');
+                if (!selectedId) {
+                    toastr.error('Silakan pilih pengajuan terlebih dahulu!');
+                    return;
                 }
-            });
-        }
 
-        function loadAllDosens() {
-            $.ajax({
-                url: '/admin/pembimbing/dosens/available',
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        allDosens = response.data;
+                getRecommendation(selectedId);
+            });
+
+            // Fungsi untuk mendapatkan rekomendasi
+            function getRecommendation(pengajuanId) {
+                const btn = $('#btn-get-recommendation');
+                const spinner = btn.find('.spinner-border');
+
+                // Show loading
+                btn.prop('disabled', true);
+                spinner.removeClass('d-none');
+
+                // Clear previous results
+                $('#detail-pengajuan, #hasil-rekomendasi').addClass('d-none');
+
+                $.ajax({
+                    url: `/admin/judul-pengajuan/${pengajuanId}`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response); // Debug
+
+                        if (response.dataPengajuan && response.rekomendasi) {
+                            displayPengajuanDetail(response.dataPengajuan);
+                            displayRekomendasi(response.rekomendasi);
+                            populatePembimbingOptions(response.rekomendasi);
+
+                            $('#detail-pengajuan, #hasil-rekomendasi').removeClass('d-none');
+
+                            toastr.success('Rekomendasi berhasil didapatkan!');
+                        } else {
+                            toastr.error('Format response tidak sesuai!');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        toastr.error('Terjadi kesalahan saat mengambil rekomendasi!');
+                    },
+                    complete: function() {
+                        // Hide loading
+                        btn.prop('disabled', false);
+                        spinner.addClass('d-none');
                     }
-                },
-                error: function(xhr) {
-                    console.error('Error loading dosens:', xhr);
-                    showErrorToast('Gagal memuat data dosen');
-                }
-            });
-        }
-
-        function getRecommendations() {
-            const pengajuanId = $('#pengajuan_select').val();
-
-            if (!pengajuanId) {
-                showWarningToast('Silakan pilih pengajuan judul terlebih dahulu');
-                return;
+                });
             }
 
-            currentPengajuanId = pengajuanId;
-            showLoading();
-            hideError();
-            hideRecommendation();
+            // Fungsi untuk menampilkan detail pengajuan
+            function displayPengajuanDetail(data) {
+                console.log(data)
+                $('#detail-judul').text(data.judul || '-');
 
-            $.ajax({
-                url: `/admin/pembimbing/recommendation-naive-bayes/${pengajuanId}`,
-                method: 'GET',
-                success: function(response) {
-                    // console.log(response);
-                    hideLoading();
-                    if (response.success) {
-                        displayRecommendations(response.data);
-                        showSuccessToast('Rekomendasi AI berhasil dimuat!');
+                const statusBadge = $('#detail-status');
+                statusBadge.text(data.status || '-');
+
+                // Set badge color based on status
+                statusBadge.removeClass('badge-success badge-warning badge-danger badge-info');
+                switch (data.status) {
+                    case 'diterima':
+                        statusBadge.addClass('badge-success');
+                        break;
+                    case 'pending':
+                        statusBadge.addClass('badge-warning');
+                        break;
+                    case 'ditolak':
+                        statusBadge.addClass('badge-danger');
+                        break;
+                    default:
+                        statusBadge.addClass('badge-info');
+                }
+
+                $('#detail-keahlian').text(data.nama_keahlian || data.id_keahlian || '-');
+                $('#detail-tanggal').text(formatDate(data.created_at) || '-');
+            }
+
+            // Fungsi untuk menampilkan rekomendasi
+            function displayRekomendasi(rekomendasi) {
+                const tbody = $('#tbody-rekomendasi');
+                tbody.empty();
+
+                if (!rekomendasi || rekomendasi.length === 0) {
+                    tbody.append(`
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Tidak ada rekomendasi dosen yang ditemukan
+                            </td>
+                        </tr>
+                    `);
+                    return;
+                }
+
+                rekomendasi.forEach((item, index) => {
+                    const rank = index + 1;
+                    const fitur = item.fitur || {};
+                    const probs = item.probs || {};
+                    const jabatan = item.jabatan_fungsional || '-';
+
+                    // Feature icons
+                    const keahlianIcon = fitur.keahlian ?
+                        '<i class="fas fa-check-circle text-success" title="Sesuai Keahlian"></i>' :
+                        '<i class="fas fa-times-circle text-danger" title="Tidak Sesuai Keahlian"></i>';
+
+                    const penelitianIcon = fitur.penelitian ?
+                        '<i class="fas fa-check-circle text-success" title="Ada Penelitian"></i>' :
+                        '<i class="fas fa-times-circle text-danger" title="Tidak Ada Penelitian"></i>';
+
+                    const judulIcon = fitur.judul ?
+                        '<i class="fas fa-check-circle text-success" title="Ada Pengalaman Bimbingan"></i>' :
+                        '<i class="fas fa-times-circle text-danger" title="Tidak Ada Pengalaman"></i>';
+
+                    // Jabatan badge dan aturan pembimbingan
+                    let jabatanBadge = '';
+                    let pembimbingRule = '';
+                    let canBePembimbing1 = false;
+                    let canBePembimbing2 = false;
+
+                    const jabatanLower = jabatan.toLowerCase();
+                    if (jabatanLower.includes('lektor')) {
+                        jabatanBadge = '<span class="badge badge-success">Lektor</span>';
+                        pembimbingRule = 'Pembimbing 1 & 2';
+                        canBePembimbing1 = true;
+                        canBePembimbing2 = true;
+                    } else if (jabatanLower.includes('ahli')) {
+                        jabatanBadge = '<span class="badge badge-warning">Ahli</span>';
+                        pembimbingRule = 'Hanya Pembimbing 2';
+                        canBePembimbing1 = false;
+                        canBePembimbing2 = true;
                     } else {
-                        showError(response.message);
+                        jabatanBadge = `<span class="badge badge-secondary">${jabatan}</span>`;
+                        pembimbingRule = 'Tidak Memenuhi Syarat';
+                        canBePembimbing1 = false;
+                        canBePembimbing2 = false;
                     }
-                },
-                error: function(xhr) {
-                    hideLoading();
-                    showError('Terjadi kesalahan saat mengambil rekomendasi');
-                    console.error('Error:', xhr);
+
+                    // Prediksi badge
+                    const prediksiClass = item.prediksi === 'Layak' ? 'badge-success' : 'badge-danger';
+
+                    // Progress bar untuk skor
+                    const skorPersen = Math.round((item.skor || 0) * 100);
+                    const progressClass = skorPersen >= 70 ? 'bg-success' : skorPersen >= 50 ?
+                        'bg-warning' : 'bg-danger';
+
+                    // Rank badge
+                    let rankClass = 'badge-secondary';
+                    if (rank === 1) rankClass = 'badge-success';
+                    else if (rank === 2) rankClass = 'badge-warning';
+                    else if (rank === 3) rankClass = 'badge-info';
+
+                    // Action buttons
+                    let actionButtons = '';
+                    const isEligible = item.prediksi === 'Layak' && (canBePembimbing1 || canBePembimbing2);
+
+                    if (isEligible) {
+                        if (canBePembimbing1 && canBePembimbing2) {
+                            actionButtons = `
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-outline-primary btn-select-pembimbing1" 
+                                            data-nidn="${item.nidn}" 
+                                            data-nama="${item.nama}"
+                                            data-jabatan="${jabatan}">
+                                        <i class="fas fa-user"></i> P1
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary btn-select-pembimbing2" 
+                                            data-nidn="${item.nidn}" 
+                                            data-nama="${item.nama}"
+                                            data-jabatan="${jabatan}">
+                                        <i class="fas fa-user-plus"></i> P2
+                                    </button>
+                                </div>
+                            `;
+                        } else if (canBePembimbing2) {
+                            actionButtons = `
+                                <button class="btn btn-sm btn-outline-secondary btn-select-pembimbing2" 
+                                        data-nidn="${item.nidn}" 
+                                        data-nama="${item.nama}"
+                                        data-jabatan="${jabatan}">
+                                    <i class="fas fa-user-plus"></i> P2
+                                </button>
+                            `;
+                        }
+                    } else {
+                        actionButtons = `
+                            <span class="text-muted">
+                                <i class="fas fa-ban"></i> Tidak Memenuhi Syarat
+                            </span>
+                        `;
+                    }
+
+                    tbody.append(`
+                        <tr>
+                            <td class="text-center">
+                                <span class="badge ${rankClass} fs-6">#${rank}</span>
+                            </td>
+                            <td class="fw-bold">${item.nidn || '-'}</td>
+                            <td>${item.nama || '-'}</td>
+                            <td class="text-center">
+                                <div>${jabatanBadge}</div>
+                                <small class="text-muted">${pembimbingRule}</small>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    ${keahlianIcon}
+                                    ${penelitianIcon}
+                                    ${judulIcon}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="text-sm">
+                                    <div class="text-success">Layak: ${Math.round((probs.Layak || 0) * 100)}%</div>
+                                    <div class="text-danger">Tidak: ${Math.round((probs['Tidak Layak'] || 0) * 100)}%</div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge ${prediksiClass}">${item.prediksi || '-'}</span>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="progress progress-sm w-75 mb-1" style="height: 8px;">
+                                        <div class="progress-bar ${progressClass}" 
+                                             style="width: ${skorPersen}%"></div>
+                                    </div>
+                                    <span class="text-muted fs-8">${item.skor || 0}</span>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                ${actionButtons}
+                            </td>
+                        </tr>
+                    `);
+                });
+            }
+
+            // Fungsi untuk populate options pembimbing
+            function populatePembimbingOptions(rekomendasi) {
+                const select1 = $('#pembimbing1');
+                const select2 = $('#pembimbing2');
+
+                select1.find('option:not(:first)').remove();
+                select2.find('option:not(:first)').remove();
+
+                // Filter berdasarkan kelayakan dan jabatan
+                rekomendasi.forEach(item => {
+                    if (item.prediksi === 'Layak') {
+                        const jabatan = (item.jabatan_fungsional || '').toLowerCase();
+                        const optionText =
+                            `${item.nama} (${item.nidn}) - ${item.jabatan_fungsional} - Skor: ${item.skor}`;
+
+                        // Lektor bisa jadi pembimbing 1 dan 2
+                        if (jabatan.includes('lektor')) {
+                            const option =
+                                `<option value="${item.nidn}" data-jabatan="${item.jabatan_fungsional}">${optionText}</option>`;
+                            select1.append(option);
+                            select2.append(option);
+                        }
+                        // Ahli hanya bisa jadi pembimbing 2
+                        else if (jabatan.includes('ahli')) {
+                            const option =
+                                `<option value="${item.nidn}" data-jabatan="${item.jabatan_fungsional}">${optionText}</option>`;
+                            select2.append(option);
+                        }
+                    }
+                });
+            }
+
+            // Event handler untuk tombol pilih pembimbing 1
+            $(document).on('click', '.btn-select-pembimbing1', function() {
+                const nidn = $(this).data('nidn');
+                const nama = $(this).data('nama');
+                const jabatan = $(this).data('jabatan');
+
+                // Check if already selected
+                const select1Val = $('#pembimbing1').val();
+                const select2Val = $('#pembimbing2').val();
+
+                if (select1Val === nidn || select2Val === nidn) {
+                    toastr.warning('Dosen ini sudah dipilih sebagai pembimbing!');
+                    return;
                 }
-            });
-        }
 
-        function displayRecommendations(data) {
-            console.log(data);
-            // Display pengajuan info
-            const pengajuanInfo = `
-        <div class="row">
-            <div class="col-md-6">
-                <strong>Judul:</strong> ${data.pengajuan.judul}<br>
-                <strong>Topik:</strong> ${data.pengajuan.topik}<br>
-                <strong>Konsentrasi:</strong> ${data.pengajuan.konsentrasi}
-            </div>
-            <div class="col-md-6">
-                <strong>Status:</strong> <span class="badge badge-${getStatusBadge(data.pengajuan.status)}">${data.pengajuan.status}</span><br>
-                <strong>Program Studi:</strong> ${data.pengajuan.id_prodi || '-'}<br>
-                <strong>Tanggal Pengajuan:</strong> ${formatDate(data.pengajuan.created_at)}
-            </div>
-        </div>
-    `;
-            $('#pengajuan-info').html(pengajuanInfo);
-
-            // Display recommendation cards
-            const cardsContainer = $('#recommendation-cards');
-            cardsContainer.empty();
-
-            data.recommendations.forEach(function(rec, index) {
-                const card = `
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 ${index < 2 ? 'border-warning' : 'border-secondary'}">
-                    <div class="card-header ${index < 2 ? 'bg-warning' : 'bg-secondary'} text-white">
-                        <h6 class="card-title mb-0">
-                            <i class="fas fa-star me-1"></i>
-                            Rekomendasi #${index + 1} 
-                            ${index < 2 ? '<span class="badge bg-danger">TOP CHOICE</span>' : ''}
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title">${rec.dosen.nama}</h6>
-                        <p class="card-text">
-                            <small class="text-muted">${rec.dosen.nidn}</small><br>
-                            <strong>Score:</strong> <span class="badge badge-primary">${(rec.score * 100).toFixed(2)}%</span>
-                        </p>
-                        <div class="mt-2">
-                            <small class="text-muted">
-                                <strong>Keahlian:</strong> ${rec.attributes.keahlian.join(', ') || '-'}<br>
-                                <strong>Mata Kuliah:</strong> ${rec.attributes.mata_kuliah.join(', ') || '-'}<br>
-                                <strong>History Bimbingan:</strong> ${rec.attributes.history_bimbingan.join(', ') || '-'}<br>
-                                <strong>History Penelitian:</strong> ${rec.attributes.history_penelitian.join(', ') || '-'}
-                            </small>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-sm btn-outline-primary" 
-                                onclick="selectPembimbing('${rec.dosen.nidn}', '${rec.dosen.nama}')">
-                            <i class="fas fa-check me-1"></i>Pilih sebagai Pembimbing
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-                cardsContainer.append(card);
-            });
-
-            // Populate pembimbing dropdowns
-            populatePembimbingDropdowns(data.recommendations);
-
-            $('#recommendation-section').show();
-        }
-
-        function populatePembimbingDropdowns(recommendations) {
-            const pembimbing1Select = $('#pembimbing1');
-            const pembimbing2Select = $('#pembimbing2');
-
-            // Clear existing options
-            pembimbing1Select.empty().append('<option value="">Pilih Pembimbing 1...</option>');
-            pembimbing2Select.empty().append('<option value="">Pilih Pembimbing 2...</option>');
-
-            // Add recommended dosens first
-            recommendations.forEach(function(rec, index) {
-                const option = `<option value="${rec.dosen.nidn}" data-score="${rec.score}">
-            ${rec.dosen.nama} (${rec.dosen.nidn}) - Score: ${(rec.score * 100).toFixed(2)}%
-        </option>`;
-
-                if (index < 2) {
-                    pembimbing1Select.append(option);
+                // Check jabatan eligibility
+                const jabatanLower = jabatan.toLowerCase();
+                if (!jabatanLower.includes('lektor')) {
+                    toastr.error('Hanya dosen dengan jabatan Lektor yang bisa menjadi Pembimbing 1!');
+                    return;
                 }
-                pembimbing2Select.append(option);
-            });
 
-            // Add all other dosens
-            allDosens.forEach(function(dosen) {
-                const isRecommended = recommendations.some(rec => rec.dosen.nidn === dosen.nidn);
-                if (!isRecommended) {
-                    const option = `<option value="${dosen.nidn}">${dosen.nama} (${dosen.nidn})</option>`;
-                    pembimbing1Select.append(option);
-                    pembimbing2Select.append(option);
-                }
-            });
-        }
-
-        function selectPembimbing(nidn, nama) {
-            // Auto-select for pembimbing 1 if empty, otherwise pembimbing 2
-            if (!$('#pembimbing1').val()) {
                 $('#pembimbing1').val(nidn).trigger('change');
-                showSuccessToast(`Dosen ${nama} dipilih sebagai Pembimbing 1`);
-            } else if (!$('#pembimbing2').val()) {
+                toastr.success(`${nama} (${jabatan}) ditambahkan sebagai Pembimbing 1`);
+            });
+
+            // Event handler untuk tombol pilih pembimbing 2
+            $(document).on('click', '.btn-select-pembimbing2', function() {
+                const nidn = $(this).data('nidn');
+                const nama = $(this).data('nama');
+                const jabatan = $(this).data('jabatan');
+
+                // Check if already selected
+                const select1Val = $('#pembimbing1').val();
+                const select2Val = $('#pembimbing2').val();
+
+                if (select1Val === nidn || select2Val === nidn) {
+                    toastr.warning('Dosen ini sudah dipilih sebagai pembimbing!');
+                    return;
+                }
+
+                // Check jabatan eligibility
+                const jabatanLower = jabatan.toLowerCase();
+                if (!jabatanLower.includes('lektor') && !jabatanLower.includes('ahli')) {
+                    toastr.error(
+                        'Hanya dosen dengan jabatan Lektor atau Ahli yang bisa menjadi Pembimbing 2!');
+                    return;
+                }
+
                 $('#pembimbing2').val(nidn).trigger('change');
-                showSuccessToast(`Dosen ${nama} dipilih sebagai Pembimbing 2`);
-            } else {
-                showWarningToast('Kedua pembimbing sudah dipilih. Silakan reset jika ingin mengubah.');
-            }
-        }
-
-        // Form submission
-        $('#assignment-form').on('submit', function(e) {
-            e.preventDefault();
-
-            const pembimbing1Id = $('#pembimbing1').val();
-            const pembimbing2Id = $('#pembimbing2').val();
-
-            if (pembimbing1Id === pembimbing2Id) {
-                showErrorToast('Pembimbing 1 dan Pembimbing 2 tidak boleh sama!');
-                return;
-            }
-
-            if (!currentPengajuanId) {
-                showErrorToast('Silakan pilih pengajuan judul terlebih dahulu');
-                return;
-            }
-
-            // Confirm assignment
-            Swal.fire({
-                title: 'Konfirmasi Assignment',
-                text: 'Apakah Anda yakin ingin menetapkan pembimbing untuk pengajuan ini?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, Assign!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    submitAssignment(pembimbing1Id, pembimbing2Id);
-                }
-            });
-        });
-
-        function submitAssignment(pembimbing1Id, pembimbing2Id) {
-
-            // Show loading with SweetAlert
-            Swal.fire({
-                title: 'Memproses...',
-                text: 'Sedang menetapkan pembimbing',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
+                toastr.success(`${nama} (${jabatan}) ditambahkan sebagai Pembimbing 2`);
             });
 
-            // Submit assignment
-            $.ajax({
-                url: `/admin/pembimbing/assign/${currentPengajuanId}`,
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    pembimbing1_id: pembimbing1Id,
-                    pembimbing2_id: pembimbing2Id,
-                    notes: $('#assignment_notes').val()
-                },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: 'Pembimbing berhasil ditetapkan!',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            resetForm();
-                            loadPengajuanData(); // Refresh pengajuan list
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: 'Gagal menetapkan pembimbing: ' + response.message,
-                            confirmButtonText: 'OK'
-                        });
+            // Prevent selecting same dosen and validate jabatan rules
+            $('#pembimbing1').on('change', function() {
+                const thisVal = $(this).val();
+                const otherVal = $('#pembimbing2').val();
+
+                if (thisVal && thisVal === otherVal) {
+                    toastr.error('Pembimbing 1 dan Pembimbing 2 tidak boleh sama!');
+                    $(this).val('').trigger('change');
+                    return;
+                }
+
+                // Validate jabatan for pembimbing 1
+                if (thisVal) {
+                    const selectedOption = $(this).find('option:selected');
+                    const jabatan = selectedOption.data('jabatan') || '';
+                    const jabatanLower = jabatan.toLowerCase();
+
+                    if (!jabatanLower.includes('lektor')) {
+                        toastr.error('Pembimbing 1 harus memiliki jabatan Lektor!');
+                        $(this).val('').trigger('change');
                     }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Terjadi kesalahan saat menetapkan pembimbing',
-                        confirmButtonText: 'OK'
-                    });
-                    console.error('Error:', xhr);
                 }
             });
-        }
 
-        function confirmReset() {
-            Swal.fire({
-                title: 'Konfirmasi Reset',
-                text: 'Apakah Anda yakin ingin mereset form? Semua data yang telah diisi akan hilang.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Reset!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    resetForm();
+            $('#pembimbing2').on('change', function() {
+                const thisVal = $(this).val();
+                const otherVal = $('#pembimbing1').val();
+
+                if (thisVal && thisVal === otherVal) {
+                    toastr.error('Pembimbing 1 dan Pembimbing 2 tidak boleh sama!');
+                    $(this).val('').trigger('change');
+                    return;
+                }
+
+                // Validate jabatan for pembimbing 2
+                if (thisVal) {
+                    const selectedOption = $(this).find('option:selected');
+                    const jabatan = selectedOption.data('jabatan') || '';
+                    const jabatanLower = jabatan.toLowerCase();
+
+                    if (!jabatanLower.includes('lektor') && !jabatanLower.includes('ahli')) {
+                        toastr.error('Pembimbing 2 harus memiliki jabatan Lektor atau Ahli!');
+                        $(this).val('').trigger('change');
+                    }
                 }
             });
-        }
 
-        function resetForm() {
-            $('#pembimbing1').val('').trigger('change');
-            $('#pembimbing2').val('').trigger('change');
-            $('#assignment_notes').val('');
-            $('#recommendation-section').hide();
-            currentPengajuanId = null;
-            showInfoToast('Form telah direset');
-        }
+            // Form assignment submission
+            $('#form-assignment').on('submit', function(e) {
+                e.preventDefault();
 
-        function showLoading() {
-            $('#loading-section').show();
-        }
+                const pembimbing1 = $('#pembimbing1').val();
+                const pembimbing2 = $('#pembimbing2').val();
+                const pengajuanId = $('#pengajuan_select').val();
 
-        function hideLoading() {
-            $('#loading-section').hide();
-        }
+                if (!pembimbing1 || !pembimbing2) {
+                    toastr.error('Kedua pembimbing harus dipilih!');
+                    return;
+                }
 
-        function showError(message) {
-            $('#error-section').text(message).show();
-            // Also show toastr notification
-            showErrorToast(message);
-        }
+                if (!pengajuanId) {
+                    toastr.error('Pengajuan harus dipilih!');
+                    return;
+                }
 
-        function hideError() {
-            $('#error-section').hide();
-        }
+                // Show loading
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalText = submitBtn.html();
+                submitBtn.prop('disabled', true)
+                    .html('<i class="fas fa-spinner fa-spin me-1"></i>Menyimpan...');
 
-        function hideRecommendation() {
-            $('#recommendation-section').hide();
-        }
+                // AJAX call to save assignment
+                $.ajax({
+                    url: '/admin/save-assignment',
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        pengajuan_id: pengajuanId,
+                        pembimbing1: pembimbing1,
+                        pembimbing2: pembimbing2
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
 
-        function getStatusBadge(status) {
-            switch (status) {
-                case 'diterima':
-                    return 'success';
-                case 'diverifikasi':
-                    return 'warning';
-                case 'ditolak':
-                    return 'danger';
-                default:
-                    return 'secondary';
+                            // Reset form
+                            $('#form-assignment')[0].reset();
+                            $('#pembimbing1, #pembimbing2').val('').trigger('change');
+
+                            // Optional: Hide results or refresh
+                            // $('#hasil-rekomendasi').addClass('d-none');
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', xhr.responseJSON);
+                        const errorMessage = xhr.responseJSON?.message ||
+                            'Terjadi kesalahan saat menyimpan assignment!';
+                        toastr.error(errorMessage);
+                    },
+                    complete: function() {
+                        // Reset button
+                        submitBtn.prop('disabled', false).html(originalText);
+                    }
+                });
+            });
+
+            // Helper function to format date
+            function formatDate(dateString) {
+                if (!dateString) return '-';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('id-ID', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
             }
+        });
+    </script>
+
+    <style>
+        .progress-sm {
+            height: 8px;
         }
 
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            return new Date(dateString).toLocaleDateString('id-ID');
+        .bullet-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
-    </script>
+
+        .table th {
+            border-top: none;
+            background-color: #f8f9fa;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+        }
+
+        .separator-dashed {
+            border-top: 1px dashed #dee2e6 !important;
+        }
+
+        .fs-8 {
+            font-size: 0.75rem;
+        }
+    </style>
 @endpush

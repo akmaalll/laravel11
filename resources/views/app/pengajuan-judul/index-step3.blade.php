@@ -50,7 +50,7 @@
                                     <!--begin::Wrapper-->
                                     <div class="me-2">
                                         <button type="button" class="btn btn-light btn-active-light-primary"
-                                            id="backStep1">
+                                            id="backStep2">
                                             <- Back </button>
                                     </div>
                                     <!--end::Wrapper-->
@@ -87,7 +87,58 @@
     @include('app.pengajuan-judul.js.submitAndDraf')
     <script>
         let mahasiswaList = [];
+        let nim1 = "{{ Session::get('stb', '') }}"; // Ambil NIM1 dari session
+
+        // Fungsi validasi NIM
+        function validateNim2(nim2) {
+            // Validasi panjang 6 digit
+            if (nim2.length !== 6) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid NIM',
+                    text: 'NIM harus 6 digit!'
+                });
+                return false;
+            }
+
+            // Validasi digit ke-3 harus sama dengan NIM1
+            if (nim1.length >= 3 && nim2.length >= 3) {
+                if (nim1[2] !== nim2[2]) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid NIM',
+                        html: `Digit ke-3 NIM harus sama dengan NIM pertama!<br>
+                           NIM1: ${nim1} (digit ke-3 = ${nim1[2]})<br>
+                           NIM2: ${nim2} (digit ke-3 = ${nim2[2]})`
+                    });
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Event saat form disubmit
+        $('form').on('submit', function(e) {
+            const nim2 = $('#nim2').val();
+
+            if (nim2 && !validateNim2(nim2)) {
+                e.preventDefault(); // Hentikan submit jika tidak valid
+                return false;
+            }
+        });
+
+        // Event saat select berubah (validasi real-time)
+        $('#nim2').on('change', function() {
+            const nim2 = $(this).val();
+            if (nim2) {
+                validateNim2(nim2);
+            }
+        });
+
         $(document).ready(function() {
+            let mahasiswaList = [];
+
             // Ambil data mahasiswa dari API
             fetch('/api/mahasiswa-list')
                 .then(response => response.json())
@@ -98,112 +149,47 @@
                         nama: m.nmmhs
                     }));
 
-                    // Inisialisasi select2 untuk semua select-mahasiswa
-                    $('.select-mahasiswa').each(function(index) {
-                        $(this).select2({
-                            data: mahasiswaList,
-                            placeholder: "Pilih Mahasiswa...",
-                            allowClear: true,
-                            width: '100%'
-                        });
-                        // Jika item pertama (login), set value default dan readonly
-                        if (index === 0) {
-                            var nimLogin = "{{ Session::get('stb', '') }}";
-                            var namaLogin = "{{ Session::get('nama_mhs', '') }}";
-                            $(this).val(nimLogin).trigger('change');
-                            $(this).prop('disabled', true);
-                            $(this).closest('[data-repeater-item]').find('.nama-mahasiswa').val(
-                                namaLogin);
-                            // Sembunyikan tombol delete pada item pertama
-                            $(this).closest('[data-repeater-item]').find('[data-repeater-delete]')
-                            .hide();
-                        }
+                    // Inisialisasi select2 khusus untuk Mahasiswa 2
+                    $('#nim2').select2({
+                        data: mahasiswaList,
+                        placeholder: "Pilih Mahasiswa...",
+                        allowClear: true,
+                        width: '100%'
                     });
+
+                    // Set nilai default jika ada (optional)
+                    @if (isset($data->nim2))
+                        $('#nim2').val("{{ $data->nim2 }}").trigger('change');
+                        const selected = mahasiswaList.find(m => m.id == "{{ $data->nim2 }}");
+                        if (selected) {
+                            $('#nama_mahasiswa2').val(selected.nama);
+                        }
+                    @endif
                 });
 
-            // Event saat select berubah, isi nama otomatis
-            $(document).on('change', '.select-mahasiswa', function() {
+            // Event saat select Mahasiswa 2 berubah
+            $('#nim2').on('change', function() {
                 const selectedNim = $(this).val();
-                const selected = mahasiswaList.find(m => m.id === selectedNim);
-                $(this).closest('[data-repeater-item]').find('.nama-mahasiswa').val(selected ? selected
-                    .nama : '');
-            });
-        });
-
-        $('#kt_docs_repeater_basic').repeater({
-            initEmpty: false,
-
-            defaultValues: {
-                'text-input': 'foo'
-            },
-
-            show: function() {
-                $(this).slideDown();
-
-                // Inisialisasi Select2 untuk elemen yang baru ditambahkan
-                $(this).find('select[name*="nim"]').select2({
-                    data: mahasiswaList,
-                    placeholder: "Pilih Mahasiswa...",
-                    allowClear: true,
-                    width: '100%'
-                });
-
-                // Jika ini item pertama (login), set value default dan readonly
-                if ($('#kt_docs_repeater_basic [data-repeater-item]').length === 1) {
-                    var nimLogin = "{{ Session::get('stb', '') }}";
-                    var namaLogin = "{{ Session::get('nama_mhs', '') }}";
-                    $(this).find('select[name*="nim"]').val(nimLogin).trigger('change');
-                    $(this).find('select[name*="nim"]').prop('disabled', true);
-                    $(this).find('.nama-mahasiswa').val(namaLogin);
-                    $(this).find('[data-repeater-delete]').hide();
-                } else {
-                    // Pastikan select NIM kosong saat baru ditambah
-                    $(this).find('select[name*="nim"]').val(null).trigger('change');
-                    $(this).find('select[name*="nim"]').prop('disabled', false);
-                    $(this).find('[data-repeater-delete]').show();
+                if (selectedNim) {
+                    if (!validateNim2(selectedNim)) {
+                        $(this).val('').trigger('change'); // Reset pilihan jika tidak valid
+                    } else {
+                        const selected = mahasiswaList.find(m => m.id === selectedNim);
+                        $('#nama_mahasiswa2').val(selected ? selected.nama : '');
+                    }
                 }
-
-                // Cek jumlah item setelah menambah
-                checkItemLimit();
-            },
-
-            hide: function(deleteElement) {
-                $(this).slideUp(deleteElement);
-
-                setTimeout(function() {
-                    checkItemLimit();
-                }, 500);
-            },
-
-        });
-
-        // Inisialisasi Select2 untuk item yang sudah ada
-        $('#kt_docs_repeater_basic select[name*="nim"]').each(function() {
-            $(this).select2({
-                data: mahasiswaList,
-                placeholder: "Pilih Mahasiswa...",
-                allowClear: true,
-                width: '100%'
             });
         });
 
-        // Fungsi untuk mengecek dan membatasi jumlah item
-        function checkItemLimit() {
-            // Hanya hitung item pada repeater (mahasiswa tambahan)
-            const repeaterItems = $('#kt_docs_repeater_basic [data-repeater-item]');
-            const addButton = $('#kt_docs_repeater_basic [data-repeater-create]');
-            const maxItems = 2; // hanya boleh tambah 1 mahasiswa tambahan
-
-            if (repeaterItems.length >= maxItems) {
-                addButton.hide();
-            } else {
-                addButton.show();
-            }
-        }
-
-        // Jalankan pengecekan limit saat halaman pertama kali dimuat
         $(document).ready(function() {
-            checkItemLimit();
-        });
+
+            $('#backStep2').on('click', function() {
+                setTimeout(function() {
+                    window.location.replace("{{ route('pengajuan.step2') }}");
+                }, 750);
+            });
+
+
+        })
     </script>
 @endpush

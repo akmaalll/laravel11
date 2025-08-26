@@ -25,11 +25,11 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             MenuSeeder::class,
             ProdiSeeder::class,
-            KeahlianSeeder::class,
+            // KeahlianSeeder::class,
             UserSeeder::class,
             UserMenuSeeder::class,
-            DosenSeeder::class,
-            DosenMatkulSeeder::class,
+            // DosenSeeder::class,
+            // DosenMatkulSeeder::class,
 
             // Judul and related data
             // MstJudulSeeder::class,

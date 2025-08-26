@@ -156,6 +156,13 @@ class Helper
         return isset($data) ? $data : null;
     }
 
+    public static function getDataJudul($param)
+    {
+        $data = DB::table($param)->leftJoin('mst_keahlian', 'mst_judul.id_keahlian', '=', 'mst_keahlian.id')->where('status', 'diajukan')->select('mst_judul.*', 'mst_keahlian.nama as nama_keahlian')->get();
+        return isset($data) ? $data : null;
+    }
+
+
     public static function getDataMhs($param)
     {
         if ($param === 'users') {

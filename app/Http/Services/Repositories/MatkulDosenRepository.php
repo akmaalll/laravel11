@@ -5,6 +5,7 @@ namespace App\Http\Services\Repositories;
 use App\Http\Services\Repositories\BaseRepository;
 use App\Http\Services\Repositories\Contracts\MatkulDosenContract;
 use App\Models\DosenMataKuliah;
+use Illuminate\Support\Facades\DB;
 
 class MatkulDosenRepository extends BaseRepository implements MatkulDosenContract
 {
@@ -25,9 +26,15 @@ class MatkulDosenRepository extends BaseRepository implements MatkulDosenContrac
 		$sortOrder = $criteria['sort_order'] ?? 'desc';
 		$search = $criteria['search'] ?? '';
 
-		return $this->model->when($search, function ($query) use ($search) {
-			$query->where('dosen_nidn', 'like', "%{$search}%");
-		})
+		return DB::table('mst_matkul_dosen')
+			->select('mst_matkul_dosen.*', 'mst_dosen.nidn as dosen_nidn', 'mst_dosen.nama as nama_dosen')
+			->join('mst_dosen', 'mst_dosen.nidn', '=', 'mst_matkul_dosen.nidn')
+			->when($search, function ($query) use ($search) {
+				$query->where(function ($q) use ($search) {
+					$q->where('dosen_nidn', 'like', "%{$search}%")
+						->orWhere('dosens.nama', 'like', "%{$search}%");
+				});
+			})
 			->orderBy($field, $sortOrder)
 			->paginate($perPage);
 	}

@@ -86,11 +86,13 @@
                             <thead>
                                 <tr class="text-start text-gray-600 fw-bold fs-7 text-uppercase gs-0">
                                     <th class="min-w-20px pe-2"> No </th>
-                                    <th class="min-w-200px"> Judul </th>
+                                    <th class="min-w-400px"> Judul </th>
                                     <th class="min-w-200px"> Topik </th>
                                     <th class="min-w-200px"> Prodi </th>
+                                    <th class="min-w-200px"> Mahasiswa </th>
                                     <th class="min-w-200px"> Pembimbing 1 </th>
                                     <th class="min-w-200px"> Pembimbing 2 </th>
+                                    <th class="min-w-200px"> Status </th>
                                     <th class="text-end min-w-70px"> Actions </th>
                                 </tr>
                             </thead>

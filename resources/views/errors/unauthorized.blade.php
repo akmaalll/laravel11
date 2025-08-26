@@ -74,7 +74,11 @@
         <p>Silakan hubungi administrator jika Anda merasa ini adalah kesalahan.</p>
 
         <div style="margin-top: 30px;">
-            <a href="{{ route('admin') }}" class="btn">Dashboard</a>
+            @if (auth()->user()->id_role == 1 || auth()->user()->id_role == 2   )
+                <a href="{{ route('admin') }}" class="btn">Dashboard</a>
+            @else
+                <a href="{{ route('dashboard') }}" class="btn">Dashboard</a>
+            @endif
             <a href="{{ route('logout') }}" class="btn btn-secondary">Logout</a>
         </div>
     </div>

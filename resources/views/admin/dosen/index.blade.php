@@ -88,7 +88,7 @@
                                 <th class="min-w-100px"> Nidn </th>
                                 <th class="min-w-200px"> Nama </th>
                                 <th class="min-w-100px"> Email</th>
-                                <th class="min-w-100px"> Bidang Keahlian</th>
+                                <th class="min-w-100px"> Jabatan Fungsional     </th>
                                 <th class="text-end min-w-70px"> Actions </th>
                             </tr>
                         </thead>

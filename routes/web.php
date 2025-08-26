@@ -1,29 +1,32 @@
 <?php
 
+use App\Http\Controllers\Admin\AtributController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController;
+use App\Http\Controllers\Admin\DosenPenelitianController;
 use App\Http\Controllers\Admin\JudulController;
-use App\Http\Controllers\admin\JudulKlasifikasiController;
 use App\Http\Controllers\Admin\KeahlianController;
+use App\Http\Controllers\Admin\KeahlianDosenController;
+use App\Http\Controllers\Admin\KehalianJudulDosenController;
+use App\Http\Controllers\Admin\KonsentrasiController;
 use App\Http\Controllers\Admin\ProdiController;
-use App\Http\Controllers\Admin\MahasiswaController;
 use App\Http\Controllers\Admin\MatkulDosenController;
 use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\PembimbingController;
-use App\Http\Controllers\Admin\PengajuanJudulController;
+use App\Http\Controllers\Admin\NaiveBayesController;
+use App\Http\Controllers\Admin\NaiveCobaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\TodoController;
 use App\Http\Controllers\Admin\UserMenuController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\App\TitleAnalysisController;
 use App\Http\Controllers\App\TitleClassificationController;
-use App\Http\Controllers\App\TitleSimilarityController;
 use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\Auth\LoginController as Auths;
 use App\Http\Controllers\Api\MahasiswaProxyController;
+use App\Http\Controllers\App\PengajuanController;
+use App\Http\Controllers\SkPembimbingController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -70,52 +73,48 @@ Route::domain('')->group(function () { // development
     Route::post('/title/analyze', [TitleAnalysisController::class, 'analyzeTitle'])->name('title.analyze');
 
 
-    Route::group(['prefix' => 'mahasiswa', 'middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'mahasiswa', 'middleware' => ['auth', 'checkRole:3']], function () {
         Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
         Route::group(['prefix' => '/pengajuan-judul'], function () {
-            Route::get('/', [App\Http\Controllers\App\PengajuanController::class, 'index'])->name('pengajuan.index');
-            Route::get('/data', [App\Http\Controllers\App\PengajuanController::class, 'data'])->name('pengajuan.data');
+            Route::get('/', [PengajuanController::class, 'index'])->name('pengajuan.index');
+            Route::get('/data', [PengajuanController::class, 'data'])->name('pengajuan.data');
+            Route::get('/{id}/detail', [PengajuanController::class, 'show'])->name('judul.detail');
+            Route::delete('/{id}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
+            Route::post('/judul/{id}/approve', [PengajuanController::class, 'approveByNim2'])->name('judul.approve');
+            Route::post('/judul/{id}/reject', [PengajuanController::class, 'rejectByNim2'])->name('judul.reject');
+            Route::get('/judul/{id}/edit-step2', [PengajuanController::class, 'editStep2'])->name('judul.edit.step2');
             Route::prefix('create')->group(function () {
-                Route::post('/store', [App\Http\Controllers\App\PengajuanController::class, 'store'])->name('pengajuan.store');
-                Route::get('/step-1', [App\Http\Controllers\App\PengajuanController::class, 'step1'])->name('pengajuan.step1');
-                Route::get('/step-2', [App\Http\Controllers\App\PengajuanController::class, 'step2'])->name('pengajuan.step2');
-                Route::get('/step-3', [App\Http\Controllers\App\PengajuanController::class, 'step3'])->name('pengajuan.step3');
+                Route::post('/store', [PengajuanController::class, 'store'])->name('pengajuan.store');
+                Route::get('/step-1', [PengajuanController::class, 'step1'])->name('pengajuan.step1');
+                Route::get('/step-2', [PengajuanController::class, 'step2'])->name('pengajuan.step2');
+                Route::get('/step-3', [PengajuanController::class, 'step3'])->name('pengajuan.step3');
             });
-            Route::post('/api/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
-                ->name('check.title.similarity');
-            // Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
-            // Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
-            // Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
         });
     });
 
 
     // ADMIN_ROUTES
-    Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:1|2']], function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
+        Route::get('/tes', [DashboardController::class, 'data'])->name('data.test');
         // routes/web.php
         // Route::get('/pengajuan/{id}/rekomendasi', [PembimbingController::class, 'getRecommendation']);
         // Route::post('/pengajuan/{id}/assign-pembimbing', [PembimbingController::class, 'assignSupervisors']);
 
-        # APPS 
-        Route::group(['prefix' => '/pengajuan-judul'], function () {
-            Route::get('/', [PengajuanJudulController::class, 'index'])->name('pengajuan-judul.index');
-            Route::get('/data', [PengajuanJudulController::class, 'data'])->name('pengajuan-judul.data');
-            Route::get('/datas', [PengajuanJudulController::class, 'datas'])->name('pengajuan-judul.datas');
-            Route::get('/create', [PengajuanJudulController::class, 'create'])->name('pengajuan-judul.create');
-            Route::post('/store', [PengajuanJudulController::class, 'store'])->name('pengajuan-judul.store');
-            Route::get('/{id}/edit', [PengajuanJudulController::class, 'edit'])->name('pengajuan-judul.edit');
-            Route::put('/{id}', [PengajuanJudulController::class, 'update'])->name('pengajuan-judul.update');
-            Route::delete('/{id}', [PengajuanJudulController::class, 'destroy'])->name('pengajuan-judul.delete');
-            Route::put('/{id}/assign-supervisor', [PengajuanJudulController::class, 'assignSupervisor'])->name('pengajuan-judul.assign-supervisor');
-            Route::get('/dosen', [PengajuanJudulController::class, 'getDosen'])->name('admin.pengajuan-judul.dosen');
-            Route::put('/{id}/update-status', [PengajuanJudulController::class, 'updateStatus'])
-                ->name('pengajuan-judul.update-status');
+        // Route::get('/rekomendasi-pembimbing', [NaiveBayesController::class, 'index'])->name('assignment');
+        // Route::get('/judul-pengajuan/{id}', [NaiveBayesController::class, 'getJudulPengajuan'])->name('getjudul.pengajuan');
+        // Route::post('/save-assignment', [NaiveBayesController::class, 'saveAssignment'])->name('save.assignment');
 
-            // Route::get('/rekomendasi-naive-bayes/{pengajuanId}', [PembimbingController::class, 'rekomendasiNaiveBayes'])->name('admin.pengajuan-judul.rekomendasi_naive_bayes');
-        });
+        Route::get('/rekomendasi-pembimbing', [NaiveCobaController::class, 'index'])->name('assignment');
+        Route::get('/judul-pengajuan/{id}', [NaiveCobaController::class, 'getJudulPengajuan'])->name('getjudul.pengajuan.tes');
+        Route::get('/hasil-algoritma', [NaiveCobaController::class, 'hasilAlgoritma'])->name('hasil.algoritma');
+        Route::post('/simpan-assignment', [NaiveCobaController::class, 'assign'])->name('pembimbing.assign');
 
+        Route::get('/sk-pembimbing/{id}/pdf', [SkPembimbingController::class, 'generatePDF'])->name('sk-pembimbing.pdf');
+
+
+        # APPS ROUTES
         Route::group(['prefix' => '/judul'], function () {
             Route::get('/', [JudulController::class, 'index'])->name('judul.index');
             Route::get('/data', [JudulController::class, 'data'])->name('judul.data');
@@ -128,18 +127,6 @@ Route::domain('')->group(function () { // development
                 ->name('admin.check.title.similarity');
         });
 
-        # MENU MASTER DATA 
-        Route::group(['prefix' => '/mahasiswa'], function () {
-            Route::get('/', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
-            Route::get('/data', [MahasiswaController::class, 'data'])->name('mahasiswa.data');
-            Route::get('/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
-            Route::post('/store', [MahasiswaController::class, 'store'])->name('mahasiswa.store');
-            Route::get('/{id}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
-            Route::put('/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
-            Route::delete('/{id}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.delete');
-            // Route::get('get-prodi-code', [MahasiswaController::class, 'getProdiCode'])->name('getProdiCode');
-        });
-
         Route::group(['prefix' => '/prodi'], function () {
             Route::get('/', [ProdiController::class, 'index'])->name('prodi.index');
             Route::get('/data', [ProdiController::class, 'data'])->name('prodi.data');
@@ -150,6 +137,16 @@ Route::domain('')->group(function () { // development
             Route::delete('/{id}', [ProdiController::class, 'destroy'])->name('prodi.delete');
         });
 
+        Route::group(['prefix' => '/dosen-penelitian'], function () {
+            Route::get('/', [DosenPenelitianController::class, 'index'])->name('dosen-penelitian.index');
+            Route::get('/data', [DosenPenelitianController::class, 'data'])->name('dosen-penelitian.data');
+            Route::get('/create', [DosenPenelitianController::class, 'create'])->name('dosen-penelitian.create');
+            Route::post('/store', [DosenPenelitianController::class, 'store'])->name('dosen-penelitian.store');
+            Route::get('/{id}/edit', [DosenPenelitianController::class, 'edit'])->name('dosen-penelitian.edit');
+            Route::put('/{id}', [DosenPenelitianController::class, 'update'])->name('dosen-penelitian.update');
+            Route::delete('/{id}', [DosenPenelitianController::class, 'destroy'])->name('dosen-penelitian.delete');
+        });
+
         Route::group(['prefix' => '/keahlian'], function () {
             Route::get('/', [KeahlianController::class, 'index'])->name('keahlian.index');
             Route::get('/data', [KeahlianController::class, 'data'])->name('keahlian.data');
@@ -158,6 +155,35 @@ Route::domain('')->group(function () { // development
             Route::get('/{id}/edit', [KeahlianController::class, 'edit'])->name('keahlian.edit');
             Route::put('/{id}', [KeahlianController::class, 'update'])->name('keahlian.update');
             Route::delete('/{id}', [KeahlianController::class, 'destroy'])->name('keahlian.delete');
+        });
+        Route::group(['prefix' => '/konsentrasi'], function () {
+            Route::get('/', [KonsentrasiController::class, 'index'])->name('konsentrasi.index');
+            Route::get('/data', [KonsentrasiController::class, 'data'])->name('konsentrasi.data');
+            Route::get('/create', [KonsentrasiController::class, 'create'])->name('konsentrasi.create');
+            Route::post('/store', [KonsentrasiController::class, 'store'])->name('konsentrasi.store');
+            Route::get('/{id}/edit', [KonsentrasiController::class, 'edit'])->name('konsentrasi.edit');
+            Route::put('/{id}', [KonsentrasiController::class, 'update'])->name('konsentrasi.update');
+            Route::delete('/{id}', [KonsentrasiController::class, 'destroy'])->name('konsentrasi.delete');
+        });
+
+        Route::group(['prefix' => '/atribut'], function () {
+            Route::get('/', [AtributController::class, 'index'])->name('atribut.index');
+            Route::get('/data', [AtributController::class, 'data'])->name('atribut.data');
+            Route::get('/create', [AtributController::class, 'create'])->name('atribut.create');
+            Route::post('/store', [AtributController::class, 'store'])->name('atribut.store');
+            Route::get('/{id}/edit', [AtributController::class, 'edit'])->name('atribut.edit');
+            Route::put('/{id}', [AtributController::class, 'update'])->name('atribut.update');
+            Route::delete('/{id}', [AtributController::class, 'destroy'])->name('atribut.delete');
+        });
+
+        Route::group(['prefix' => '/keahlian-dosen'], function () {
+            Route::get('/', [KeahlianDosenController::class, 'index'])->name('keahlian-dosen.index');
+            Route::get('/data', [KeahlianDosenController::class, 'data'])->name('keahlian-dosen.data');
+            Route::get('/create', [KeahlianDosenController::class, 'create'])->name('keahlian-dosen.create');
+            Route::post('/store', [KeahlianDosenController::class, 'store'])->name('keahlian-dosen.store');
+            Route::get('/{id}/edit', [KeahlianDosenController::class, 'edit'])->name('keahlian-dosen.edit');
+            Route::put('/{id}', [KeahlianDosenController::class, 'update'])->name('keahlian-dosen.update');
+            Route::delete('/{id}', [KeahlianDosenController::class, 'destroy'])->name('keahlian-dosen.delete');
         });
 
         Route::group(['prefix' => '/matkul-dosen'], function () {
@@ -180,43 +206,16 @@ Route::domain('')->group(function () { // development
             Route::delete('/{id}', [DosenController::class, 'destroy'])->name('dosen.delete');
         });
 
-        Route::group(['prefix' => '/pembimbing'], function () {
-            Route::get('/test', function () {
-                return view('admin.pembimbing.test');
-            });
-            Route::get('/naive-bayes-test', function () {
-                return view('admin.pembimbing.naive-bayes-test');
-            })->name('pembimbing.naive-bayes-test');
-            Route::get('/assignment', [PembimbingController::class, 'showAssignment'])->name('pembimbing.assignment');
-            Route::post('/assign-with-recommendation/{pengajuanId}', [PembimbingController::class, 'assignWithRecommendation'])->name('pembimbing.assign-with-recommendation');
-            Route::get('/', [PembimbingController::class, 'index'])->name('pembimbing.index');
-            Route::get('/data', [PembimbingController::class, 'data'])->name('pembimbing.data');
-            Route::get('/create', [PembimbingController::class, 'create'])->name('pembimbing.create');
-            Route::post('/store', [PembimbingController::class, 'store'])->name('pembimbing.store');
-            Route::get('/{id}/edit', [PembimbingController::class, 'edit'])->name('pembimbing.edit');
-            Route::put('/{id}', [PembimbingController::class, 'update'])->name('pembimbing.update');
-            Route::delete('/{id}', [PembimbingController::class, 'destroy'])->name('pembimbing.delete');
-
-            Route::get('/recommendation-naive-bayes/{pengajuanId}', [PembimbingController::class, 'getRecommendationNaiveBayes'])
-                ->name('pembimbing.recommendation.naive-bayes');
-
-            Route::post('/train-naive-bayes', [PembimbingController::class, 'trainNaiveBayesModel'])
-                ->name('pembimbing.train-naive-bayes');
-
-            Route::post('/save-training-data', [PembimbingController::class, 'saveTrainingData'])
-                ->name('pembimbing.save-training-data');
-
-            Route::post('/assign/{pengajuanId}', [PembimbingController::class, 'assignSupervisors'])
-                ->name('pembimbing.assign');
-
-            // Get available dosens
-            Route::get('/dosens/available', [PembimbingController::class, 'getAvailableDosens'])
-                ->name('pembimbing.dosens.available');
-
-            // Get pembimbing history
-            Route::get('/history/{pengajuanId}', [PembimbingController::class, 'getPembimbingHistory'])
-                ->name('pembimbing.history');
+        Route::group(['prefix' => '/keahlian-judul-dosen'], function () {
+            Route::get('/', [KehalianJudulDosenController::class, 'index'])->name('keahlian-judul-dosen.index');
+            Route::get('/data', [KehalianJudulDosenController::class, 'data'])->name('keahlian-judul-dosen.data');
+            Route::get('/create', [KehalianJudulDosenController::class, 'create'])->name('keahlian-judul-dosen.create');
+            Route::post('/store', [KehalianJudulDosenController::class, 'store'])->name('keahlian-judul-dosen.store');
+            Route::get('/{id}/edit', [KehalianJudulDosenController::class, 'edit'])->name('keahlian-judul-dosen.edit');
+            Route::put('/{id}', [KehalianJudulDosenController::class, 'update'])->name('keahlian-judul-dosen.update');
+            Route::delete('/{id}', [KehalianJudulDosenController::class, 'destroy'])->name('keahlian-judul-dosen.delete');
         });
+
 
         # USER SETTING
         Route::group(['prefix' => '/roles'], function () {
@@ -272,10 +271,13 @@ Route::domain('')->group(function () { // development
     });
 });
 
+
 // Proxy API Mahasiswa untuk frontend (tanpa middleware, agar tidak kena CORS)
 Route::group(['prefix' => '/api'], function () {
+    Route::post('/check-title-similarity', [TitleClassificationController::class, 'checkTitleSimilarity'])
+        ->name('check.title.similarity');
     Route::get('/mahasiswa-list', MahasiswaProxyController::class);
-    Route::get('/dosen/{nidn}/predict', [KeahlianController::class, 'predict']);
-    Route::post('/dosen/{nidn}/assign-keahlian', [KeahlianController::class, 'assignKeahlian']);
-    Route::post('/generate-keahlian-dosen', [KeahlianController::class, 'generateAllKeahlian'])->name('keahlian.generate-all');
+    // Route::get('/dosen/{nidn}/predict', [KeahlianController::class, 'predict']);
+    // Route::post('/dosen/{nidn}/assign-keahlian', [KeahlianController::class, 'assignKeahlian']);
+    // Route::post('/generate-keahlian-dosen', [KeahlianController::class, 'generateAllKeahlian'])->name('keahlian.generate-all');
 });

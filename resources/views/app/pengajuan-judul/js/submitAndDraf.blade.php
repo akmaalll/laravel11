@@ -24,7 +24,8 @@
             e.preventDefault();
             const judul = document.getElementById('judul').value;
             localStorage.setItem('judul_pengajuan', judul);
-            const predictedTopic = localStorage.getItem('predicted_topic');
+            const predictedTopic = localStorage.getItem('predicted_topic_name');
+            const predictedTopicId = localStorage.getItem('predicted_topic_id');
             const sts = $(this).data('id');
             const formData = new FormData(document.getElementById('kt_formvalidation_step'));
 

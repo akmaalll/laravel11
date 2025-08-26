@@ -119,10 +119,10 @@ class LoginController extends Controller
 
                 // Redirect based on user role
                 $userRole = auth()->user()->id_role;
+                // dd($userRole);
                 switch ($userRole) {
                     case 1: // Super Admin
-                    case 2: // Admin
-                    case 4: // Dosen
+                    case 2: // Kaprodi
                         return redirect()->route('admin');
                     case 3: // Mahasiswa
                         return redirect()->route('dashboard');

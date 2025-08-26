@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\Repositories\Contracts\datasContract;
 use App\Http\Services\Repositories\Contracts\UsersContract;
+use App\Models\Judul;
 use App\Models\Mahasiswa;
 use App\Models\PengajuanJudul;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -35,7 +38,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $totalPengajuan = PengajuanJudul::with('pengusuls')->get();
+        $stb = Session::get('stb'); // Ambil NIM dari session
+
+        $totalPengajuan = DB::table('mst_judul')
+            ->where('nim1', $stb)
+            ->orWhere('nim2', $stb)
+            ->get();
         // dd($totalPengajuan);
         return view('app.home', compact('totalPengajuan'));
     }

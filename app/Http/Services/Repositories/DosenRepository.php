@@ -27,6 +27,7 @@ class DosenRepository extends BaseRepository implements DosenContract
 
 		return $this->model->when($search, function ($query) use ($search) {
 			$query->where('nama', 'like', "%{$search}%");
+			$query->orWhere('nidn', 'like', "%{$search}%");
 		})
 			->orderBy($field, $sortOrder)
 			->paginate($perPage);

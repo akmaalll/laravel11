@@ -52,11 +52,10 @@
                                 <div class="col-md-6 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Nidn Dosen</label>
                                     <select class="form-select" data-control="select2" data-hide-search="false"
-                                        data-placeholder="Pilih Nidn Dosen" name="dosen_nidn" id="dosen_nidn">
+                                        data-placeholder="Pilih Nidn Dosen" name="nidn" id="nidn">
                                         <option value="">Select user...</option>
-                                        @foreach (Helper::getData('mst_dosens') as $v)
-                                            <option
-                                                {{ isset($data->dosen_nidn) && $data->dosen_nidn == $v->nidn ? 'selected' : '' }}
+                                        @foreach (Helper::getData('mst_dosen') as $v)
+                                            <option {{ isset($data->nidn) && $data->nidn == $v->nidn ? 'selected' : '' }}
                                                 value="{{ $v->nidn }}">{{ $v->nama }}</option>
                                         @endforeach
                                     </select>
@@ -64,30 +63,8 @@
 
                                 <div class="col-md-6 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Mata Kuliah</label>
-                                    <input type="text" class="form-control" placeholder="Mata Kuliah" name="mata_kuliah"
-                                        id="mata_kuliah" value="{{ $data->mata_kuliah ?? '' }}" />
-                                </div>
-                            </div>
-
-                            <div class="row g-9 mb-8">
-                                <div class="col-md-6 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Kode Mata Kuliah</label>
-                                    <input type="text" class="form-control" placeholder="Kode Mata Kuliah" name="kode_mk"
-                                        id="kode_mk" value="{{ $data->kode_mk ?? '' }}" />
-                                </div>
-
-                                <div class="col-md-6 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Semester</label>
-                                    <select class="form-select" data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Semester" name="semester" id="semester">
-                                        <option value="">Select user...</option>
-                                        <option value="genap"
-                                            {{ isset($data->semester) && $data->semester == 'genap' ? 'selected' : '' }}>
-                                            Genap</option>
-                                        <option value="ganjil"
-                                            {{ isset($data->semester) && $data->semester == 'ganjil' ? 'selected' : '' }}>
-                                            Ganjil</option>
-                                    </select>
+                                    <input type="text" class="form-control" placeholder="Mata Kuliah" name="matkul"
+                                        id="matkul" value="{{ $data->matkul ?? '' }}" />
                                 </div>
                             </div>
                             <!--end::Input group-->

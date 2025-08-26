@@ -56,11 +56,11 @@ class TitleClassificationController extends Controller
         $magnitude2 = 0;
 
         $allWords = array_unique(array_merge(array_keys($vector1), array_keys($vector2)));
-        
+
         foreach ($allWords as $word) {
             $val1 = $vector1[$word] ?? 0;
             $val2 = $vector2[$word] ?? 0;
-            
+
             $dotProduct += $val1 * $val2;
             $magnitude1 += $val1 * $val1;
             $magnitude2 += $val2 * $val2;
@@ -89,9 +89,11 @@ class TitleClassificationController extends Controller
         $id_prodi = Session::get('id_prodi') ?? 2; // Fallback untuk testing
 
         // Dapatkan data judul dari database
-        $existingTitles = DB::table('mst_juduls')
-            ->select('id', 'judul', 'topik', 'created_at')
-            ->where('id_prodi', $id_prodi)
+        $existingTitles = DB::table('mst_judul')
+            ->select('mst_judul.id', 'mst_judul.judul', 'mst_judul.id_keahlian', 'mst_judul.created_at', 'mst_keahlian.nama as nama_topik')
+            ->join('mst_keahlian', 'mst_judul.id_keahlian', '=', 'mst_keahlian.id')
+            ->where('mst_judul.id_prodi', $id_prodi)
+            ->where('status', 'diterima')
             ->get();
 
         if ($existingTitles->isEmpty()) {
@@ -115,7 +117,8 @@ class TitleClassificationController extends Controller
             $documents[] = $preprocessed_doc;
             $training_data_array[] = [
                 'text' => $preprocessed_doc,
-                'topic' => $existingTitle->topik
+                'topic' => $existingTitle->id_keahlian,
+                'topic_name' => $existingTitle->nama_topik
             ];
         }
 
@@ -135,7 +138,7 @@ class TitleClassificationController extends Controller
                 $similarity_results[] = [
                     'id' => $existingTitles[$index]->id,
                     'judul' => $existingTitles[$index]->judul,
-                    'topik' => $existingTitles[$index]->topik,
+                    'topik' => $train_doc['topic_name'],
                     'similarity' => $similarity,
                     'created_at' => $existingTitles[$index]->created_at
                 ];
@@ -143,6 +146,7 @@ class TitleClassificationController extends Controller
                 if ($similarity > $max_similarity) {
                     $max_similarity = $similarity;
                     $predicted_topic = $train_doc['topic'];
+                    $predicted_topic_name = $train_doc['topic_name'];
                 }
             }
         }
@@ -168,9 +172,9 @@ class TitleClassificationController extends Controller
             ]);
         } else {
             // Periksa apakah topik yang diprediksi ada di prodi saat ini
-            $topic_exists = DB::table('mst_juduls')
+            $topic_exists = DB::table('mst_judul')
                 ->where('id_prodi', $id_prodi)
-                ->where('topik', $predicted_topic)
+                ->where('id_keahlian', $predicted_topic)
                 ->exists();
 
             if ($topic_exists) {
@@ -188,7 +192,11 @@ class TitleClassificationController extends Controller
                 'message' => $message,
                 'similarity' => $max_similarity,
                 'similar_titles' => $top_similar_titles,
-                'predicted_topic' => $predicted_topic,
+                // 'predicted_topic' => $predicted_topic,
+                'predicted_topic' => [
+                    'id' => $predicted_topic,
+                    'name' => $predicted_topic_name
+                ],
                 'validation_message' => $topic_validasi,
                 'input_title' => $input_title
             ]);

@@ -79,7 +79,7 @@
                                         <label class="required fs-6 fw-semibold mb-2">Topik</label>
                                         <input type="text" class="form-control"
                                             placeholder="Topik akan diisi otomatis setelah klasifikasi" name="topik"
-                                            id="topik" value="{{ $data->topik ?? '' }}" readonly />
+                                            id="topik" value="{{ $data->id_keahlian ?? '' }}" readonly />
                                         <small class="form-text text-muted">Topik akan diisi otomatis berdasarkan hasil
                                             klasifikasi judul</small>
                                     </div>
@@ -90,7 +90,7 @@
                                         <select class="form-select" data-control="select2" data-hide-search="true"
                                             data-placeholder="Select a Keahlian" name="id_prodi" id="id_prodi" readonly>
                                             <option value="">Select user...</option>
-                                            @foreach (Helper::getData('mst_prodis') as $v)
+                                            @foreach (Helper::getData('mst_prodi') as $v)
                                                 <option value="{{ $v->id }}"
                                                     @if (isset($data->id_prodi) && $data->id_prodi == $v->id) selected
                             @elseif(!isset($data->id_prodi) && Session::get('prodi_kode') == $v->kode)
@@ -102,30 +102,62 @@
                                     </div>
                                 </div>
 
-                            </div>
-                            <!--end::Input group-->
+                                <div class="col-md-12 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Pembimbing 1</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Select a Pembimbing 1" name="nidn1" id="nidn1">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getData('mst_dosen') as $v)
+                                            <option value="{{ $v->nidn }}"
+                                                @if (isset($data->nidn1) && $data->nidn1 == $v->id) selected
+                            @elseif(!isset($data->nidn1) && Session::get('nidn1') == $v->id)
+                                selected @endif>
+                                                {{ $v->nidn }} - {{ $v->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-12 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Pembimbing 2</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Select a Pembimbing 2" name="nidn2" id="nidn2">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getData('mst_dosen') as $v)
+                                            <option value="{{ $v->nidn }}"
+                                                @if (isset($data->nidn2) && $data->nidn2 == $v->id) selected
+                            @elseif(!isset($data->nidn2) && Session::get('nidn2') == $v->id)
+                                selected @endif>
+                                                {{ $v->nidn }} - {{ $v->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                            <!--begin::Actions-->
-                            <div class="d-flex justify-content-end">
-                                <a href="{{ route($title . '.index') }}">
-                                    <button type="button" id="kt_modal_new_target_cancel" class="btn btn-secondary me-3"
-                                        data-bs-dismiss="modal">Batal</button>
-                                </a>
-                                @if (isset($data->id))
-                                    <button type="submit" id="kt_modal_new_target_update" class="btn btn-primary">
-                                        <span class="indicator-label">Update</span>
-                                        <span class="indicator-progress">Please wait...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    </button>
-                                @else
-                                    <button type="submit" id="kt_modal_new_target_save" class="btn btn-primary">
-                                        <span class="indicator-label">Simpan</span>
-                                        <span class="indicator-progress">Please wait...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    </button>
-                                @endif
-                            </div>
-                            <!--end::Actions-->
+                                <!--end::Input group-->
+
+                                <!--begin::Actions-->
+                                <div class="d-flex justify-content-end">
+                                    <a href="{{ route($title . '.index') }}">
+                                        <button type="button" id="kt_modal_new_target_cancel"
+                                            class="btn btn-secondary me-3" data-bs-dismiss="modal">Batal</button>
+                                    </a>
+                                    @if (isset($data->id))
+                                        <button type="submit" id="kt_modal_new_target_update" class="btn btn-primary">
+                                            <span class="indicator-label">Update</span>
+                                            <span class="indicator-progress">Please wait...
+                                                <span
+                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                        </button>
+                                    @else
+                                        <button type="submit" id="kt_modal_new_target_save" class="btn btn-primary">
+                                            <span class="indicator-label">Simpan</span>
+                                            <span class="indicator-progress">Please wait...
+                                                <span
+                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                        </button>
+                                    @endif
+                                </div>
+                                <!--end::Actions-->
 
                         </form>
                         <!--end:Form-->
@@ -231,13 +263,13 @@
                     if (response.status === 'success') {
                         resultDiv.className = 'alert alert-success';
                         messageDiv.innerHTML = `
-                        <strong>Topik Diprediksi:</strong> ${response.predicted_topic}<br>
+                        <strong>Topik Diprediksi:</strong> ${response.predicted_topic.name}<br>
                         <strong>Tingkat Kemiripan:</strong> ${(response.similarity * 100).toFixed(2)}%<br>
                         <strong>Status:</strong> ${response.message}
                     `;
 
                         // Set topik otomatis
-                        document.getElementById('topik').value = response.predicted_topic;
+                        document.getElementById('topik').value = response.predicted_topic.name;
 
                         toastr.success('Klasifikasi berhasil! Topik telah diisi otomatis.');
 

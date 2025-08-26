@@ -16,10 +16,10 @@ class Role
     public function handle(Request $request, Closure $next, $menu = null)
     {
         if (auth()->check()) {
-            $arr = Session::get('roles');
+            $arr = Session::get('roles', []);
             $roles = $arr[$menu];
+            dd($roles);
             $flag = explode('/', url()->current());
-            // dd($flag);
             $flag = isset($flag[4]) ? $flag[4] : $menu; //  production
             // $flag = isset($flag[5]) ? $flag[5] : $menu; // development
             if ($flag == $menu) {
@@ -29,7 +29,7 @@ class Role
                     $flag = isset($roles) ? $roles[$flag] : null;
                 }
             }
-            return $flag == '1' ? $next($request) : redirect()->route('unauthorized');
+            return $flag == '1'  ? $next($request) : redirect()->route('unauthorized');
         }
         return $next($request)
             ->header('Access-Control-Allow-Origin', '*')

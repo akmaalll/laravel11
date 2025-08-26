@@ -8,45 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Judul extends Model
 {
     use HasFactory;
-    protected $table = 'mst_juduls';
+    protected $table = 'mst_judul';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
-        'judul',
-        'topik',
+        'id',
         'id_prodi',
-        'nidn_p1',
-        'nidn_p2',
+        'id_keahlian',
+        'judul',
+        'konsentrasi',
+        'objek_penelitian',
+        'latar_belakang',
+        'rumusan_masalah',
+        'tujuan_penelitian',
+        'penelitian_terkait',
+        'nim1',
+        'nim2',
+        'nidn1',
+        'nidn2',
+        'status',
     ];
-
-    public function p1()
-    {
-        return $this->belongsTo(Dosen::class, 'nidn_p1', 'nidn');
-    }
-
-    public function p2()
-    {
-        return $this->belongsTo(Dosen::class, 'nidn_p2', 'nidn');
-    }
-
-    public function prodi()
-    {
-        return $this->hasOne(Prodi::class, 'id', 'id_prodi');
-    }
-
-    public function pembimbings()
-    {
-        return $this->hasMany(MstJudulPembimbing::class, 'id_judul', 'id');
-    }
-
-    public function pembimbing1()
-    {
-        return $this->hasOne(MstJudulPembimbing::class, 'id_judul', 'id')
-            ->where('peran', 'pembimbing_1');
-    }
-
-    public function pembimbing2()
-    {
-        return $this->hasOne(MstJudulPembimbing::class, 'id_judul', 'id')
-            ->where('peran', 'pembimbing_2');
-    }
 }

@@ -44,9 +44,7 @@
                                 </div>
                             </div>
                             <div class="stat-value mb-2">
-                                {{ $totalPengajuan->filter(function ($pengajuan) {
-                                        return $pengajuan->status == 'diajukan' && $pengajuan->pengusuls->contains('nim', Session::get('stb'));
-                                    })->count() }}
+                                {{ $totalPengajuan->where('status', 'diajukan')->count() }}
                             </div>
                             <p class="text-gray-600 fs-7 mb-0">
                                 Total yang diajukan
@@ -68,9 +66,7 @@
                                 </div>
                             </div>
                             <div class="stat-value mb-2">
-                                {{ $totalPengajuan->filter(function ($pengajuan) {
-                                        return $pengajuan->status == 'diverifikasi' && $pengajuan->pengusuls->contains('nim', Session::get('stb'));
-                                    })->count() }}
+                                {{ $totalPengajuan->where('status', 'diverifikasi')->count() }}
                             </div>
                             <p class="text-gray-600 fs-7 mb-0">
                                 Sedang ditinjau dosen
@@ -92,9 +88,7 @@
                                 </div>
                             </div>
                             <div class="stat-value mb-2">
-                                {{ $totalPengajuan->filter(function ($pengajuan) {
-                                        return $pengajuan->status == 'diterima' && $pengajuan->pengusuls->contains('nim', Session::get('stb'));
-                                    })->count() }}
+                                {{ $totalPengajuan->where('status', 'diterima')->count() }}
                             </div>
                             <p class="text-gray-600 fs-7 mb-0">
                                 Judul yang diterima
@@ -108,24 +102,30 @@
             <div class="row g-5 g-lg-10 mb-5 mb-lg-10">
                 <!-- Ajukan Judul Baru -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card card-flush h-100 hover-elevate-up">
-                        <div class="card-body text-center">
-                            <div class="mb-5" style="font-size: 3rem;">➕</div>
-                            <h3 class="fw-bold mb-3">Ajukan Judul Baru</h3>
-                            <p class="text-gray-600 fs-6 mb-0">Kirim proposal judul untuk ditinjau</p>
-                        </div>
-                    </div>
+                    @if ($totalPengajuan->count() < 3)
+                        <a href="{{ route('pengajuan.step1') }}">
+                            <div class="card card-flush h-100 hover-elevate-up">
+                                <div class="card-body text-center">
+                                    <div class="mb-5" style="font-size: 3rem;">➕</div>
+                                    <h3 class="fw-bold mb-3">Ajukan Judul Baru</h3>
+                                    <p class="text-gray-600 fs-6 mb-0">Kirim proposal judul untuk ditinjau</p>
+                                </div>
+                            </div>
+                        </a>
+                    @endif
                 </div>
 
                 <!-- Cek Status -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card card-flush h-100 hover-elevate-up">
-                        <div class="card-body text-center">
-                            <div class="mb-5" style="font-size: 3rem;">📋</div>
-                            <h3 class="fw-bold mb-3">Cek Status</h3>
-                            <p class="text-gray-600 fs-6 mb-0">Lihat perkembangan pengajuan</p>
+                    <a href="{{ route('pengajuan.index') }}">
+                        <div class="card card-flush h-100 hover-elevate-up">
+                            <div class="card-body text-center">
+                                <div class="mb-5" style="font-size: 3rem;">📋</div>
+                                <h3 class="fw-bold mb-3">Cek Status</h3>
+                                <p class="text-gray-600 fs-6 mb-0">Lihat perkembangan pengajuan</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Panduan -->
@@ -149,8 +149,7 @@
                         </div>
                         <div class="card-body pt-0">
                             @foreach ($totalPengajuan as $v)
-                               @if ($v->pengusuls->contains('nim', Session::get('stb')))
-                                    <div class="recent-item">
+                                <div class="recent-item">
                                     <div class="flex-grow-1">
                                         <div class="recent-title fw-bold text-gray-800 fs-6">{{ $v->judul }}</div>
                                         <div class="recent-desc text-gray-600 fs-7">
@@ -165,7 +164,6 @@
                                         {{ $v->status }}
                                     </span>
                                 </div>
-                               @endif
                             @endforeach
                         </div>
                     </div>

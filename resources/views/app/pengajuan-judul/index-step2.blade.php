@@ -95,9 +95,12 @@
                 document.getElementById('judul').value = savedJudul;
             }
 
-            const savedTopic = localStorage.getItem('predicted_topic');
+            const savedTopic = localStorage.getItem('predicted_topic_name');
+            const savedTopicId = localStorage.getItem('predicted_topic_id');
+            
             if (savedTopic) {
-                 document.getElementById('topik').value = savedTopic;
+                document.getElementById('topik').value = savedTopic;
+                document.getElementById('id_topik').value = savedTopicId;
             }
         });
 

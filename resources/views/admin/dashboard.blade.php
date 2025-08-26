@@ -13,7 +13,7 @@
             <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                 <!--begin::Title-->
                 <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Online Courses</h1>
+                    Sistem Pengajuan Judul</h1>
                 <!--end::Title-->
                 <!--begin::Breadcrumb-->
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -28,7 +28,7 @@
                     </li>
                     <!--end::Item-->
                     <!--begin::Item-->
-                    <li class="breadcrumb-item text-muted">Dashboards</li>
+                    <li class="breadcrumb-item text-muted">Dashboard Admin</li>
                     <!--end::Item-->
                 </ul>
                 <!--end::Breadcrumb-->
@@ -38,11 +38,11 @@
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <!--begin::Secondary button-->
                 <a href="#" class="btn btn-sm fw-bold btn-secondary" data-bs-toggle="modal"
-                    data-bs-target="#kt_modal_create_app">Rollover</a>
+                    data-bs-target="#kt_modal_export_data">Export Data</a>
                 <!--end::Secondary button-->
                 <!--begin::Primary button-->
                 <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#kt_modal_create_campaign">Add Campaign</a>
+                    data-bs-target="#kt_modal_tambah_pengumuman">Tambah Pengumuman</a>
                 <!--end::Primary button-->
             </div>
             <!--end::Actions-->
@@ -50,6 +50,7 @@
         <!--end::Toolbar container-->
     </div>
     <!--end::Toolbar-->
+    
     <!--begin::Content-->
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <!--begin::Content container-->
@@ -58,25 +59,25 @@
             <div class="row gx-5 gx-xl-10">
                 <!--begin::Col-->
                 <div class="col-xl-4 mb-10">
-                    <!--begin::Lists Widget 19-->
+                    <!--begin::Statistics Widget-->
                     <div class="card card-flush h-xl-100">
                         <!--begin::Heading-->
                         <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px"
-                            style="background-image:url('assets/media/svg/shapes/top-green.png" data-bs-theme="light">
+                            style="background-image:url('assets/media/svg/shapes/top-green.png')" data-bs-theme="light">
                             <!--begin::Title-->
                             <h3 class="card-title align-items-start flex-column text-white pt-15">
-                                <span class="fw-bold fs-2x mb-3">My Tasks</span>
+                                <span class="fw-bold fs-2x mb-3">Pengajuan Hari Ini</span>
                                 <div class="fs-4 text-white">
-                                    <span class="opacity-75">You have</span>
+                                    <span class="opacity-75">Terdapat</span>
                                     <span class="position-relative d-inline-block">
-                                        <a href="pages/user-profile/projects.html"
-                                            class="link-white opacity-75-hover fw-bold d-block mb-1">4 tasks</a>
+                                        <a href="" class="link-white opacity-75-hover fw-bold d-block mb-1">12
+                                            pengajuan</a>
                                         <!--begin::Separator-->
                                         <span
                                             class="position-absolute opacity-50 bottom-0 start-0 border-2 border-body border-bottom w-100"></span>
                                         <!--end::Separator-->
                                     </span>
-                                    <span class="opacity-75">to comlete</span>
+                                    <span class="opacity-75">menunggu review</span>
                                 </div>
                             </h3>
                             <!--end::Title-->
@@ -109,47 +110,17 @@
                                     <!--end::Menu separator-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3">New Ticket</a>
+                                        <a href="#" class="menu-link px-3">Review Pengajuan</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3">New Customer</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3" data-kt-menu-trigger="hover"
-                                        data-kt-menu-placement="right-start">
-                                        <!--begin::Menu item-->
-                                        <a href="#" class="menu-link px-3">
-                                            <span class="menu-title">New Group</span>
-                                            <span class="menu-arrow"></span>
-                                        </a>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu sub-->
-                                        <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="#" class="menu-link px-3">Admin Group</a>
-                                            </div>
-                                            <!--end::Menu item-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="#" class="menu-link px-3">Staff Group</a>
-                                            </div>
-                                            <!--end::Menu item-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="#" class="menu-link px-3">Member Group</a>
-                                            </div>
-                                            <!--end::Menu item-->
-                                        </div>
-                                        <!--end::Menu sub-->
+                                        <a href="#" class="menu-link px-3">Kelola Dosen</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3">New Contact</a>
+                                        <a href="#" class="menu-link px-3">Kelola Mahasiswa</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu separator-->
@@ -159,7 +130,7 @@
                                     <div class="menu-item px-3">
                                         <div class="menu-content px-3 py-3">
                                             <a class="btn btn-primary btn-sm px-4" href="#">Generate
-                                                Reports</a>
+                                                Laporan</a>
                                         </div>
                                     </div>
                                     <!--end::Menu item-->
@@ -183,7 +154,7 @@
                                             <!--begin::Symbol-->
                                             <div class="symbol symbol-30px me-5 mb-8">
                                                 <span class="symbol-label">
-                                                    <i class="ki-duotone ki-flask fs-1 text-primary">
+                                                    <i class="ki-duotone ki-document fs-1 text-primary">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                     </i>
@@ -194,10 +165,10 @@
                                             <div class="m-0">
                                                 <!--begin::Number-->
                                                 <span
-                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">37</span>
+                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">247</span>
                                                 <!--end::Number-->
                                                 <!--begin::Desc-->
-                                                <span class="text-gray-500 fw-semibold fs-6">Courses</span>
+                                                <span class="text-gray-500 fw-semibold fs-6">Total Pengajuan</span>
                                                 <!--end::Desc-->
                                             </div>
                                             <!--end::Stats-->
@@ -212,7 +183,7 @@
                                             <!--begin::Symbol-->
                                             <div class="symbol symbol-30px me-5 mb-8">
                                                 <span class="symbol-label">
-                                                    <i class="ki-duotone ki-bank fs-1 text-primary">
+                                                    <i class="ki-duotone ki-check-square fs-1 text-success">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
                                                     </i>
@@ -223,10 +194,10 @@
                                             <div class="m-0">
                                                 <!--begin::Number-->
                                                 <span
-                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">6</span>
+                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">198</span>
                                                 <!--end::Number-->
                                                 <!--begin::Desc-->
-                                                <span class="text-gray-500 fw-semibold fs-6">Certificates</span>
+                                                <span class="text-gray-500 fw-semibold fs-6">Disetujui</span>
                                                 <!--end::Desc-->
                                             </div>
                                             <!--end::Stats-->
@@ -241,10 +212,9 @@
                                             <!--begin::Symbol-->
                                             <div class="symbol symbol-30px me-5 mb-8">
                                                 <span class="symbol-label">
-                                                    <i class="ki-duotone ki-award fs-1 text-primary">
+                                                    <i class="ki-duotone ki-time fs-1 text-warning">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
-                                                        <span class="path3"></span>
                                                     </i>
                                                 </span>
                                             </div>
@@ -253,10 +223,10 @@
                                             <div class="m-0">
                                                 <!--begin::Number-->
                                                 <span
-                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">4,7</span>
+                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">32</span>
                                                 <!--end::Number-->
                                                 <!--begin::Desc-->
-                                                <span class="text-gray-500 fw-semibold fs-6">Avg. Score</span>
+                                                <span class="text-gray-500 fw-semibold fs-6">Pending</span>
                                                 <!--end::Desc-->
                                             </div>
                                             <!--end::Stats-->
@@ -271,10 +241,9 @@
                                             <!--begin::Symbol-->
                                             <div class="symbol symbol-30px me-5 mb-8">
                                                 <span class="symbol-label">
-                                                    <i class="ki-duotone ki-timer fs-1 text-primary">
+                                                    <i class="ki-duotone ki-cross-square fs-1 text-danger">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
-                                                        <span class="path3"></span>
                                                     </i>
                                                 </span>
                                             </div>
@@ -283,10 +252,10 @@
                                             <div class="m-0">
                                                 <!--begin::Number-->
                                                 <span
-                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">822</span>
+                                                    class="text-gray-700 fw-bolder d-block fs-2qx lh-1 ls-n1 mb-1">17</span>
                                                 <!--end::Number-->
                                                 <!--begin::Desc-->
-                                                <span class="text-gray-500 fw-semibold fs-6">Hours Learned</span>
+                                                <span class="text-gray-500 fw-semibold fs-6">Ditolak</span>
                                                 <!--end::Desc-->
                                             </div>
                                             <!--end::Stats-->
@@ -301,25 +270,26 @@
                         </div>
                         <!--end::Body-->
                     </div>
-                    <!--end::Lists Widget 19-->
+                    <!--end::Statistics Widget-->
                 </div>
                 <!--end::Col-->
+                
                 <!--begin::Col-->
                 <div class="col-xl-8 mb-10">
                     <!--begin::Row-->
                     <div class="row g-5 g-xl-10">
                         <!--begin::Col-->
                         <div class="col-xl-6 mb-xl-10">
-                            <!--begin::Slider Widget 1-->
-                            <div id="kt_sliders_widget_1_slider"
+                            <!--begin::Recent Submissions Widget-->
+                            <div id="kt_pengajuan_terbaru_slider"
                                 class="card card-flush carousel carousel-custom carousel-stretch slide h-xl-100"
                                 data-bs-ride="carousel" data-bs-interval="5000">
                                 <!--begin::Header-->
                                 <div class="card-header pt-5">
                                     <!--begin::Title-->
                                     <h4 class="card-title d-flex align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Today’s Course</span>
-                                        <span class="text-gray-500 mt-1 fw-bold fs-7">4 lessons, 3 hours 45 minutes</span>
+                                        <span class="card-label fw-bold text-gray-800">Pengajuan Terbaru</span>
+                                        <span class="text-gray-500 mt-1 fw-bold fs-7">12 pengajuan hari ini</span>
                                     </h4>
                                     <!--end::Title-->
                                     <!--begin::Toolbar-->
@@ -327,11 +297,11 @@
                                         <!--begin::Carousel Indicators-->
                                         <ol
                                             class="p-0 m-0 carousel-indicators carousel-indicators-bullet carousel-indicators-active-primary">
-                                            <li data-bs-target="#kt_sliders_widget_1_slider" data-bs-slide-to="0"
+                                            <li data-bs-target="#kt_pengajuan_terbaru_slider" data-bs-slide-to="0"
                                                 class="active ms-1"></li>
-                                            <li data-bs-target="#kt_sliders_widget_1_slider" data-bs-slide-to="1"
+                                            <li data-bs-target="#kt_pengajuan_terbaru_slider" data-bs-slide-to="1"
                                                 class="ms-1"></li>
-                                            <li data-bs-target="#kt_sliders_widget_1_slider" data-bs-slide-to="2"
+                                            <li data-bs-target="#kt_pengajuan_terbaru_slider" data-bs-slide-to="2"
                                                 class="ms-1"></li>
                                         </ol>
                                         <!--end::Carousel Indicators-->
@@ -347,235 +317,111 @@
                                         <div class="carousel-item active show">
                                             <!--begin::Wrapper-->
                                             <div class="d-flex align-items-center mb-5">
-                                                <!--begin::Chart-->
-                                                <div class="w-80px flex-shrink-0 me-2">
-                                                    <div class="min-h-auto ms-n3" id="kt_slider_widget_1_chart_1"
-                                                        style="height: 100px"></div>
-                                                </div>
-                                                <!--end::Chart-->
-                                                <!--begin::Info-->
-                                                <div class="m-0">
-                                                    <!--begin::Subtitle-->
-                                                    <h4 class="fw-bold text-gray-800 mb-3">Ruby on
-                                                        Rails</h4>
-                                                    <!--end::Subtitle-->
-                                                    <!--begin::Items-->
-                                                    <div class="d-flex d-grid gap-5">
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0 me-4">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>3 Topics</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>1 Speakers</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>50 Min</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>72 students</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
+                                                <!--begin::Avatar-->
+                                                <div class="symbol symbol-50px me-3">
+                                                    <div class="symbol-label bg-light-primary">
+                                                        <span class="text-primary fw-bold fs-4">MH</span>
                                                     </div>
-                                                    <!--end::Items-->
+                                                </div>
+                                                <!--end::Avatar-->
+                                                <!--begin::Info-->
+                                                <div class="m-0 flex-grow-1">
+                                                    <!--begin::Title-->
+                                                    <h5 class="fw-bold text-gray-800 mb-1">Muhammad Haris</h5>
+                                                    <!--end::Title-->
+                                                    <!--begin::Subtitle-->
+                                                    <p class="text-gray-600 fw-semibold mb-2 fs-7">Sistem Informasi Manajemen Perpustakaan Berbasis Web</p>
+                                                    <!--end::Subtitle-->
+                                                    <!--begin::Details-->
+                                                    <div class="d-flex gap-3">
+                                                        <span class="badge badge-light-warning fs-8">Pending</span>
+                                                        <span class="text-gray-500 fs-8">2 jam lalu</span>
+                                                    </div>
+                                                    <!--end::Details-->
                                                 </div>
                                                 <!--end::Info-->
                                             </div>
                                             <!--end::Wrapper-->
                                             <!--begin::Action-->
                                             <div class="m-0">
-                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Skip
-                                                    This</a>
-                                                <a href="#" class="btn btn-sm btn-primary mb-2"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_create_app">Continue</a>
+                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Detail</a>
+                                                <a href="#" class="btn btn-sm btn-primary mb-2">Review</a>
                                             </div>
                                             <!--end::Action-->
                                         </div>
                                         <!--end::Item-->
+                                        
                                         <!--begin::Item-->
                                         <div class="carousel-item">
                                             <!--begin::Wrapper-->
                                             <div class="d-flex align-items-center mb-5">
-                                                <!--begin::Chart-->
-                                                <div class="w-80px flex-shrink-0 me-2">
-                                                    <div class="min-h-auto ms-n3" id="kt_slider_widget_1_chart_2"
-                                                        style="height: 100px"></div>
-                                                </div>
-                                                <!--end::Chart-->
-                                                <!--begin::Info-->
-                                                <div class="m-0">
-                                                    <!--begin::Subtitle-->
-                                                    <h4 class="fw-bold text-gray-800 mb-3">Ruby on
-                                                        Rails</h4>
-                                                    <!--end::Subtitle-->
-                                                    <!--begin::Items-->
-                                                    <div class="d-flex d-grid gap-5">
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0 me-4">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>3 Topics</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>1 Speakers</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>50 Min</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>72 students</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
+                                                <!--begin::Avatar-->
+                                                <div class="symbol symbol-50px me-3">
+                                                    <div class="symbol-label bg-light-success">
+                                                        <span class="text-success fw-bold fs-4">SA</span>
                                                     </div>
-                                                    <!--end::Items-->
+                                                </div>
+                                                <!--end::Avatar-->
+                                                <!--begin::Info-->
+                                                <div class="m-0 flex-grow-1">
+                                                    <!--begin::Title-->
+                                                    <h5 class="fw-bold text-gray-800 mb-1">Siti Aminah</h5>
+                                                    <!--end::Title-->
+                                                    <!--begin::Subtitle-->
+                                                    <p class="text-gray-600 fw-semibold mb-2 fs-7">Aplikasi Mobile Learning untuk Pembelajaran Bahasa Inggris</p>
+                                                    <!--end::Subtitle-->
+                                                    <!--begin::Details-->
+                                                    <div class="d-flex gap-3">
+                                                        <span class="badge badge-light-primary fs-8">Under Review</span>
+                                                        <span class="text-gray-500 fs-8">4 jam lalu</span>
+                                                    </div>
+                                                    <!--end::Details-->
                                                 </div>
                                                 <!--end::Info-->
                                             </div>
                                             <!--end::Wrapper-->
                                             <!--begin::Action-->
                                             <div class="m-0">
-                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Skip
-                                                    This</a>
-                                                <a href="#" class="btn btn-sm btn-primary mb-2"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_create_app">Continue</a>
+                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Detail</a>
+                                                <a href="#" class="btn btn-sm btn-primary mb-2">Review</a>
                                             </div>
                                             <!--end::Action-->
                                         </div>
                                         <!--end::Item-->
+                                        
                                         <!--begin::Item-->
                                         <div class="carousel-item">
                                             <!--begin::Wrapper-->
                                             <div class="d-flex align-items-center mb-5">
-                                                <!--begin::Chart-->
-                                                <div class="w-80px flex-shrink-0 me-2">
-                                                    <div class="min-h-auto ms-n3" id="kt_slider_widget_1_chart_3"
-                                                        style="height: 100px"></div>
-                                                </div>
-                                                <!--end::Chart-->
-                                                <!--begin::Info-->
-                                                <div class="m-0">
-                                                    <!--begin::Subtitle-->
-                                                    <h4 class="fw-bold text-gray-800 mb-3">Ruby on
-                                                        Rails</h4>
-                                                    <!--end::Subtitle-->
-                                                    <!--begin::Items-->
-                                                    <div class="d-flex d-grid gap-5">
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0 me-4">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>3 Topics</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>1 Speakers</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>50 Min</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>72 students</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
+                                                <!--begin::Avatar-->
+                                                <div class="symbol symbol-50px me-3">
+                                                    <div class="symbol-label bg-light-info">
+                                                        <span class="text-info fw-bold fs-4">RD</span>
                                                     </div>
-                                                    <!--end::Items-->
+                                                </div>
+                                                <!--end::Avatar-->
+                                                <!--begin::Info-->
+                                                <div class="m-0 flex-grow-1">
+                                                    <!--begin::Title-->
+                                                    <h5 class="fw-bold text-gray-800 mb-1">Rizky Dwi</h5>
+                                                    <!--end::Title-->
+                                                    <!--begin::Subtitle-->
+                                                    <p class="text-gray-600 fw-semibold mb-2 fs-7">Analisis Sentimen Media Sosial Menggunakan Machine Learning</p>
+                                                    <!--end::Subtitle-->
+                                                    <!--begin::Details-->
+                                                    <div class="d-flex gap-3">
+                                                        <span class="badge badge-light-warning fs-8">Pending</span>
+                                                        <span class="text-gray-500 fs-8">6 jam lalu</span>
+                                                    </div>
+                                                    <!--end::Details-->
                                                 </div>
                                                 <!--end::Info-->
                                             </div>
                                             <!--end::Wrapper-->
                                             <!--begin::Action-->
                                             <div class="m-0">
-                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Skip
-                                                    This</a>
-                                                <a href="#" class="btn btn-sm btn-primary mb-2"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_create_app">Continue</a>
+                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Detail</a>
+                                                <a href="#" class="btn btn-sm btn-primary mb-2">Review</a>
                                             </div>
                                             <!--end::Action-->
                                         </div>
@@ -585,21 +431,22 @@
                                 </div>
                                 <!--end::Body-->
                             </div>
-                            <!--end::Slider Widget 1-->
+                            <!--end::Recent Submissions Widget-->
                         </div>
                         <!--end::Col-->
+                        
                         <!--begin::Col-->
                         <div class="col-xl-6 mb-5 mb-xl-10">
-                            <!--begin::Slider Widget 2-->
-                            <div id="kt_sliders_widget_2_slider"
+                            <!--begin::Dosen Pembimbing Widget-->
+                            <div id="kt_dosen_pembimbing_slider"
                                 class="card card-flush carousel carousel-custom carousel-stretch slide h-xl-100"
                                 data-bs-ride="carousel" data-bs-interval="5500">
                                 <!--begin::Header-->
                                 <div class="card-header pt-5">
                                     <!--begin::Title-->
                                     <h4 class="card-title d-flex align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Today’s Events</span>
-                                        <span class="text-gray-500 mt-1 fw-bold fs-7">24 events on all activities</span>
+                                        <span class="card-label fw-bold text-gray-800">Dosen Pembimbing</span>
+                                        <span class="text-gray-500 mt-1 fw-bold fs-7">Status bimbingan aktif</span>
                                     </h4>
                                     <!--end::Title-->
                                     <!--begin::Toolbar-->
@@ -607,11 +454,11 @@
                                         <!--begin::Carousel Indicators-->
                                         <ol
                                             class="p-0 m-0 carousel-indicators carousel-indicators-bullet carousel-indicators-active-success">
-                                            <li data-bs-target="#kt_sliders_widget_2_slider" data-bs-slide-to="0"
+                                            <li data-bs-target="#kt_dosen_pembimbing_slider" data-bs-slide-to="0"
                                                 class="active ms-1"></li>
-                                            <li data-bs-target="#kt_sliders_widget_2_slider" data-bs-slide-to="1"
+                                            <li data-bs-target="#kt_dosen_pembimbing_slider" data-bs-slide-to="1"
                                                 class="ms-1"></li>
-                                            <li data-bs-target="#kt_sliders_widget_2_slider" data-bs-slide-to="2"
+                                            <li data-bs-target="#kt_dosen_pembimbing_slider" data-bs-slide-to="2"
                                                 class="ms-1"></li>
                                         </ol>
                                         <!--end::Carousel Indicators-->
@@ -630,20 +477,21 @@
                                                 <!--begin::Symbol-->
                                                 <div class="symbol symbol-70px symbol-circle me-5">
                                                     <span class="symbol-label bg-light-success">
-                                                        <i class="ki-duotone ki-abstract-24 fs-3x text-success">
+                                                        <i class="ki-duotone ki-profile-user fs-3x text-success">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
                                                         </i>
                                                     </span>
                                                 </div>
                                                 <!--end::Symbol-->
                                                 <!--begin::Info-->
                                                 <div class="m-0">
-                                                    <!--begin::Subtitle-->
-                                                    <h4 class="fw-bold text-gray-800 mb-3">Ruby on
-                                                        Rails</h4>
-                                                    <!--end::Subtitle-->
-                                                    <!--begin::Items-->
+                                                    <!--begin::Name-->
+                                                    <h4 class="fw-bold text-gray-800 mb-3">Dr. Ahmad Fauzi, M.Kom</h4>
+                                                    <!--end::Name-->
+                                                    <!--begin::Stats-->
                                                     <div class="d-flex d-grid gap-5">
                                                         <!--begin::Item-->
                                                         <div class="d-flex flex-column flex-shrink-0 me-4">
@@ -651,19 +499,20 @@
                                                             <span
                                                                 class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-user-tick fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>5 Topics</span>
+                                                                    <span class="path3"></span>
+                                                                </i>15 Mahasiswa</span>
                                                             <!--end::Section-->
                                                             <!--begin::Section-->
                                                             <span
                                                                 class="d-flex align-items-center text-gray-500 fw-bold fs-7">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-check-square fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>1 Speakers</span>
+                                                                </i>8 Selesai</span>
                                                             <!--end::Section-->
                                                         </div>
                                                         <!--end::Item-->
@@ -673,120 +522,37 @@
                                                             <span
                                                                 class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-time fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>60 Min</span>
+                                                                </i>7 Progress</span>
                                                             <!--end::Section-->
                                                             <!--begin::Section-->
                                                             <span
                                                                 class="d-flex align-items-center text-gray-500 fw-bold fs-7">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-star fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>137 students</span>
+                                                                </i>4.8 Rating</span>
                                                             <!--end::Section-->
                                                         </div>
                                                         <!--end::Item-->
                                                     </div>
-                                                    <!--end::Items-->
+                                                    <!--end::Stats-->
                                                 </div>
                                                 <!--end::Info-->
                                             </div>
                                             <!--end::Wrapper-->
                                             <!--begin::Action-->
                                             <div class="m-0">
-                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Details</a>
-                                                <a href="#" class="btn btn-sm btn-success mb-2"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_create_campaign">Join
-                                                    Event</a>
+                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Detail</a>
+                                                <a href="#" class="btn btn-sm btn-success mb-2">Kelola Bimbingan</a>
                                             </div>
                                             <!--end::Action-->
                                         </div>
                                         <!--end::Item-->
-                                        <!--begin::Item-->
-                                        <div class="carousel-item">
-                                            <!--begin::Wrapper-->
-                                            <div class="d-flex align-items-center mb-9">
-                                                <!--begin::Symbol-->
-                                                <div class="symbol symbol-70px symbol-circle me-5">
-                                                    <span class="symbol-label bg-light-danger">
-                                                        <i class="ki-duotone ki-abstract-25 fs-3x text-danger">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                        </i>
-                                                    </span>
-                                                </div>
-                                                <!--end::Symbol-->
-                                                <!--begin::Info-->
-                                                <div class="m-0">
-                                                    <!--begin::Subtitle-->
-                                                    <h4 class="fw-bold text-gray-800 mb-3">Ruby on
-                                                        Rails</h4>
-                                                    <!--end::Subtitle-->
-                                                    <!--begin::Items-->
-                                                    <div class="d-flex d-grid gap-5">
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0 me-4">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>12 Topics</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>1 Speakers</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="d-flex flex-column flex-shrink-0">
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>50 Min</span>
-                                                            <!--end::Section-->
-                                                            <!--begin::Section-->
-                                                            <span
-                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
-                                                                <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>72 students</span>
-                                                            <!--end::Section-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                    </div>
-                                                    <!--end::Items-->
-                                                </div>
-                                                <!--end::Info-->
-                                            </div>
-                                            <!--end::Wrapper-->
-                                            <!--begin::Action-->
-                                            <div class="m-0">
-                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Details</a>
-                                                <a href="#" class="btn btn-sm btn-success mb-2"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_create_campaign">Join
-                                                    Event</a>
-                                            </div>
-                                            <!--end::Action-->
-                                        </div>
-                                        <!--end::Item-->
+                                        
                                         <!--begin::Item-->
                                         <div class="carousel-item">
                                             <!--begin::Wrapper-->
@@ -794,20 +560,21 @@
                                                 <!--begin::Symbol-->
                                                 <div class="symbol symbol-70px symbol-circle me-5">
                                                     <span class="symbol-label bg-light-primary">
-                                                        <i class="ki-duotone ki-abstract-36 fs-3x text-primary">
+                                                        <i class="ki-duotone ki-profile-user fs-3x text-primary">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
                                                         </i>
                                                     </span>
                                                 </div>
                                                 <!--end::Symbol-->
                                                 <!--begin::Info-->
                                                 <div class="m-0">
-                                                    <!--begin::Subtitle-->
-                                                    <h4 class="fw-bold text-gray-800 mb-3">Ruby on
-                                                        Rails</h4>
-                                                    <!--end::Subtitle-->
-                                                    <!--begin::Items-->
+                                                    <!--begin::Name-->
+                                                    <h4 class="fw-bold text-gray-800 mb-3">Dr. Sari Wijaya, M.T</h4>
+                                                    <!--end::Name-->
+                                                    <!--begin::Stats-->
                                                     <div class="d-flex d-grid gap-5">
                                                         <!--begin::Item-->
                                                         <div class="d-flex flex-column flex-shrink-0 me-4">
@@ -815,19 +582,20 @@
                                                             <span
                                                                 class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-user-tick fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>3 Topics</span>
+                                                                    <span class="path3"></span>
+                                                                </i>12 Mahasiswa</span>
                                                             <!--end::Section-->
                                                             <!--begin::Section-->
                                                             <span
                                                                 class="d-flex align-items-center text-gray-500 fw-bold fs-7">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-check-square fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>1 Speakers</span>
+                                                                </i>6 Selesai</span>
                                                             <!--end::Section-->
                                                         </div>
                                                         <!--end::Item-->
@@ -837,34 +605,115 @@
                                                             <span
                                                                 class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-time fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>50 Min</span>
+                                                                </i>6 Progress</span>
                                                             <!--end::Section-->
                                                             <!--begin::Section-->
                                                             <span
                                                                 class="d-flex align-items-center text-gray-500 fw-bold fs-7">
                                                                 <i
-                                                                    class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
+                                                                    class="ki-duotone ki-star fs-6 text-gray-600 me-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
-                                                                </i>72 students</span>
+                                                                </i>4.7 Rating</span>
                                                             <!--end::Section-->
                                                         </div>
                                                         <!--end::Item-->
                                                     </div>
-                                                    <!--end::Items-->
+                                                    <!--end::Stats-->
                                                 </div>
                                                 <!--end::Info-->
                                             </div>
                                             <!--end::Wrapper-->
                                             <!--begin::Action-->
                                             <div class="m-0">
-                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Details</a>
-                                                <a href="#" class="btn btn-sm btn-success mb-2"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_create_campaign">Join
-                                                    Event</a>
+                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Detail</a>
+                                                <a href="#" class="btn btn-sm btn-success mb-2">Kelola Bimbingan</a>
+                                            </div>
+                                            <!--end::Action-->
+                                        </div>
+                                        <!--end::Item-->
+                                        
+                                        <!--begin::Item-->
+                                        <div class="carousel-item">
+                                            <!--begin::Wrapper-->
+                                            <div class="d-flex align-items-center mb-9">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-70px symbol-circle me-5">
+                                                    <span class="symbol-label bg-light-warning">
+                                                        <i class="ki-duotone ki-profile-user fs-3x text-warning">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                        </i>
+                                                    </span>
+                                                </div>
+                                                <!--end::Symbol-->
+                                                <!--begin::Info-->
+                                                <div class="m-0">
+                                                    <!--begin::Name-->
+                                                    <h4 class="fw-bold text-gray-800 mb-3">Prof. Budi Santoso, Ph.D</h4>
+                                                    <!--end::Name-->
+                                                    <!--begin::Stats-->
+                                                    <div class="d-flex d-grid gap-5">
+                                                        <!--begin::Item-->
+                                                        <div class="d-flex flex-column flex-shrink-0 me-4">
+                                                            <!--begin::Section-->
+                                                            <span
+                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
+                                                                <i
+                                                                    class="ki-duotone ki-user-tick fs-6 text-gray-600 me-2">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                    <span class="path3"></span>
+                                                                </i>18 Mahasiswa</span>
+                                                            <!--end::Section-->
+                                                            <!--begin::Section-->
+                                                            <span
+                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
+                                                                <i
+                                                                    class="ki-duotone ki-check-square fs-6 text-gray-600 me-2">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>12 Selesai</span>
+                                                            <!--end::Section-->
+                                                        </div>
+                                                        <!--end::Item-->
+                                                        <!--begin::Item-->
+                                                        <div class="d-flex flex-column flex-shrink-0">
+                                                            <!--begin::Section-->
+                                                            <span
+                                                                class="d-flex align-items-center fs-7 fw-bold text-gray-500 mb-2">
+                                                                <i
+                                                                    class="ki-duotone ki-time fs-6 text-gray-600 me-2">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>6 Progress</span>
+                                                            <!--end::Section-->
+                                                            <!--begin::Section-->
+                                                            <span
+                                                                class="d-flex align-items-center text-gray-500 fw-bold fs-7">
+                                                                <i
+                                                                    class="ki-duotone ki-star fs-6 text-gray-600 me-2">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>4.9 Rating</span>
+                                                            <!--end::Section-->
+                                                        </div>
+                                                        <!--end::Item-->
+                                                    </div>
+                                                    <!--end::Stats-->
+                                                </div>
+                                                <!--end::Info-->
+                                            </div>
+                                            <!--end::Wrapper-->
+                                            <!--begin::Action-->
+                                            <div class="m-0">
+                                                <a href="#" class="btn btn-sm btn-light me-2 mb-2">Detail</a>
+                                                <a href="#" class="btn btn-sm btn-success mb-2">Kelola Bimbingan</a>
                                             </div>
                                             <!--end::Action-->
                                         </div>
@@ -874,12 +723,13 @@
                                 </div>
                                 <!--end::Body-->
                             </div>
-                            <!--end::Slider Widget 2-->
+                            <!--end::Dosen Pembimbing Widget-->
                         </div>
                         <!--end::Col-->
                     </div>
                     <!--end::Row-->
-                    <!--begin::Engage widget 4-->
+                    
+                    <!--begin::Notification Widget-->
                     <div class="card border-transparent" data-bs-theme="light" style="background-color: #1C325E;">
                         <!--begin::Body-->
                         <div class="card-body d-flex ps-xl-15">
@@ -887,26 +737,22 @@
                             <div class="m-0">
                                 <!--begin::Title-->
                                 <div class="position-relative fs-2x z-index-2 fw-bold text-white mb-7">
-                                    <span class="me-2">You have got
+                                    <span class="me-2">Sistem pengajuan judul telah mencatat
                                         <span class="position-relative d-inline-block text-danger">
-                                            <a href="pages/user-profile/overview.html"
-                                                class="text-danger opacity-75-hover">2300 bonus</a>
+                                            <a href="#" class="text-danger opacity-75-hover">247 pengajuan</a>
                                             <!--begin::Separator-->
                                             <span
                                                 class="position-absolute opacity-50 bottom-0 start-0 border-4 border-danger border-bottom w-100"></span>
                                             <!--end::Separator-->
-                                        </span></span>points.
-                                    <br />Feel free to use them in your lessons
+                                        </span></span>
+                                    <br />dengan tingkat persetujuan 80.16%
                                 </div>
                                 <!--end::Title-->
                                 <!--begin::Action-->
                                 <div class="mb-3">
                                     <a href='#' class="btn btn-danger fw-semibold me-2" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_upgrade_plan">Get
-                                        Reward</a>
-                                    <a href="apps/support-center/overview.html"
-                                        class="btn btn-color-white bg-white bg-opacity-15 bg-hover-opacity-25 fw-semibold">How
-                                        to</a>
+                                        data-bs-target="#kt_modal_laporan_bulanan">Laporan Bulanan</a>
+                                    <a href="#" class="btn btn-color-white bg-white bg-opacity-15 bg-hover-opacity-25 fw-semibold">Panduan Admin</a>
                                 </div>
                                 <!--begin::Action-->
                             </div>
@@ -918,11 +764,198 @@
                         </div>
                         <!--end::Body-->
                     </div>
-                    <!--end::Engage widget 4-->
+                    <!--end::Notification Widget-->
                 </div>
                 <!--end::Col-->
             </div>
             <!--end::Row-->
+            
+            <!--begin::Recent Activities-->
+            <div class="row gx-5 gx-xl-10 mb-5 mb-xl-10">
+                <!--begin::Col-->
+                <div class="col-xl-12">
+                    <!--begin::Table Widget 5-->
+                    <div class="card card-flush h-xl-100">
+                        <!--begin::Header-->
+                        <div class="card-header pt-7">
+                            <!--begin::Title-->
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bold text-gray-900">Aktivitas Terbaru</span>
+                                <span class="text-gray-500 pt-2 fw-semibold fs-6">Aktivitas sistem dalam 24 jam terakhir</span>
+                            </h3>
+                            <!--end::Title-->
+                            <!--begin::Toolbar-->
+                            <div class="card-toolbar">
+                                <a href="#" class="btn btn-sm btn-light">Lihat Semua</a>
+                            </div>
+                            <!--end::Toolbar-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <!--begin::Table-->
+                            <div class="table-responsive">
+                                <table class="table table-row-dashed align-middle gs-5">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                            <th class="min-w-200px">Mahasiswa</th>
+                                            <th class="min-w-150px">Judul</th>
+                                            <th class="min-w-100px">Status</th>
+                                            <th class="min-w-100px">Dosen Pembimbing</th>
+                                            <th class="min-w-100px">Waktu</th>
+                                            <th class="text-end min-w-100px pe-4">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-semibold text-gray-600">
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-50px me-3">
+                                                        <div class="symbol-label bg-light-primary">
+                                                            <span class="text-primary fw-bold">MH</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1 fs-6 fw-bold">Muhammad Haris</a>
+                                                        <span class="text-muted fw-semibold">21.01.4567</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block mb-1 fs-7">Sistem Informasi Manajemen...</span>
+                                                <span class="text-muted fw-semibold d-block fs-8">Teknik Informatika</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-light-warning fs-7 fw-bold">Pending Review</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block fs-7">Dr. Ahmad Fauzi</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted fw-semibold">2 jam lalu</span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
+                                                    <i class="ki-duotone ki-black-right fs-2 text-gray-500"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-50px me-3">
+                                                        <div class="symbol-label bg-light-success">
+                                                            <span class="text-success fw-bold">SA</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1 fs-6 fw-bold">Siti Aminah</a>
+                                                        <span class="text-muted fw-semibold">21.01.4568</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block mb-1 fs-7">Aplikasi Mobile Learning...</span>
+                                                <span class="text-muted fw-semibold d-block fs-8">Sistem Informasi</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-light-success fs-7 fw-bold">Disetujui</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block fs-7">Dr. Sari Wijaya</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted fw-semibold">4 jam lalu</span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
+                                                    <i class="ki-duotone ki-black-right fs-2 text-gray-500"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-50px me-3">
+                                                        <div class="symbol-label bg-light-info">
+                                                            <span class="text-info fw-bold">RD</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1 fs-6 fw-bold">Rizky Dwi</a>
+                                                        <span class="text-muted fw-semibold">21.01.4569</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block mb-1 fs-7">Analisis Sentimen Media Sosial...</span>
+                                                <span class="text-muted fw-semibold d-block fs-8">Teknik Informatika</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-light-primary fs-7 fw-bold">Under Review</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block fs-7">Prof. Budi Santoso</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted fw-semibold">6 jam lalu</span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
+                                                    <i class="ki-duotone ki-black-right fs-2 text-gray-500"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-50px me-3">
+                                                        <div class="symbol-label bg-light-danger">
+                                                            <span class="text-danger fw-bold">AN</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1 fs-6 fw-bold">Andi Nugraha</a>
+                                                        <span class="text-muted fw-semibold">21.01.4570</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block mb-1 fs-7">E-Commerce Platform...</span>
+                                                <span class="text-muted fw-semibold d-block fs-8">Sistem Informasi</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-light-danger fs-7 fw-bold">Perlu Revisi</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-gray-800 fw-bold d-block fs-7">Dr. Ahmad Fauzi</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted fw-semibold">8 jam lalu</span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
+                                                    <i class="ki-duotone ki-black-right fs-2 text-gray-500"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                            </div>
+                            <!--end::Table-->
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::Table Widget 5-->
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Recent Activities-->
+            
         </div>
         <!--end::Content container-->
     </div>

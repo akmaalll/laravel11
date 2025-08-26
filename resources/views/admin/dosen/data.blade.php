@@ -22,7 +22,7 @@
         </td>
         <td>
             <span class="fw-semibold">
-                {{ $v->keahlians->implode('nama', ', ') ?? '-' }}
+                {{ $v->jabatan_fungsional }}
             </span>
         </td>
         <td class="text-end">

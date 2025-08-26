@@ -12,4 +12,5 @@ interface JudulContract
 	*/
 
 	public function paginated(array $request);
+	public function paginatedMhs(array $request);
 }

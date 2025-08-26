@@ -9,36 +9,9 @@ class DosenMataKuliah extends Model
 {
     use HasFactory;
 
-    protected $table = 'dosen_mata_kuliah';
+    protected $table = 'mst_matkul_dosen';
     protected $fillable = [
-        'dosen_nidn',
-        'mata_kuliah',
-        'kode_mk',
-        'semester',
+        'nidn',
+        'matkul',
     ];
-
-    public function dosen()
-    {
-        return $this->belongsTo(Dosen::class, 'dosen_nidn', 'nidn');
-    }
-
-    /**
-     * Get all courses taught by a lecturer
-     */
-    public static function getMataKuliahByDosen($dosenNidn)
-    {
-        return self::where('dosen_nidn', $dosenNidn)
-            ->pluck('mata_kuliah')
-            ->toArray();
-    }
-
-    /**
-     * Get unique courses for text processing
-     */
-    public static function getAllMataKuliah()
-    {
-        return self::distinct()
-            ->pluck('mata_kuliah')
-            ->toArray();
-    }
 }

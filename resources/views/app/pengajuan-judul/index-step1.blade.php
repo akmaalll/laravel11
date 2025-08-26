@@ -141,7 +141,8 @@
                 const data = await response.json();
 
                 if (data.predicted_topic) {
-                    localStorage.setItem('predicted_topic', data.predicted_topic);
+                    localStorage.setItem('predicted_topic_name', data.predicted_topic.name);
+                    localStorage.setItem('predicted_topic_id', data.predicted_topic.id);
                 }
 
                 if (!response.ok) {
@@ -177,7 +178,7 @@
             const resultDiv = document.getElementById('titleCheckResult');
             const submitButton = document.getElementById('kt_formvalidation_step_submit');
             const cosinePercent = (data.similarity * 100).toFixed(2);
-            const svmPrediction = data.predicted_topic || 'Tidak dapat diprediksi';
+            const svmPrediction = data.predicted_topic.name || 'Tidak dapat diprediksi';
 
             // Determine overall status
             let overallStatus, alertClass;
@@ -203,8 +204,8 @@
                     <strong>Judul yang mirip:</strong>
                     <ul class="mt-2">
                         ${data.similar_titles.map(title => `
-                                                                    <li>${title.judul} (${Math.round(title.similarity * 100)}% similar, Topik: ${title.topik})</li>
-                                                                `).join('')}
+                                                                                                <li>${title.judul} (${Math.round(title.similarity * 100)}% similar, Topik: ${title.topik})</li>
+                                                                                            `).join('')}
                     </ul>
                 </div>
             `;
