@@ -15,7 +15,7 @@
                 <input type="hidden" name="id_keahlian" id="id_topik">
                 <input type="hidden" name="nim1" value="{{ Session::get('stb', '') }}">
                 <input type="text" class="form-control form-control-solid" placeholder="" name="topik"
-                    id="topik" value="{{ $data->nama_keahlian }}" readonly />
+                    id="topik" value="{{ $data->nama_keahlian ?? '-' }}" readonly />
             </div>
         </div>
         <div class="col-md-6">

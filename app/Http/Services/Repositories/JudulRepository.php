@@ -26,6 +26,13 @@ class JudulRepository extends BaseRepository implements JudulContract
 		$sortOrder = $criteria['sort_order'] ?? 'desc';
 		$search = $criteria['search'] ?? '';
 
+
+
+		// dd(
+		// 	$this->model->toSql(),
+		// 	$this->model->getBindings()
+		// );
+
 		return $this->model
 			->select(
 				'mst_judul.*',
@@ -37,15 +44,17 @@ class JudulRepository extends BaseRepository implements JudulContract
 				'u2.name as nama_mhs2'
 			)
 			->join('mst_keahlian', 'mst_judul.id_keahlian', '=', 'mst_keahlian.id')
-			->join('mst_dosen', 'mst_dosen.nidn', '=', 'mst_judul.nidn1')
-			->join('mst_dosen as d2', 'd2.nidn', '=', 'mst_judul.nidn2')
+			->leftJoin('mst_dosen', 'mst_dosen.nidn', '=', 'mst_judul.nidn1')
+			->leftJoin('mst_dosen as d2', 'd2.nidn', '=', 'mst_judul.nidn2') // <<<<<< LEFT JOIN
 			->join('users', 'users.username', '=', 'mst_judul.nim1')
-			->join('users as u2', 'u2.username', '=', 'mst_judul.nim2')
+			->leftJoin('users as u2', 'u2.username', '=', 'mst_judul.nim2')   // <<<<<< LEFT JOIN
 			->when($search, function ($query) use ($search) {
 				$query->where('judul', 'like', "%{$search}%");
 			})
-			->where('nim1', Session::get('stb'))
-			->orWhere('nim2', Session::get('stb'))
+			->where(function ($query) {
+				$query->where('nim1', Session::get('stb'))
+					->orWhere('nim2', Session::get('stb'));
+			})
 			->orderBy($field, $sortOrder)
 			->paginate($perPage);
 	}

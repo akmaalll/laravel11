@@ -50,11 +50,34 @@
                             <!--begin::Input group-->
                             <div class="row g-9 mb-8">
                                 <div class="col-md-6 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Nama</label>
-                                    <input type="text" class="form-control" placeholder="Nama" name="nama"
-                                        id="nama" value="{{ $data->nama ?? '' }}" />
+                                    <label class="required fs-6 fw-semibold mb-2">Matkul Dosen</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Matkul Dosen" name="id_matkul_dosen" id="id_matkul_dosen">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getDataMatkul('mst_matkul_dosen') as $v)
+                                            <option
+                                                {{ isset($data->id_matkul_dosen) && $data->id_matkul_dosen == $v->id ? 'selected' : '' }}
+                                                value="{{ $v->id }}">{{ $v->nama_dosen . ' - ' . $v->matkul }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Keahlian</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Keahlian" name="id_keahlian" id="id_keahlian">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getData('mst_keahlian') as $v)
+                                            <option
+                                                {{ isset($data->id_keahlian) && $data->id_keahlian == $v->id ? 'selected' : '' }}
+                                                value="{{ $v->id }}">{{ $v->nama }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
+
                             <!--end::Input group-->
 
                             <!--begin::Actions-->

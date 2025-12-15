@@ -8,16 +8,29 @@ use App\Models\Dosen;
 use Illuminate\Support\Str;
 use App\Models\DosenPenelitian;
 use App\Models\KeahlianJudulDosen;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    public function utama()
+    {
+        return redirect()->route('login');
+    }
 
     public function index()
     {
-        return view('admin.dashboard');
+        $data = DB::table('mst_judul');
+
+        $totalPengajuan = $data->count();
+        $diterima = DB::table('mst_judul')->where('status', 'diterima')->count();
+        $diajukan = DB::table('mst_judul')->where('status', 'diajukan')->count();
+        $ditolak = DB::table('mst_judul')->where('status', 'ditolak')->count();
+
+        return view('admin.dashboard', compact('totalPengajuan', 'diterima', 'diajukan', 'ditolak'));
     }
 
-    public function pembimbing(){
+    public function pembimbing()
+    {
         return view('admin.pembimbing.assignment');
     }
     public function data()

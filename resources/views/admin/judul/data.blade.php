@@ -39,11 +39,21 @@
                 {{ $v->status }}
             </span>
         </td>
+
         <td class="text-end text-nowrap">
             @if ($v->status == 'diterima')
-                <a href="{{ route('sk-pembimbing.pdf', $v->id) }}" class="btn btn-sm btn-danger" target="_blank">
-                    <i class="fa fa-file-pdf"></i>
-                </a>
+                @if (auth()->user()->id_role == 4 && !$v->sk_pembimbing)
+                    <a href="{{ route('sk-pembimbing', $v->id) }}" class="btn btn-sm btn-danger">
+                        <i class="fa fa-file-pdf"></i> Input No SK
+                    </a>
+                @endif
+
+                @if ($v->sk_pembimbing)
+                    <a href="{{ route('sk-pembimbing.download', $v->id) }}" class="btn btn-sm btn-primary"
+                        target="_blank">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                @endif
             @endif
             {!! Helper::btnAction($v->id, $title) !!}
         </td>

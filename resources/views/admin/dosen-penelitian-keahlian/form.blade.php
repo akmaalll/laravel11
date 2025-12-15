@@ -49,16 +49,49 @@
 
                             <!--begin::Input group-->
                             <div class="row g-9 mb-8">
-                                <div class="col-md-4 fv-row">
-                                    <label class="fs-6 fw-semibold mb-2">Kode</label>
-                                    <input type="text" class="form-control" placeholder="Kode Level" name="code"
-                                        id="code" maxlength="3" value="{{ $data->code ?? '' }}" />
+                                <div class="col-md-6 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Judul Penelitian</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Nidn Dosen" name="id_dosen_penelitian"
+                                        id="id_dosen_penelitian">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getData('mst_dosen_penelitian') as $v)
+                                            <option
+                                                {{ isset($data->id_dosen_penelitian) && $data->id_dosen_penelitian == $v->id ? 'selected' : '' }}
+                                                value="{{ $v->id }}">{{ $v->judul_penelitian }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="col-md-8 fv-row">
-                                    <label class="fs-6 fw-semibold mb-2">Nama</label>
-                                    <input type="text" class="form-control" placeholder="Nama Level" name="name"
-                                        id="name" value="{{ $data->name ?? '' }}" />
+
+                                <div class="col-md-6 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Keahlian</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Keahlian" name="keahlian_id" id="keahlian_id">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getData('mst_keahlian') as $v)
+                                            <option
+                                                {{ isset($data->keahlian_id) && $data->keahlian_id == $v->id ? 'selected' : '' }}
+                                                value="{{ $v->id }}">{{ $v->nama }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
+
+                                {{-- <div class="col-md-6 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Keahlian</label>
+                                    <select class="form-select" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Keahlian" name="keahlian_id" id="keahlian_id">
+                                        <option value="">Select user...</option>
+                                        @foreach (Helper::getData('mst_keahlian') as $v)
+                                            <option
+                                                {{ isset($data->keahlian_id) && $data->keahlian_id == $v->id ? 'selected' : '' }}
+                                                value="{{ $v->id }}">{{ $v->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div> --}}
+                            </div>
+
+                            <div class="row g-9 mb-8">
+
                             </div>
                             <!--end::Input group-->
 
@@ -136,7 +169,7 @@
             }
         );
 
-        // proses save data
+        // // proses save data
         // const submitButton = document.getElementById('kt_modal_new_target_save');
         // submitButton.addEventListener('click', function(e) {
         //     // Prevent default button action

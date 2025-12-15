@@ -5,13 +5,13 @@
 <head>
     <title>Sistem Pengajuan Judul - UNDIPA</title>
     <meta charset="utf-8" />
-    <meta name="description" content="umi-fikir" />
-    <meta name="keywords" content="umi-fikir" />
+    <meta name="description" content="dcc" />
+    <meta name="keywords" content="dcc" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="Umi - LP2s" />
-    <meta property="og:url" content="https://fikir.umi-ac.id" />
-    <meta property="og:site_name" content="FIKIR-UMI" />
+    <meta property="og:title" content="Skripsi" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="akml-dcc" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 

@@ -5,10 +5,8 @@
     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
         <!--begin::Logo image-->
         <a href="index.html">
-            <img alt="Logo" src="{{ asset('/') }}themes/dist/assets/media/logos/default-dark.svg"
-                class="h-25px app-sidebar-logo-default" />
-            <img alt="Logo" src="{{ asset('/') }}themes/dist/assets/media/logos/default-small.svg"
-                class="h-20px app-sidebar-logo-minimize" />
+            <img alt="Logo" src="{{ asset('/') }}img/LogoUndipaa.png" class="h-50px app-sidebar-logo-default" />
+            <img alt="Logo" src="{{ asset('/') }}img/LogoUndipaa.png" class="h-25px app-sidebar-logo-minimize" />
         </a>
         <!--end::Logo image-->
 
@@ -215,16 +213,16 @@
     <!--end::sidebar menu-->
     <!--begin::Footer-->
     <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
-        <a href="https://preview.keenthemes.com/html/metronic/docs"
+        <a href="{{ route('logout') }}"
             class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"
-            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click"
-            title="200+ in-house components and 3rd-party plugins">
-            <span class="btn-label">Docs & Components</span>
+            data-bs-toggle="tooltip">
+            <span class="btn-label">Logout</span>
             <i class="ki-duotone ki-document btn-icon fs-2 m-0">
                 <span class="path1"></span>
                 <span class="path2"></span>
             </i>
         </a>
     </div>
+    {{-- https://preview.keenthemes.com/html/metronic/docs --}}
     <!--end::Footer-->
 </div>

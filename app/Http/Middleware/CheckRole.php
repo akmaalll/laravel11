@@ -22,7 +22,7 @@ class CheckRole
 
         // Bersihkan dan konversi semua ke integer
         $allowedRoles = array_map('intval', array_map('trim', explode('|', $roles)));
-
+        
         // Ambil role user sebagai integer
         $userRole = (int) auth()->user()->id_role;
 

@@ -52,35 +52,36 @@
                                 <div class="col-md-6 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Nidn Dosen</label>
                                     <select class="form-select" data-control="select2" data-hide-search="false"
-                                        data-placeholder="Pilih Nidn Dosen" name="dosen_nidn" id="dosen_nidn">
+                                        data-placeholder="Pilih Nidn Dosen" name="nidn" id="nidn">
                                         <option value="">Select user...</option>
-                                        @foreach (Helper::getData('mst_dosens') as $v)
-                                            <option
-                                                {{ isset($data->dosen_nidn) && $data->dosen_nidn == $v->nidn ? 'selected' : '' }}
+                                        @foreach (Helper::getData('mst_dosen') as $v)
+                                            <option {{ isset($data->nidn) && $data->nidn == $v->nidn ? 'selected' : '' }}
                                                 value="{{ $v->nidn }}">{{ $v->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div class="col-md-6 fv-row">
+                                 <div class="col-md-12 fv-row">
+                                    <label class="required fs-6 fw-semibold mb-2">Judul Penelitian</label>
+                                    <textarea name="judul_penelitian" id="judul_penelitian" class="form-control" cols="30" rows="10">{{ $data->judul_penelitian ?? ''}}</textarea>
+                                </div>
+
+                                {{-- <div class="col-md-6 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Keahlian</label>
                                     <select class="form-select" data-control="select2" data-hide-search="false"
                                         data-placeholder="Pilih Keahlian" name="keahlian_id" id="keahlian_id">
                                         <option value="">Select user...</option>
-                                        @foreach (Helper::getData('mst_keahlians') as $v)
+                                        @foreach (Helper::getData('mst_keahlian') as $v)
                                             <option
-                                                {{ isset($data->keahlian_id) && $data->keahlian_id == $v->nidn ? 'selected' : '' }}
+                                                {{ isset($data->keahlian_id) && $data->keahlian_id == $v->id ? 'selected' : '' }}
                                                 value="{{ $v->id }}">{{ $v->nama }}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="row g-9 mb-8">
-                                <div class="col-md-12 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Judul Penelitian</label>
-                                    <textarea name="judul_penelitian" id="judul_penelitian" class="form-control" cols="30" rows="10"></textarea>
-                                </div>
+                               
                             </div>
                             <!--end::Input group-->
 

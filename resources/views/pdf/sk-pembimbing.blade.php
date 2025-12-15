@@ -88,7 +88,7 @@
         <hr>
         <div class="title">SURAT KEPUTUSAN</div>
         <div class="title">REKTOR UNIVERSITAS DIPA MAKASSAR</div>
-        <div class="nomor-surat">Nomor: .../UNDIPA/.../.../....</div>
+        <div class="nomor-surat">Nomor: {{ $nomor_surat }}</div>
         <div class="title">Tentang</div>
         <div class="title">PENGANGKATAN DOSEN PEMBIMBING TUGAS AKHIR / SKRIPSI</div>
         <div class="title">REKTOR UNIVERSITAS DIPA MAKASSAR</div>
@@ -163,7 +163,8 @@
                 <td width="100">Kedua</td>
                 <td width="5">:</td>
                 <td align="justify">
-                    Bahwa Pembimbingan Tersebut, mulai tanggal {{ $tanggal }} sampai tanggal {{ $tanggal_akhir }}.
+                    Bahwa Pembimbingan Tersebut, mulai tanggal {{ $tanggal }} sampai tanggal
+                    {{ $tanggal_akhir }}.
                 </td>
             </tr>
             <tr valign="top">

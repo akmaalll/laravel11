@@ -156,6 +156,16 @@ class Helper
         return isset($data) ? $data : null;
     }
 
+
+    public static function getDataMatkul($param)
+    {
+        $data = DB::table($param)->leftJoin('mst_dosen', 'mst_matkul_dosen.nidn', '=', 'mst_dosen.nidn')
+            ->select('mst_matkul_dosen.*', 'mst_dosen.nama as nama_dosen')
+            ->get();
+
+        return isset($data) ? $data : null;
+    }
+
     public static function getDataJudul($param)
     {
         $data = DB::table($param)->leftJoin('mst_keahlian', 'mst_judul.id_keahlian', '=', 'mst_keahlian.id')->where('status', 'diajukan')->select('mst_judul.*', 'mst_keahlian.nama as nama_keahlian')->get();

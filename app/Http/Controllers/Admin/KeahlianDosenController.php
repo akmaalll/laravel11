@@ -14,6 +14,7 @@ class KeahlianDosenController extends Controller
     {
         $this->title = 'keahlian-dosen';
         $this->repo = $repo;
+        // dd($this->repo);
     }
 
     public function index()
@@ -85,6 +86,7 @@ class KeahlianDosenController extends Controller
         try {
             $title = $this->title;
             $data = $this->repo->find($id);
+            // dd($data);
             return view('admin.' . $title . '.form', compact('title', 'data'));
         } catch (\Exception $e) {
             return view('errors.message', ['message' => $e->getMessage()]);

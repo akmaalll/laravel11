@@ -74,7 +74,7 @@ class LoginController extends Controller
             // Parse the API response - adjust according to actual API response format
             $data = json_decode($body, true);
 
-            // dd();
+            // dd($data);
             if (isset($data['data'][0]['stb']) && $data['data'][0]['stb'] === $username) {
                 return ['success' => true, 'data' => $data];
             }
@@ -91,10 +91,8 @@ class LoginController extends Controller
         $user = User::where('username', $username)
             ->orWhere('email', $username)
             ->first();
-        // dd($username);
 
         if (!$user) {
-            // Create new user from API data
             $user = new User();
             $user->username = $username;
             $user->email = $apiData['data'][0]['email'] ?? $username; // Adjust according to API data
@@ -123,6 +121,7 @@ class LoginController extends Controller
                 switch ($userRole) {
                     case 1: // Super Admin
                     case 2: // Kaprodi
+                    case 4: // BAAK
                         return redirect()->route('admin');
                     case 3: // Mahasiswa
                         return redirect()->route('dashboard');
@@ -132,7 +131,6 @@ class LoginController extends Controller
             }
 
             $apiResponse = $this->attemptApiLogin($login, $password);
-            // dd($sesi);
 
             if ($apiResponse['success']) {
                 // API authentication succeeded - handle user login/creation
@@ -146,10 +144,10 @@ class LoginController extends Controller
                 }
             }
 
-            return redirect()->back()->withErrors(['message' => 'Invalid credentials']);
+            return redirect()->back()->response()->json('message', 'salahki sodara');
         } catch (\Exception $e) {
             $this->response['message'] = $e->getMessage() . ' in file :' . $e->getFile() . ' line: ' . $e->getLine();
-            return view('errors.message', ['message' => $this->response]);
+            return redirect()->back()->withErrors(['message' => 'Terjadi kesalahan sistem. Silakan coba lagi.']);
         }
     }
 

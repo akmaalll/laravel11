@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AtributController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController;
 use App\Http\Controllers\Admin\DosenPenelitianController;
+use App\Http\Controllers\Admin\DosenPenelitianKeahlianController;
 use App\Http\Controllers\Admin\JudulController;
 use App\Http\Controllers\Admin\KeahlianController;
 use App\Http\Controllers\Admin\KeahlianDosenController;
@@ -40,12 +41,15 @@ use App\Http\Controllers\SkPembimbingController;
 // Route::resource('photos', PhotoController::class)->except(['create', 'store', 'update', 'destroy']);
 // Route::resource('photos', PhotoController::class)->only(['index', 'show']);
 
+Route::get('/', [DashboardController::class, 'utama']);
 
 
 Route::domain('')->group(function () { // development
     // Route::domain('permohonan.bpfkmakassar.go.id')->group(function () { // production
 
     // Auth::routes();
+
+
     Route::get('/auth/login', [Auths::class, 'index'])->name('admin.login');
     Route::post('/auth/login', [Auths::class, 'login'])->name('login');
     // Route::get('/auth/register', [App\Http\Controllers\HomeController::class, 'register']);
@@ -94,7 +98,7 @@ Route::domain('')->group(function () { // development
 
 
     // ADMIN_ROUTES
-    Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:1|2']], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:1|2|4']], function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin');
         Route::get('/tes', [DashboardController::class, 'data'])->name('data.test');
@@ -111,7 +115,9 @@ Route::domain('')->group(function () { // development
         Route::get('/hasil-algoritma', [NaiveCobaController::class, 'hasilAlgoritma'])->name('hasil.algoritma');
         Route::post('/simpan-assignment', [NaiveCobaController::class, 'assign'])->name('pembimbing.assign');
 
-        Route::get('/sk-pembimbing/{id}/pdf', [SkPembimbingController::class, 'generatePDF'])->name('sk-pembimbing.pdf');
+        Route::post('/sk-pembimbing/{id}/pdf', [SkPembimbingController::class, 'generatePDF'])->name('sk-pembimbing.pdf');
+        Route::get('/sk-pembimbing/{id}/input-nomor', [SkPembimbingController::class, 'showInputForm'])->name('sk-pembimbing');
+        Route::get('/sk-pembimbing/{id}/download', [SkPembimbingController::class, 'download'])->name('sk-pembimbing.download');
 
 
         # APPS ROUTES
@@ -145,6 +151,15 @@ Route::domain('')->group(function () { // development
             Route::get('/{id}/edit', [DosenPenelitianController::class, 'edit'])->name('dosen-penelitian.edit');
             Route::put('/{id}', [DosenPenelitianController::class, 'update'])->name('dosen-penelitian.update');
             Route::delete('/{id}', [DosenPenelitianController::class, 'destroy'])->name('dosen-penelitian.delete');
+        });
+        Route::group(['prefix' => '/dosen-penelitian-keahlian'], function () {
+            Route::get('/', [DosenPenelitianKeahlianController::class, 'index'])->name('dosen-penelitian-keahlian.index');
+            Route::get('/data', [DosenPenelitianKeahlianController::class, 'data'])->name('dosen-penelitian-keahlian.data');
+            Route::get('/create', [DosenPenelitianKeahlianController::class, 'create'])->name('dosen-penelitian-keahlian.create');
+            Route::post('/store', [DosenPenelitianKeahlianController::class, 'store'])->name('dosen-penelitian-keahlian.store');
+            Route::get('/{id}/edit', [DosenPenelitianKeahlianController::class, 'edit'])->name('dosen-penelitian-keahlian.edit');
+            Route::put('/{id}', [DosenPenelitianKeahlianController::class, 'update'])->name('dosen-penelitian-keahlian.update');
+            Route::delete('/{id}', [DosenPenelitianKeahlianController::class, 'destroy'])->name('dosen-penelitian-keahlian.delete');
         });
 
         Route::group(['prefix' => '/keahlian'], function () {

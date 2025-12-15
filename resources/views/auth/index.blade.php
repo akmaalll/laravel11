@@ -67,12 +67,12 @@
                 <!--begin::Aside-->
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
-                    <a href="index.html" class="mb-7">
-                        <img alt="Logo" src="{{ asset('/') }}themes/dist/assets/media/logos/custom-3.svg" />
+                    <a href="" class="mb-7">
+                        <img alt="Logo" src="{{ asset('/') }}img/LogoUndipaa.png" width="300px" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->
-                    <h2 class="text-white fw-normal m-0">Branding tools designed for your business</h2>
+                    <h2 class="text-white fw-normal m-0">Agility, Encourage, Excellence and Humanity</h2>
                     <!--end::Title-->
                 </div>
                 <!--begin::Aside-->
@@ -149,6 +149,7 @@
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="{{ asset('/') }}themes/dist/assets/plugins/global/plugins.bundle.js"></script>
     <script src="{{ asset('/') }}themes/dist/assets/js/scripts.bundle.js"></script>
+
     <!--end::Global Javascript Bundle-->
     <!--begin::Custom Javascript(used for this page only)-->
     {{-- <script src="{{ asset('/') }}themes/dist/assets/js/custom/authentication/sign-in/general.js"></script> --}}

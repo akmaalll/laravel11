@@ -10,6 +10,7 @@ use App\Http\Services\Repositories\Contracts\AtributContract;
 use App\Http\Services\Repositories\Contracts\BaseContract;
 use App\Http\Services\Repositories\Contracts\DosenContract;
 use App\Http\Services\Repositories\Contracts\DosenPenelitianContract;
+use App\Http\Services\Repositories\Contracts\DosenPenelitianKeahlianContract;
 use App\Http\Services\Repositories\Contracts\DosenRecommenderContract;
 use App\Http\Services\Repositories\Contracts\JudulContract;
 use App\Http\Services\Repositories\Contracts\KeahlianContract;
@@ -28,6 +29,7 @@ use App\Http\Services\Repositories\Contracts\RoleContract;
 use App\Http\Services\Repositories\Contracts\SettingContract;
 use App\Http\Services\Repositories\Contracts\UserMenuContract;
 use App\Http\Services\Repositories\Contracts\UsersContract;
+use App\Http\Services\Repositories\DosenPenelitianKeahlianRepository;
 use App\Http\Services\Repositories\DosenPenelitianRepository;
 use App\Http\Services\Repositories\DosenRecommenderRepository;
 use App\Http\Services\Repositories\DosenRepository;
@@ -83,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(KeahlianJudulDosenContract::class, KeahlianJudulDosenRepository::class);
         $this->app->bind(KeahlianDosenContract::class, KeahlianDosenRepository::class);
         $this->app->bind(AtributContract::class, AtributRepository::class);
+        $this->app->bind(DosenPenelitianKeahlianContract::class, DosenPenelitianKeahlianRepository::class);
 
 
         $this->app->bind(KonsentrasiContract::class, KonsentrasiRepository::class);

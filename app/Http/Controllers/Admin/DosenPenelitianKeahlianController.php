@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Services\Repositories\Contracts\RoleContract;
+use App\Http\Services\Repositories\Contracts\ProdiContract;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Services\Repositories\Contracts\DosenPenelitianKeahlianContract;
 
-class RoleController extends Controller
+class DosenPenelitianKeahlianController extends Controller
 {
     protected $title, $repo, $response;
 
-    public function __construct(RoleContract $repo)
+    public function __construct(DosenPenelitianKeahlianContract $repo)
     {
-        $this->title = 'roles';
+        $this->title = 'dosen-penelitian-keahlian';
         $this->repo = $repo;
     }
 
@@ -40,6 +41,7 @@ class RoleController extends Controller
                 "html"       => $view,
             ]);
         } catch (\Exception $e) {
+            dd($e);
             return view('errors.message', ['message' => $e->getMessage()]);
         }
     }
@@ -61,10 +63,23 @@ class RoleController extends Controller
             $data = $this->repo->store($req);
             return response()->json(['data' => $data, 'success' => true]);
         } catch (\Exception $e) {
-            dd($e);
-            return view('errors.message', ['message' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
+
+    // public function show($id)
+    // {
+    //     try {
+    //         $data = $this->repo->find($id);
+    //         return response()->json($data);
+    //     } catch (\Exception $e) {
+    //         return view('errors.message', ['message' => $e->getMessage()]);
+    //     }
+    // }
+
 
     public function edit($id)
     {

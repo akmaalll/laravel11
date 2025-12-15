@@ -272,8 +272,9 @@
                                                                     <span
                                                                         class="fs-5 fw-bold">{{ number_format($psat[0] ?? 0, 4) }}</span>
                                                                 </div>
-                                                                <div class="text-muted small">= jumlah Disarankan / total
-                                                                    data latih</div>
+                                                                <div class="text-muted small">jumlah Disarankan / total
+                                                                    data latih =
+                                                                    {{ $pStatus[0] . '/' . count($nassami ?? []) }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -285,8 +286,9 @@
                                                                     <span
                                                                         class="fs-5 fw-bold">{{ number_format($psat[1] ?? 0, 4) }}</span>
                                                                 </div>
-                                                                <div class="text-muted small">= jumlah Rekomendasi / total
-                                                                    data latih</div>
+                                                                <div class="text-muted small">jumlah Rekomendasi / total
+                                                                    data latih =
+                                                                    {{ $pStatus[1] . '/' . count($nassami ?? []) }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -570,6 +572,15 @@
                                                                         (Skor: {{ $item['skor'] }})
                                                                     </option>
                                                                 @endforeach
+                                                                <optgroup label="Lektor Disarankan">
+                                                                    @foreach ($sortDisarankanLektor ?? [] as $item)
+                                                                        <option value="{{ $item['nidn'] }}">
+                                                                            {{ $item['nama'] }} - NIDN:
+                                                                            {{ $item['nidn'] }} (Skor:
+                                                                            {{ $item['skor'] }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
                                                             </select>
                                                             <div class="form-text">Wajib dari kelompok <strong>Lektor
                                                                     Rekomendasi</strong>.</div>
@@ -579,7 +590,7 @@
                                                             <label class="form-label fw-bold">Pembimbing 2</label>
                                                             <select name="pembimbing2" id="pembimbing2"
                                                                 class="form-select" required>
-                                                                <option value="">-- Pilih Pembimbing 2 --</option>
+                                                                <option value="">-- Pili h Pembimbing 2 --</option>
                                                                 <optgroup label="Lektor Disarankan">
                                                                     @foreach ($sortDisarankanLektor ?? [] as $item)
                                                                         <option value="{{ $item['nidn'] }}">

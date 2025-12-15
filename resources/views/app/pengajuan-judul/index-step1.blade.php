@@ -56,7 +56,7 @@
                                     <!--begin::Wrapper-->
                                     <div class="mb-5">
                                         <button type="button" id="kt_formvalidation_step_submit"
-                                            class="btn btn-primary kt_formvalidation_step_submit" data-id="submit">
+                                            class="btn btn-primary kt_formvalidation_step_submit" data-id="submit" disabled>
                                             <span class="indicator-label">Continue -></span>
                                             <span class="indicator-progress">Please wait...
                                                 <span

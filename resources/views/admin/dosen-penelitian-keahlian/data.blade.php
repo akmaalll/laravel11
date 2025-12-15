@@ -1,5 +1,5 @@
 @foreach ($data as $key => $v)
-    <tr>
+    <tr class="text-start text-gray-600 fs-7">
         <td>
             <span class="fw-semibold">
                 {{ ++$i }}
@@ -7,17 +7,12 @@
         </td>
         <td>
             <span class="fw-semibold">
-                {{ $v->nidn_dosen . ' - ' . $v->nama_dosen }}
+                {{ $v->judul_dosen ?? '-' }}
             </span>
         </td>
         <td>
             <span class="fw-semibold">
-                {{ $v->nama_matkul }}
-            </span>
-        </td>
-        <td>
-            <span class="fw-semibold">
-                {{ $v->nama_keahlian }}
+                {{ $v->nama_keahlian ?? '-' }}
             </span>
         </td>
         <td class="text-end">

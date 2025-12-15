@@ -17,7 +17,7 @@
                 <!--end::Header navs toggle-->
                 <!--begin::Logo-->
                 <a href="{{ route('dashboard') }}" class="d-flex align-items-center">
-                    <img alt="Logo" src="{{ asset('public/logo-fikir.png') }}" class="h-25px h-lg-30px" />
+                    <img alt="Logo" src="{{ asset('img/LogoUndipaa.png') }}" class="h-25px h-lg-30px" />
                 </a>
                 <!--end::Logo-->
             </div>

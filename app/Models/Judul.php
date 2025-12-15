@@ -27,6 +27,7 @@ class Judul extends Model
         'nim2',
         'nidn1',
         'nidn2',
+        'sk_pembimbing',
         'status',
     ];
 }

@@ -9,9 +9,50 @@ use Illuminate\Support\Facades\DB;
 
 class SkPembimbingController extends Controller
 {
-    public function generatePDF($id)
-    {
+    // public function generatePDF($id)
+    // {
 
+    //     $data = DB::table('mst_judul')
+    //         ->select(
+    //             'mst_judul.id',
+    //             'mst_judul.judul',
+    //             'mhs1.username as nim',
+    //             'mhs1.name as nama',
+    //             'mhs2.username as nim_partner',
+    //             'mhs2.name as nama_partner',
+    //             'd1.nama as pembimbing1',
+    //             'd2.nama as pembimbing2'
+    //         )
+    //         ->leftJoin('users as mhs1', 'mhs1.username', '=', 'mst_judul.nim1') // mahasiswa utama
+    //         ->leftJoin('users as mhs2', 'mhs2.username', '=', 'mst_judul.nim2') // partner
+    //         ->leftJoin('mst_dosen as d1', 'd1.nidn', '=', 'mst_judul.nidn1') // pembimbing 1
+    //         ->leftJoin('mst_dosen as d2', 'd2.nidn', '=', 'mst_judul.nidn2') // pembimbing 2
+    //         ->where('mst_judul.id', $id)
+    //         ->first();
+
+
+    //     $tanggal = now()->translatedFormat('d F Y');
+    //     $tanggal_akhir = now()->addYear()->translatedFormat('d F Y');
+
+    //     $pdf = Pdf::loadView('pdf.sk-pembimbing', [
+    //         'data' => [
+    //             'nim'           => $data->nim,
+    //             'nama'          => $data->nama,
+    //             'nim_partner'   => $data->nim_partner,
+    //             'nama_partner'  => $data->nama_partner,
+    //             'judul'         => $data->judul,
+    //             'pembimbing1'   => $data->pembimbing1,
+    //             'pembimbing2'   => $data->pembimbing2,
+    //         ],
+    //         'tanggal'        => $tanggal,
+    //         'tanggal_akhir'  => $tanggal_akhir,
+    //     ])->setPaper('legal');
+
+    //     return $pdf->download("SK_Pembimbing_{$data->nim}.pdf");
+    // }
+
+    public function generatePDF($id, Request $request)
+    {
         $data = DB::table('mst_judul')
             ->select(
                 'mst_judul.id',
@@ -30,9 +71,9 @@ class SkPembimbingController extends Controller
             ->where('mst_judul.id', $id)
             ->first();
 
-
         $tanggal = now()->translatedFormat('d F Y');
         $tanggal_akhir = now()->addYear()->translatedFormat('d F Y');
+        $nomor_surat = $request->input('nomor_surat');
 
         $pdf = Pdf::loadView('pdf.sk-pembimbing', [
             'data' => [
@@ -46,8 +87,54 @@ class SkPembimbingController extends Controller
             ],
             'tanggal'        => $tanggal,
             'tanggal_akhir'  => $tanggal_akhir,
+            'nomor_surat'    => $nomor_surat,
         ])->setPaper('legal');
 
+        // Simpan ke storage
+        $filename = 'SK_Pembimbing_' . $data->nim . '_' . time() . '.pdf';
+        $path = 'sk_pembimbing/';
+
+        if (!file_exists(public_path($path))) {
+            mkdir(public_path($path), 0777, true);
+        }
+
+        // Simpan file PDF
+        $pdf->save(public_path($path . '/' . $filename));
+
+        DB::table('mst_judul')
+            ->where('id', $id)
+            ->update([
+                'sk_pembimbing' => $filename,
+            ]);
+
+
         return $pdf->download("SK_Pembimbing_{$data->nim}.pdf");
+    }
+
+    public function showInputForm($id)
+    {
+        $title = 'input';
+        return view('inputnosk', compact('title', 'id'));
+    }
+
+    public function download($id)
+    {
+        $data = DB::table('mst_judul')
+            ->where('id', $id)
+            ->first();
+
+        if (!$data || !$data->sk_pembimbing) {
+            return redirect()->back()->with('error', 'File SK tidak ditemukan');
+        }
+
+        $file_path = public_path('sk_pembimbing/' . $data->sk_pembimbing);
+        // dd($file_path);
+
+        if (!file_exists($file_path)) {
+            dd($data);
+            return redirect()->back()->with('error', 'File SK tidak ditemukan');
+        }
+
+        return response()->download($file_path);
     }
 }
