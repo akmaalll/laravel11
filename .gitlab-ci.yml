@@ -4,7 +4,7 @@ stages:
 Deploy:
   stage: deploy
   variables:
-    VAR_DIREKTORI: "/home/akmlrydlftrh/www"
+    VAR_DIREKTORI: "/home/akmlrydlftrh/app/www"
     VAR_GIT_URL_TANPA_HTTP: "gitlab.com/akmalrayadilfitrah/laravel-skripsi.git"
     VAR_CLONE_KEY: "glpat-WvAMs2PVxqXPo07XuRbytm86MQp1OmN6M2R4Cw.01.120h1yf4l"
     VAR_USER: "deployer"
